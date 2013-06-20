@@ -31,7 +31,7 @@ class Grouping
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\Bacteria" mappedBy="grouping")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\Bacteria", mappedBy="grouping")
      */
     private $bacterias;
 

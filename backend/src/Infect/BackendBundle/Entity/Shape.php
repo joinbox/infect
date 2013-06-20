@@ -31,7 +31,7 @@ class Shape
     
     /**
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\Bacteria" mappedBy="shape")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\Bacteria", mappedBy="shape")
      */
     private $bacterias;
 

@@ -44,7 +44,7 @@ class Diagnosis
     /**
      * @var \Infect\BackendBundle\Entity\Topic
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\Therapy" mappedBy="diagnosis")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\Therapy", mappedBy="diagnosis")
      */
     private $therapies;
 

@@ -50,7 +50,7 @@ class CompoundLocale
        /**
      * @var string
      *
-     * @ORM\Column(name="value", type="text" nullable=false)
+     * @ORM\Column(name="value", type="text", nullable=false)
      */
     private $value;
 

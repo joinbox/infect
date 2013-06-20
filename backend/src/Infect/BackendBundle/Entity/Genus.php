@@ -30,7 +30,7 @@ class Genus
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\Species" mappedBy="genus")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\Species", mappedBy="genus")
      */
     private $species;
 

@@ -55,35 +55,35 @@ class Bacteria
     /**
      * @var boolean
      *
-     * @ORM\Column(name="gram", type="boolean", nullable=false)
+     * @ORM\Column(type="boolean")
      */
     private $gram;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="aerobic", type="boolean", nullable=false)
+     * @ORM\Column(type="boolean")
      */
     private $aerobic;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="aerobic-optional", type="boolean", nullable=false)
+     * @ORM\Column(type="boolean")
      */
     private $aerobicOptional;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="anaerobic", type="boolean", nullable=false)
+     * @ORM\Column(type="boolean")
      */
     private $anaerobic;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="anaerobic-optional", type="boolean", nullable=false)
+     * @ORM\Column(type="boolean")
      */
     private $anaerobicOptional;
 

@@ -40,7 +40,7 @@ class Species
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\Bacteria" mappedBy="species")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\Bacteria", mappedBy="species")
      */
     private $bacterias;
 
