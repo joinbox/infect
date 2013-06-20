@@ -1,0 +1,35 @@
+    <!-- Header -->
+    <!-- Add the class .navbar-fixed-top or .navbar-fixed-bottom for a fixed header on top or bottom respectively -->
+    <!-- <header class="navbar navbar-inverse navbar-fixed-top"> -->
+    <!-- <header class="navbar navbar-inverse navbar-fixed-bottom"> -->
+    <header class="navbar navbar-inverse">
+        <!-- Navbar Inner -->
+        <div class="navbar-inner remove-radius remove-box-shadow">
+            <!-- div#container-fluid -->
+            <div class="container-fluid">
+                <!-- Mobile Navigation, Shows up  on smaller screens -->
+                <ul class="nav pull-right visible-phone visible-tablet">
+                    <li class="divider-vertical remove-margin"></li>
+                    <li>
+                        <!-- It is set to open and close the main navigation on smaller screens. The class .nav-collapse was added to aside#page-sidebar -->
+                        <a href="javascript:void(0)" data-toggle="collapse" data-target=".nav-collapse">
+                            <i class="icon-reorder"></i>
+                        </a>
+                    </li>
+                </ul>
+                <!-- END Mobile Navigation -->
+
+                <!-- Logo -->
+                <a href="{{ path('infect_dashboard') }}" class="brand"><img src="/img/template/logo.png" alt="logo"></a>
+
+                <!-- Loading Indicator, Used for demostrating how loading of widgets could happen, check main.js - uiDemo() -->
+                <div id="loading" class="hide pull-left"><i class="icon-certificate icon-spin"></i></div>
+
+                <!-- HEADER WIDGETS WOULD GO HERE -->
+                
+            </div>
+            <!-- END div#container-fluid -->
+        </div>
+        <!-- END Navbar Inner -->
+    </header>
+    <!-- END Header -->

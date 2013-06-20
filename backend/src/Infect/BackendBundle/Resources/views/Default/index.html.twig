@@ -1,0 +1,138 @@
+{% extends 'InfectBackendBundle::main.html.twig' %}
+
+{% block pageTitle %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+<div class="dash-tiles row-fluid">
+    <!-- Column 1 of Row 1 -->
+    <div class="span3">
+        <!-- Total Users Tile -->
+        <div class="dash-tile dash-tile-ocean clearfix">
+            <div class="dash-tile-header">
+                <div class="dash-tile-options">
+                    <div class="btn-group">
+                        <a href="javascript:void(0)" class="btn" data-toggle="tooltip" title="" data-original-title="Manage Users"><i class="icon-cog"></i></a>
+                        <a href="javascript:void(0)" class="btn" data-toggle="tooltip" title="" data-original-title="Statistics"><i class="icon-bar-chart"></i></a>
+                    </div>
+                </div>
+                Total Users
+            </div>
+            <div class="dash-tile-icon"><i class="icon-group"></i></div>
+            <div class="dash-tile-text">265k</div>
+        </div>
+        <!-- END Total Users Tile -->
+
+        <!-- Total Profit Tile -->
+        <div class="dash-tile dash-tile-leaf clearfix">
+            <div class="dash-tile-header">
+                <span class="dash-tile-options">
+                    <a href="javascript:void(0)" class="btn" data-toggle="popover" data-placement="top" data-content="$500 (230 Sales)" title="" data-original-title="Today's profit"><i class="icon-credit-card"></i></a>
+                </span>
+                Total Profit
+            </div>
+            <div class="dash-tile-icon"><i class="icon-money"></i></div>
+            <div class="dash-tile-text">$5M</div>
+        </div>
+        <!-- END Total Profit Tile -->
+    </div>
+    <!-- END Column 1 of Row 1 -->
+
+    <!-- Column 2 of Row 1 -->
+    <div class="span3">
+        <!-- Total Sales Tile -->
+        <div class="dash-tile dash-tile-flower clearfix">
+            <div class="dash-tile-header">
+                <div class="dash-tile-options">
+                    <div class="btn-group">
+                        <a href="javascript:void(0)" class="btn" data-toggle="tooltip" title="" data-original-title="View new orders"><i class="icon-shopping-cart"></i></a>
+                        <a href="javascript:void(0)" class="btn" data-toggle="tooltip" title="" data-original-title="Statistics"><i class="icon-bar-chart"></i></a>
+                    </div>
+                </div>
+                Total Sales
+            </div>
+            <div class="dash-tile-icon"><i class="icon-tags"></i></div>
+            <div class="dash-tile-text">300k</div>
+        </div>
+        <!-- END Total Sales Tile -->
+
+        <!-- Total Downloads Tile -->
+        <div class="dash-tile dash-tile-fruit clearfix">
+            <div class="dash-tile-header">
+                <div class="dash-tile-options">
+                    <a href="javascript:void(0)" class="btn" data-toggle="tooltip" title="" data-original-title="View popular downloads"><i class="icon-asterisk"></i></a>
+                </div>
+                Total Downloads
+            </div>
+            <div class="dash-tile-icon"><i class="icon-cloud-download"></i></div>
+            <div class="dash-tile-text">360k</div>
+        </div>
+        <!-- END Total Downloads Tile -->
+    </div>
+    <!-- END Column 2 of Row 1 -->
+
+    <!-- Column 3 of Row 1 -->
+    <div class="span3">
+        <!-- Popularity Tile -->
+        <div class="dash-tile dash-tile-oil clearfix">
+            <div class="dash-tile-header">
+                <div class="dash-tile-options">
+                    <div class="btn-group">
+                        <a href="javascript:void(0)" class="btn" data-toggle="tooltip" title="" data-original-title="What's changed?"><i class="icon-fire"></i></a>
+                        <a href="javascript:void(0)" class="btn" data-toggle="tooltip" title="" data-original-title="Share"><i class="icon-share"></i></a>
+                    </div>
+                </div>
+                Popularity
+            </div>
+            <div class="dash-tile-icon"><i class="icon-globe"></i></div>
+            <div class="dash-tile-text">+90%</div>
+        </div>
+        <!-- END Popularity Tile -->
+
+        <!-- Server Downtime Tile -->
+        <div class="dash-tile dash-tile-dark clearfix">
+            <div class="dash-tile-header">
+                <div class="dash-tile-options">
+                    <a href="javascript:void(0)" class="btn" data-toggle="tooltip" title="" data-original-title="Monthly report"><i class="icon-bar-chart"></i></a>
+                </div>
+                Server Downtime
+            </div>
+            <div class="dash-tile-icon"><i class="icon-hdd"></i></div>
+            <div class="dash-tile-text">0.1%</div>
+        </div>
+        <!-- END Server Downtime Tile -->
+    </div>
+    <!-- END Column 3 of Row 1 -->
+
+    <!-- Column 4 of Row 1 -->
+    <div class="span3">
+        <!-- RSS Subscribers Tile -->
+        <div class="dash-tile dash-tile-balloon clearfix">
+            <div class="dash-tile-header">
+                <div class="dash-tile-options">
+                    <a href="javascript:void(0)" class="btn" data-toggle="tooltip" title="" data-original-title="Manage subscribers"><i class="icon-cog"></i></a>
+                </div>
+                RSS Subscribers
+            </div>
+            <div class="dash-tile-icon"><i class="icon-rss"></i></div>
+            <div class="dash-tile-text">160k</div>
+        </div>
+        <!-- END RSS Subscribers Tile -->
+
+        <!-- Total Tickets Tile -->
+        <div class="dash-tile dash-tile-doll clearfix">
+            <div class="dash-tile-header">
+                <div class="dash-tile-options">
+                    <a href="javascript:void(0)" class="btn" data-toggle="tooltip" title="" data-original-title="Open tickets"><i class="icon-file-alt"></i></a>
+                </div>
+                Total Tickets
+            </div>
+            <div class="dash-tile-icon"><i class="icon-wrench"></i></div>
+            <div class="dash-tile-text">1.5k</div>
+        </div>
+        <!-- END Total Tickets Tile -->
+    </div>
+    <!-- END Column 4 of Row 1 -->
+</div>
+{% endblock %}

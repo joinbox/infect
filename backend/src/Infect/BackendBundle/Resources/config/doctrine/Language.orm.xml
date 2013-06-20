@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Infect\BackendBundle\Entity\Language" table="language">
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="name" type="string" column="name" length="100" nullable="false"/>
+    <many-to-many field="idSubstance" target-entity="Substance" mapped-by="idLanguage"/>
+    <many-to-many field="idTherapy" target-entity="Therapy" mapped-by="idLanguage"/>
+    <many-to-many field="idTopic" target-entity="Topic" mapped-by="idLanguage"/>
+    <many-to-many field="idSubstanceclass" target-entity="Substanceclass" inversed-by="idLanguage">
+      <join-table name="substanceclasslocale">
+        <join-columns>
+          <join-column name="id_language" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="id_substanceClass" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+    <many-to-many field="idDiagnosis" target-entity="Diagnosis" mapped-by="idLanguage"/>
+    <many-to-many field="idCompound" target-entity="Compound" mapped-by="idLanguage"/>
+    <many-to-many field="idCountry" target-entity="Country" mapped-by="idLanguage"/>
+    <many-to-many field="idBacteria" target-entity="Bacteria" mapped-by="idLanguage"/>
+  </entity>
+</doctrine-mapping>

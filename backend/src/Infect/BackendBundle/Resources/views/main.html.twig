@@ -1,0 +1,72 @@
+{% extends 'InfectBackendBundle::base.html.twig' %}
+
+{% block meta %}
+    <meta name="keywords" content="" />
+{% endblock %}
+
+{% block body %}
+
+	<!-- Page Container -->
+	<div id="page-container">
+	    {% include 'InfectBackendBundle::header.html.twig' %}
+
+	    <!-- Inner Container -->
+	    <div id="inner-container">
+	        {% include 'InfectBackendBundle::sidebar.html.twig' %}
+
+	        <!-- Page Content -->
+	        <div id="page-content">
+	            {# include 'InfectBackendBundle::navigation.info.html.twig' #}
+
+	            <!-- Your Content -->
+	            <h3 class="page-header page-header-top"><!-- <i class="icon-circle-blank"></i> --> {% block pageTitle %}page_title{% endblock %}</h3>
+				
+				{# NOTICE #}
+				{% for flashMessage in app.session.flashbag.get('notice') %}			    
+							
+					<div class="alert alert-notice">
+						<button class="close" data-dismiss="alert">×</button>
+						{{ flashMessage }}
+					</div>							
+
+				{% endfor %}
+
+				{# SUCCESS #}
+				{% for flashMessage in app.session.flashbag.get('success') %}			    
+						
+					<div class="alert alert-success">
+						<button class="close" data-dismiss="alert">×</button>
+						{{ flashMessage }}
+					</div>							
+
+				{% endfor %}
+
+				{# ERROR #}
+				{% for flashMessage in app.session.flashbag.get('error') %}			    
+							
+					<div class="alert alert-error">
+						<button class="close" data-dismiss="alert">×</button>
+						{{ flashMessage }}
+					</div>							
+
+				{% endfor %}
+
+	            {% block content %}	                
+	            {% endblock %}
+	            <!-- End Your Content -->
+
+	        </div>
+	        <!-- END Page Content -->
+
+	        {% include 'InfectBackendBundle::footer.html.twig' %}
+	    </div>
+	    <!-- END Inner Container -->
+	</div>
+	<!-- END Page Container -->
+
+	<!-- Scroll to top link, check main.js - scrollToTop() -->
+	<a href="#" id="to-top"><i class="icon-chevron-up"></i></a>
+
+	<!-- user.modal.html.twig -->
+
+{% endblock %}

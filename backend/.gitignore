@@ -1,0 +1,28 @@
+# SYMFONY #
+######################
+
+/web/bundles/
+/app/bootstrap*
+/app/cache/*
+/app/logs/*
+/vendor/
+/app/config/parameters.yml
+
+# OS generated files #
+######################
+
+*.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# NETBEANS #
+######################
+
+nbproject/
+.idea/
+
+# TEXTMATE & SUBLIME TEXT #
+######################
+
+*._*

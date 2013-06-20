@@ -1,0 +1,10 @@
+infect_dashboard:
+    pattern: /
+    defaults: { _controller: InfectBackendBundle:Default:index }
+
+infect_login:
+    pattern:    /login
+    defaults:   { _controller: InfectBackendBundle:Security:login }
+
+infect_login_check:
+    pattern:    /login/check   

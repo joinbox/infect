@@ -1,0 +1,4 @@
+infect_backend:
+    resource: "@InfectBackendBundle/Resources/config/routing.yml"
+    prefix:   /
+
