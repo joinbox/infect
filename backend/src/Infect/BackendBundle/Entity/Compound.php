@@ -73,4 +73,202 @@ class Compound
      */
     private $locales;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->therapies = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->substances = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->drugs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->locales = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set iv
+     *
+     * @param boolean $iv
+     * @return Compound
+     */
+    public function setIv($iv)
+    {
+        $this->iv = $iv;
+    
+        return $this;
+    }
+
+    /**
+     * Get iv
+     *
+     * @return boolean 
+     */
+    public function getIv()
+    {
+        return $this->iv;
+    }
+
+    /**
+     * Set po
+     *
+     * @param boolean $po
+     * @return Compound
+     */
+    public function setPo($po)
+    {
+        $this->po = $po;
+    
+        return $this;
+    }
+
+    /**
+     * Get po
+     *
+     * @return boolean 
+     */
+    public function getPo()
+    {
+        return $this->po;
+    }
+
+    /**
+     * Add therapies
+     *
+     * @param \Infect\BackendBundle\Entity\Therapy $therapies
+     * @return Compound
+     */
+    public function addTherapie(\Infect\BackendBundle\Entity\Therapy $therapies)
+    {
+        $this->therapies[] = $therapies;
+    
+        return $this;
+    }
+
+    /**
+     * Remove therapies
+     *
+     * @param \Infect\BackendBundle\Entity\Therapy $therapies
+     */
+    public function removeTherapie(\Infect\BackendBundle\Entity\Therapy $therapies)
+    {
+        $this->therapies->removeElement($therapies);
+    }
+
+    /**
+     * Get therapies
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTherapies()
+    {
+        return $this->therapies;
+    }
+
+    /**
+     * Add substances
+     *
+     * @param \Infect\BackendBundle\Entity\Substance $substances
+     * @return Compound
+     */
+    public function addSubstance(\Infect\BackendBundle\Entity\Substance $substances)
+    {
+        $this->substances[] = $substances;
+    
+        return $this;
+    }
+
+    /**
+     * Remove substances
+     *
+     * @param \Infect\BackendBundle\Entity\Substance $substances
+     */
+    public function removeSubstance(\Infect\BackendBundle\Entity\Substance $substances)
+    {
+        $this->substances->removeElement($substances);
+    }
+
+    /**
+     * Get substances
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSubstances()
+    {
+        return $this->substances;
+    }
+
+    /**
+     * Add drugs
+     *
+     * @param \Infect\BackendBundle\Entity\Drug $drugs
+     * @return Compound
+     */
+    public function addDrug(\Infect\BackendBundle\Entity\Drug $drugs)
+    {
+        $this->drugs[] = $drugs;
+    
+        return $this;
+    }
+
+    /**
+     * Remove drugs
+     *
+     * @param \Infect\BackendBundle\Entity\Drug $drugs
+     */
+    public function removeDrug(\Infect\BackendBundle\Entity\Drug $drugs)
+    {
+        $this->drugs->removeElement($drugs);
+    }
+
+    /**
+     * Get drugs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDrugs()
+    {
+        return $this->drugs;
+    }
+
+    /**
+     * Add locales
+     *
+     * @param \Infect\BackendBundle\Entity\BacteriaLocale $locales
+     * @return Compound
+     */
+    public function addLocale(\Infect\BackendBundle\Entity\BacteriaLocale $locales)
+    {
+        $this->locales[] = $locales;
+    
+        return $this;
+    }
+
+    /**
+     * Remove locales
+     *
+     * @param \Infect\BackendBundle\Entity\BacteriaLocale $locales
+     */
+    public function removeLocale(\Infect\BackendBundle\Entity\BacteriaLocale $locales)
+    {
+        $this->locales->removeElement($locales);
+    }
+
+    /**
+     * Get locales
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLocales()
+    {
+        return $this->locales;
+    }
 }

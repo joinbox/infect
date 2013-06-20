@@ -6,10 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
- * @ORM\Table(name="therapyLocale")
+ * @ORM\Table(name="substanceLocale")
  * @ORM\Entity
  */
-class TherapyLocale
+class SubstanceLocale
 {
     /**
      * @var integer
@@ -33,19 +33,19 @@ class TherapyLocale
     /**
      * @var \Infect\BackendBundle\Entity\Drug
      *
-     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Therapy", inversedBy="locales")
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Substance", inversedBy="locales")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_substance", referencedColumnName="id")
      * })
      */
-    private $therapy;
+    private $substance;
 
         /**
      * @var string
      *
-     * @ORM\Column(name="text", type="text", nullable=false)
+     * @ORM\Column(name="name", type="string", length=250, nullable=false)
      */
-    private $text;
+    private $name;
 
 
     /**
@@ -59,33 +59,33 @@ class TherapyLocale
     }
 
     /**
-     * Set text
+     * Set name
      *
-     * @param string $text
-     * @return TherapyLocale
+     * @param string $name
+     * @return SubstanceLocale
      */
-    public function setText($text)
+    public function setName($name)
     {
-        $this->text = $text;
+        $this->name = $name;
     
         return $this;
     }
 
     /**
-     * Get text
+     * Get name
      *
      * @return string 
      */
-    public function getText()
+    public function getName()
     {
-        return $this->text;
+        return $this->name;
     }
 
     /**
      * Set language
      *
      * @param \Infect\BackendBundle\Entity\Language $language
-     * @return TherapyLocale
+     * @return SubstanceLocale
      */
     public function setLanguage(\Infect\BackendBundle\Entity\Language $language = null)
     {
@@ -105,25 +105,25 @@ class TherapyLocale
     }
 
     /**
-     * Set therapy
+     * Set substance
      *
-     * @param \Infect\BackendBundle\Entity\Therapy $therapy
-     * @return TherapyLocale
+     * @param \Infect\BackendBundle\Entity\Substance $substance
+     * @return SubstanceLocale
      */
-    public function setTherapy(\Infect\BackendBundle\Entity\Therapy $therapy = null)
+    public function setSubstance(\Infect\BackendBundle\Entity\Substance $substance = null)
     {
-        $this->therapy = $therapy;
+        $this->substance = $substance;
     
         return $this;
     }
 
     /**
-     * Get therapy
+     * Get substance
      *
-     * @return \Infect\BackendBundle\Entity\Therapy 
+     * @return \Infect\BackendBundle\Entity\Substance 
      */
-    public function getTherapy()
+    public function getSubstance()
     {
-        return $this->therapy;
+        return $this->substance;
     }
 }

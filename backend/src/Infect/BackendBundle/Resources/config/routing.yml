@@ -7,4 +7,9 @@ infect_login:
     defaults:   { _controller: InfectBackendBundle:Security:login }
 
 infect_login_check:
-    pattern:    /login/check   
+    pattern:    /login/check
+
+# Bacteria
+infect_bacteria_add:
+    pattern: /bacteria/add/{edit}/{id}
+    defaults: { _controller: InfectBackendBundle:Bacteria:addEdit, edit: '', id: '' }        

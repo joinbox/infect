@@ -54,4 +54,111 @@ class Therapy
     private $locales;
 
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->compounds = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->locales = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set diagnosis
+     *
+     * @param \Infect\BackendBundle\Entity\Diagnosis $diagnosis
+     * @return Therapy
+     */
+    public function setDiagnosis(\Infect\BackendBundle\Entity\Diagnosis $diagnosis = null)
+    {
+        $this->diagnosis = $diagnosis;
+    
+        return $this;
+    }
+
+    /**
+     * Get diagnosis
+     *
+     * @return \Infect\BackendBundle\Entity\Diagnosis 
+     */
+    public function getDiagnosis()
+    {
+        return $this->diagnosis;
+    }
+
+    /**
+     * Add compounds
+     *
+     * @param \Infect\BackendBundle\Entity\Compound $compounds
+     * @return Therapy
+     */
+    public function addCompound(\Infect\BackendBundle\Entity\Compound $compounds)
+    {
+        $this->compounds[] = $compounds;
+    
+        return $this;
+    }
+
+    /**
+     * Remove compounds
+     *
+     * @param \Infect\BackendBundle\Entity\Compound $compounds
+     */
+    public function removeCompound(\Infect\BackendBundle\Entity\Compound $compounds)
+    {
+        $this->compounds->removeElement($compounds);
+    }
+
+    /**
+     * Get compounds
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCompounds()
+    {
+        return $this->compounds;
+    }
+
+    /**
+     * Add locales
+     *
+     * @param \Infect\BackendBundle\Entity\TherapyLocale $locales
+     * @return Therapy
+     */
+    public function addLocale(\Infect\BackendBundle\Entity\TherapyLocale $locales)
+    {
+        $this->locales[] = $locales;
+    
+        return $this;
+    }
+
+    /**
+     * Remove locales
+     *
+     * @param \Infect\BackendBundle\Entity\TherapyLocale $locales
+     */
+    public function removeLocale(\Infect\BackendBundle\Entity\TherapyLocale $locales)
+    {
+        $this->locales->removeElement($locales);
+    }
+
+    /**
+     * Get locales
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLocales()
+    {
+        return $this->locales;
+    }
 }

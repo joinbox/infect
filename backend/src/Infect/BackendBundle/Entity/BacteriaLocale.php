@@ -49,4 +49,83 @@ class BacteriaLocale
     private $name;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return BacteriaLocale
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set language
+     *
+     * @param \Infect\BackendBundle\Entity\Language $language
+     * @return BacteriaLocale
+     */
+    public function setLanguage(\Infect\BackendBundle\Entity\Language $language = null)
+    {
+        $this->language = $language;
+    
+        return $this;
+    }
+
+    /**
+     * Get language
+     *
+     * @return \Infect\BackendBundle\Entity\Language 
+     */
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    /**
+     * Set bacteria
+     *
+     * @param \Infect\BackendBundle\Entity\Bacteria $bacteria
+     * @return BacteriaLocale
+     */
+    public function setBacteria(\Infect\BackendBundle\Entity\Bacteria $bacteria = null)
+    {
+        $this->bacteria = $bacteria;
+    
+        return $this;
+    }
+
+    /**
+     * Get bacteria
+     *
+     * @return \Infect\BackendBundle\Entity\Bacteria 
+     */
+    public function getBacteria()
+    {
+        return $this->bacteria;
+    }
 }

@@ -1,0 +1,16 @@
+<form class="form-horizontal form-box" method="post" action="" onsubmit="return false;" {{ form_enctype(form) }}>
+    <h4 class="form-box-header">
+        hallo
+    </h4>
+
+    <div class="form-box-content">
+        {{ form_widget(form) }}
+        {{ form_rest(form) }} 
+
+        <div class="form-actions">
+            <input type="submit" class="btn btn-success" value="Save changes">
+            <input type="submit" class="btn btn-danger" value="Cancel">
+        </div>
+
+    </div>
+</form>    

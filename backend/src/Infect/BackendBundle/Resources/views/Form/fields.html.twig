@@ -1,0 +1,30 @@
+{% block form_row %}
+{% spaceless %}
+    <div class="control-group">
+        <label class="control-label">{% if required %}<i class="icon icon-exclamation-sign" style="float:left;margin-left:10px;"></i>{% endif %}{{ form_label(form) }}</label>
+        <div class="controls">
+            {{ form_widget(form) }}
+            <span for="required" generated="true" class="help-inline" style="">{{ form_errors(form) }}</span>
+        </div>
+    </div>
+{% endspaceless %}
+{% endblock form_row %}
+
+{% block choice_widget_collapsed %}
+{% spaceless %}
+    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %} class="select-chosen">
+        {% if empty_value is not none %}
+            <option {% if required %} disabled="disabled"{% if value is empty %} selected="selected"{% endif %}{% else %} value=""{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
+        {% endif %}
+        {% if preferred_choices|length > 0 %}
+            {% set options = preferred_choices %}
+            {{ block('choice_widget_options') }}
+            {% if choices|length > 0 and separator is not none %}
+                <option disabled="disabled">{{ separator }}</option>
+            {% endif %}
+        {% endif %}
+        {% set options = choices %}
+        {{ block('choice_widget_options') }}
+    </select>
+{% endspaceless %}
+{% endblock choice_widget_collapsed %}

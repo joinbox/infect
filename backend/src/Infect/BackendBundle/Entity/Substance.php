@@ -57,4 +57,156 @@ class Substance
      */
     private $locales;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->compounds = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->substanceClasses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->childs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->locales = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Add compounds
+     *
+     * @param \Infect\BackendBundle\Entity\Compound $compounds
+     * @return Substance
+     */
+    public function addCompound(\Infect\BackendBundle\Entity\Compound $compounds)
+    {
+        $this->compounds[] = $compounds;
+    
+        return $this;
+    }
+
+    /**
+     * Remove compounds
+     *
+     * @param \Infect\BackendBundle\Entity\Compound $compounds
+     */
+    public function removeCompound(\Infect\BackendBundle\Entity\Compound $compounds)
+    {
+        $this->compounds->removeElement($compounds);
+    }
+
+    /**
+     * Get compounds
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCompounds()
+    {
+        return $this->compounds;
+    }
+
+    /**
+     * Add substanceClasses
+     *
+     * @param \Infect\BackendBundle\Entity\SubstanceClass $substanceClasses
+     * @return Substance
+     */
+    public function addSubstanceClasse(\Infect\BackendBundle\Entity\SubstanceClass $substanceClasses)
+    {
+        $this->substanceClasses[] = $substanceClasses;
+    
+        return $this;
+    }
+
+    /**
+     * Remove substanceClasses
+     *
+     * @param \Infect\BackendBundle\Entity\SubstanceClass $substanceClasses
+     */
+    public function removeSubstanceClasse(\Infect\BackendBundle\Entity\SubstanceClass $substanceClasses)
+    {
+        $this->substanceClasses->removeElement($substanceClasses);
+    }
+
+    /**
+     * Get substanceClasses
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSubstanceClasses()
+    {
+        return $this->substanceClasses;
+    }
+
+    /**
+     * Add childs
+     *
+     * @param \Infect\BackendBundle\Entity\SubstanceClass $childs
+     * @return Substance
+     */
+    public function addChild(\Infect\BackendBundle\Entity\SubstanceClass $childs)
+    {
+        $this->childs[] = $childs;
+    
+        return $this;
+    }
+
+    /**
+     * Remove childs
+     *
+     * @param \Infect\BackendBundle\Entity\SubstanceClass $childs
+     */
+    public function removeChild(\Infect\BackendBundle\Entity\SubstanceClass $childs)
+    {
+        $this->childs->removeElement($childs);
+    }
+
+    /**
+     * Get childs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChilds()
+    {
+        return $this->childs;
+    }
+
+    /**
+     * Add locales
+     *
+     * @param \Infect\BackendBundle\Entity\SubstanceLocale $locales
+     * @return Substance
+     */
+    public function addLocale(\Infect\BackendBundle\Entity\SubstanceLocale $locales)
+    {
+        $this->locales[] = $locales;
+    
+        return $this;
+    }
+
+    /**
+     * Remove locales
+     *
+     * @param \Infect\BackendBundle\Entity\SubstanceLocale $locales
+     */
+    public function removeLocale(\Infect\BackendBundle\Entity\SubstanceLocale $locales)
+    {
+        $this->locales->removeElement($locales);
+    }
+
+    /**
+     * Get locales
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLocales()
+    {
+        return $this->locales;
+    }
 }

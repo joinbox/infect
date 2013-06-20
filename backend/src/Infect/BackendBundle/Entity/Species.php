@@ -44,4 +44,100 @@ class Species
      */
     private $bacterias;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->bacterias = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Species
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set genus
+     *
+     * @param \Infect\BackendBundle\Entity\Genus $genus
+     * @return Species
+     */
+    public function setGenus(\Infect\BackendBundle\Entity\Genus $genus = null)
+    {
+        $this->genus = $genus;
+    
+        return $this;
+    }
+
+    /**
+     * Get genus
+     *
+     * @return \Infect\BackendBundle\Entity\Genus 
+     */
+    public function getGenus()
+    {
+        return $this->genus;
+    }
+
+    /**
+     * Add bacterias
+     *
+     * @param \Infect\BackendBundle\Entity\Bacteria $bacterias
+     * @return Species
+     */
+    public function addBacteria(\Infect\BackendBundle\Entity\Bacteria $bacterias)
+    {
+        $this->bacterias[] = $bacterias;
+    
+        return $this;
+    }
+
+    /**
+     * Remove bacterias
+     *
+     * @param \Infect\BackendBundle\Entity\Bacteria $bacterias
+     */
+    public function removeBacteria(\Infect\BackendBundle\Entity\Bacteria $bacterias)
+    {
+        $this->bacterias->removeElement($bacterias);
+    }
+
+    /**
+     * Get bacterias
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBacterias()
+    {
+        return $this->bacterias;
+    }
 }

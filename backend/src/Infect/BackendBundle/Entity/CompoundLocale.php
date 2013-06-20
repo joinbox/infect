@@ -55,4 +55,106 @@ class CompoundLocale
     private $value;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set key
+     *
+     * @param string $key
+     * @return CompoundLocale
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+    
+        return $this;
+    }
+
+    /**
+     * Get key
+     *
+     * @return string 
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * Set value
+     *
+     * @param string $value
+     * @return CompoundLocale
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+    
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return string 
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Set language
+     *
+     * @param \Infect\BackendBundle\Entity\Language $language
+     * @return CompoundLocale
+     */
+    public function setLanguage(\Infect\BackendBundle\Entity\Language $language = null)
+    {
+        $this->language = $language;
+    
+        return $this;
+    }
+
+    /**
+     * Get language
+     *
+     * @return \Infect\BackendBundle\Entity\Language 
+     */
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    /**
+     * Set compound
+     *
+     * @param \Infect\BackendBundle\Entity\Compound $compound
+     * @return CompoundLocale
+     */
+    public function setCompound(\Infect\BackendBundle\Entity\Compound $compound = null)
+    {
+        $this->compound = $compound;
+    
+        return $this;
+    }
+
+    /**
+     * Get compound
+     *
+     * @return \Infect\BackendBundle\Entity\Compound 
+     */
+    public function getCompound()
+    {
+        return $this->compound;
+    }
 }
