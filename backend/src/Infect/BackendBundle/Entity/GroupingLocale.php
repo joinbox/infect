@@ -6,10 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
- * @ORM\Table(name="substanceLocale")
+ * @ORM\Table(name="groupingLocale")
  * @ORM\Entity
  */
-class SubstanceLocale
+class GroupingLocale
 {
 
     /**
@@ -25,26 +25,27 @@ class SubstanceLocale
     /**
      * @var \Infect\BackendBundle\Entity\Drug
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Substance", inversedBy="locales")
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Grouping", inversedBy="locales")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_substance", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="id_grouping", referencedColumnName="id")
      * })
      */
-    private $substance;
+    private $grouping;
 
         /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=250, nullable=false)
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     private $name;
+
 
 
     /**
      * Set name
      *
      * @param string $name
-     * @return SubstanceLocale
+     * @return GroupingLocale
      */
     public function setName($name)
     {
@@ -67,9 +68,9 @@ class SubstanceLocale
      * Set language
      *
      * @param \Infect\BackendBundle\Entity\Language $language
-     * @return SubstanceLocale
+     * @return GroupingLocale
      */
-    public function setLanguage(\Infect\BackendBundle\Entity\Language $language = null)
+    public function setLanguage(\Infect\BackendBundle\Entity\Language $language)
     {
         $this->language = $language;
     
@@ -87,25 +88,25 @@ class SubstanceLocale
     }
 
     /**
-     * Set substance
+     * Set grouping
      *
-     * @param \Infect\BackendBundle\Entity\Substance $substance
-     * @return SubstanceLocale
+     * @param \Infect\BackendBundle\Entity\Grouping $grouping
+     * @return GroupingLocale
      */
-    public function setSubstance(\Infect\BackendBundle\Entity\Substance $substance = null)
+    public function setGrouping(\Infect\BackendBundle\Entity\Grouping $grouping)
     {
-        $this->substance = $substance;
+        $this->grouping = $grouping;
     
         return $this;
     }
 
     /**
-     * Get substance
+     * Get grouping
      *
-     * @return \Infect\BackendBundle\Entity\Substance 
+     * @return \Infect\BackendBundle\Entity\Grouping 
      */
-    public function getSubstance()
+    public function getGrouping()
     {
-        return $this->substance;
+        return $this->grouping;
     }
 }

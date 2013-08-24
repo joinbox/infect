@@ -36,6 +36,13 @@ class Language
     private $countries;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iso2", type="string", length=2, unique=true)
+     */
+    private $iso2;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -76,6 +83,16 @@ class Language
         return $this->name;
     }
 
+    public function setCountries(\Doctrine\Common\Collections\ArrayCollection $countries)
+    {
+        foreach ($countries as $c) 
+        {
+            $c->addLanguage($this);
+        }
+
+        $this->countries = $countries;
+    }
+
     /**
      * Add countries
      *
@@ -107,5 +124,28 @@ class Language
     public function getCountries()
     {
         return $this->countries;
+    }
+
+    /**
+     * Set iso2
+     *
+     * @param string $iso2
+     * @return Language
+     */
+    public function setIso2($iso2)
+    {
+        $this->iso2 = $iso2;
+    
+        return $this;
+    }
+
+    /**
+     * Get iso2
+     *
+     * @return string 
+     */
+    public function getIso2()
+    {
+        return $this->iso2;
     }
 }

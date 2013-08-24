@@ -12,4 +12,6 @@ infect_login_check:
 # Bacteria
 infect_bacteria_add:
     pattern: /bacteria/add/{edit}/{id}
-    defaults: { _controller: InfectBackendBundle:Bacteria:addEdit, edit: '', id: '' }        
+    defaults: { _controller: InfectBackendBundle:Bacteria:addEdit, edit: '', id: '' }
+
+                

@@ -36,6 +36,13 @@ class Shape
     private $bacterias;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\ShapeLocale", mappedBy="shape")
+     */
+    private $locales;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -107,5 +114,38 @@ class Shape
     public function getBacterias()
     {
         return $this->bacterias;
+    }
+
+    /**
+     * Add locales
+     *
+     * @param \Infect\BackendBundle\Entity\ShapeLocale $locales
+     * @return Shape
+     */
+    public function addLocale(\Infect\BackendBundle\Entity\ShapeLocale $locales)
+    {
+        $this->locales[] = $locales;
+    
+        return $this;
+    }
+
+    /**
+     * Remove locales
+     *
+     * @param \Infect\BackendBundle\Entity\ShapeLocale $locales
+     */
+    public function removeLocale(\Infect\BackendBundle\Entity\ShapeLocale $locales)
+    {
+        $this->locales->removeElement($locales);
+    }
+
+    /**
+     * Get locales
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLocales()
+    {
+        return $this->locales;
     }
 }

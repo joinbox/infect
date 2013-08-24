@@ -69,7 +69,7 @@ class Compound
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\BacteriaLocale", mappedBy="bacteria")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\CompoundLocale", mappedBy="compound")
      */
     private $locales;
 
@@ -242,10 +242,10 @@ class Compound
     /**
      * Add locales
      *
-     * @param \Infect\BackendBundle\Entity\BacteriaLocale $locales
+     * @param \Infect\BackendBundle\Entity\CompoundLocale $locales
      * @return Compound
      */
-    public function addLocale(\Infect\BackendBundle\Entity\BacteriaLocale $locales)
+    public function addLocale(\Infect\BackendBundle\Entity\CompoundLocale $locales)
     {
         $this->locales[] = $locales;
     
@@ -255,9 +255,9 @@ class Compound
     /**
      * Remove locales
      *
-     * @param \Infect\BackendBundle\Entity\BacteriaLocale $locales
+     * @param \Infect\BackendBundle\Entity\CompoundLocale $locales
      */
-    public function removeLocale(\Infect\BackendBundle\Entity\BacteriaLocale $locales)
+    public function removeLocale(\Infect\BackendBundle\Entity\CompoundLocale $locales)
     {
         $this->locales->removeElement($locales);
     }

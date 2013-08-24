@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Country
 {
-        /**
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -24,14 +24,14 @@ class Country
     /**
      * @var integer
      *
-     * @ORM\Column(name="iso2", type="integer")
+     * @ORM\Column(name="iso2", type="string", length=2)
      */
     private $iso2;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="iso3", type="integer")
+     * @ORM\Column(name="iso3", type="string", length=3)
      */
     private $iso3;
 
@@ -39,7 +39,7 @@ class Country
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Infect\BackendBundle\Entity\Language", inversedBy="countries")
-     * @ORM\JoinTable(name="country_language",
+     * @ORM\JoinTable(name="countryLocale",
      *   joinColumns={
      *     @ORM\JoinColumn(name="id_country", referencedColumnName="id")
      *   },
@@ -51,6 +51,15 @@ class Country
     private $languages;
 
     /**
+     *
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Language")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_language", referencedColumnName="id")
+     * })
+     */
+    private $defaultLanguage;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -58,6 +67,11 @@ class Country
         $this->languages = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
+    public function __toString()
+    {
+        return $this->iso2." | ".$this->iso3;
+    }
+
     /**
      * Get id
      *
@@ -71,7 +85,7 @@ class Country
     /**
      * Set iso2
      *
-     * @param integer $iso2
+     * @param string $iso2
      * @return Country
      */
     public function setIso2($iso2)
@@ -84,7 +98,7 @@ class Country
     /**
      * Get iso2
      *
-     * @return integer 
+     * @return string 
      */
     public function getIso2()
     {
@@ -94,7 +108,7 @@ class Country
     /**
      * Set iso3
      *
-     * @param integer $iso3
+     * @param string $iso3
      * @return Country
      */
     public function setIso3($iso3)
@@ -107,7 +121,7 @@ class Country
     /**
      * Get iso3
      *
-     * @return integer 
+     * @return string 
      */
     public function getIso3()
     {
@@ -145,5 +159,28 @@ class Country
     public function getLanguages()
     {
         return $this->languages;
+    }
+
+    /**
+     * Set defaultLanguage
+     *
+     * @param \Infect\BackendBundle\Entity\Language $defaultLanguage
+     * @return Country
+     */
+    public function setDefaultLanguage(\Infect\BackendBundle\Entity\Language $defaultLanguage = null)
+    {
+        $this->defaultLanguage = $defaultLanguage;
+    
+        return $this;
+    }
+
+    /**
+     * Get defaultLanguage
+     *
+     * @return \Infect\BackendBundle\Entity\Language 
+     */
+    public function getDefaultLanguage()
+    {
+        return $this->defaultLanguage;
     }
 }

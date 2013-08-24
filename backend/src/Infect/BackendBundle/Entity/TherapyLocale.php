@@ -11,18 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TherapyLocale
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
 
     /**
      * @var \Infect\BackendBundle\Entity\Language
-     *
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Language")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_language", referencedColumnName="id")
@@ -32,10 +24,10 @@ class TherapyLocale
 
     /**
      * @var \Infect\BackendBundle\Entity\Drug
-     *
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Therapy", inversedBy="locales")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_substance", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="id_therapy", referencedColumnName="id")
      * })
      */
     private $therapy;
@@ -47,16 +39,6 @@ class TherapyLocale
      */
     private $text;
 
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set text

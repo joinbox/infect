@@ -12,18 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BacteriaLocale
 {
+
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(type="boolean")
      */
-    private $id;
+    private $isPrimary;
 
     /**
      * @var \Infect\BackendBundle\Entity\Language
-     *
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Language")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_language", referencedColumnName="id")
@@ -33,7 +30,7 @@ class BacteriaLocale
 
     /**
      * @var \Infect\BackendBundle\Entity\Drug
-     *
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Bacteria", inversedBy="locales")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_bacteria", referencedColumnName="id")
@@ -51,13 +48,11 @@ class BacteriaLocale
 
 
     /**
-     * Get id
-     *
-     * @return integer 
+     * Constructor
      */
-    public function getId()
+    public function __construct()
     {
-        return $this->id;
+        $this->isPrimary = false;
     }
 
     /**
@@ -127,5 +122,28 @@ class BacteriaLocale
     public function getBacteria()
     {
         return $this->bacteria;
+    }
+
+    /**
+     * Set isPrimary
+     *
+     * @param boolean $isPrimary
+     * @return BacteriaLocale
+     */
+    public function setIsPrimary($isPrimary)
+    {
+        $this->isPrimary = $isPrimary;
+    
+        return $this;
+    }
+
+    /**
+     * Get isPrimary
+     *
+     * @return boolean 
+     */
+    public function getIsPrimary()
+    {
+        return $this->isPrimary;
     }
 }

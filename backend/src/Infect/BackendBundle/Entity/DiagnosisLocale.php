@@ -11,18 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class DiagnosisLocale
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
 
     /**
      * @var \Infect\BackendBundle\Entity\Language
-     *
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Language")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_language", referencedColumnName="id")
@@ -32,7 +24,7 @@ class DiagnosisLocale
 
     /**
      * @var \Infect\BackendBundle\Entity\Drug
-     *
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Diagnosis", inversedBy="locales")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_diagnosis", referencedColumnName="id")
@@ -54,17 +46,6 @@ class DiagnosisLocale
      */
     private $description;
 
-
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set title

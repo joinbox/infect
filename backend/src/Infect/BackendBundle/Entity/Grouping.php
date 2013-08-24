@@ -36,6 +36,13 @@ class Grouping
     private $bacterias;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\GroupingLocale", mappedBy="grouping")
+     */
+    private $locales;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -107,5 +114,38 @@ class Grouping
     public function getBacterias()
     {
         return $this->bacterias;
+    }
+
+    /**
+     * Add locales
+     *
+     * @param \Infect\BackendBundle\Entity\GroupingLocale $locales
+     * @return Grouping
+     */
+    public function addLocale(\Infect\BackendBundle\Entity\GroupingLocale $locales)
+    {
+        $this->locales[] = $locales;
+    
+        return $this;
+    }
+
+    /**
+     * Remove locales
+     *
+     * @param \Infect\BackendBundle\Entity\GroupingLocale $locales
+     */
+    public function removeLocale(\Infect\BackendBundle\Entity\GroupingLocale $locales)
+    {
+        $this->locales->removeElement($locales);
+    }
+
+    /**
+     * Get locales
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLocales()
+    {
+        return $this->locales;
     }
 }

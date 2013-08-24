@@ -6,10 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
- * @ORM\Table(name="substanceLocale")
+ * @ORM\Table(name="shapeLocale")
  * @ORM\Entity
  */
-class SubstanceLocale
+class ShapeLocale
 {
 
     /**
@@ -25,26 +25,27 @@ class SubstanceLocale
     /**
      * @var \Infect\BackendBundle\Entity\Drug
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Substance", inversedBy="locales")
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Shape", inversedBy="locales")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_substance", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="id_shape", referencedColumnName="id")
      * })
      */
-    private $substance;
+    private $shape;
 
         /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=250, nullable=false)
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     private $name;
+
 
 
     /**
      * Set name
      *
      * @param string $name
-     * @return SubstanceLocale
+     * @return ShapeLocale
      */
     public function setName($name)
     {
@@ -67,9 +68,9 @@ class SubstanceLocale
      * Set language
      *
      * @param \Infect\BackendBundle\Entity\Language $language
-     * @return SubstanceLocale
+     * @return ShapeLocale
      */
-    public function setLanguage(\Infect\BackendBundle\Entity\Language $language = null)
+    public function setLanguage(\Infect\BackendBundle\Entity\Language $language)
     {
         $this->language = $language;
     
@@ -87,25 +88,25 @@ class SubstanceLocale
     }
 
     /**
-     * Set substance
+     * Set shape
      *
-     * @param \Infect\BackendBundle\Entity\Substance $substance
-     * @return SubstanceLocale
+     * @param \Infect\BackendBundle\Entity\Shape $shape
+     * @return ShapeLocale
      */
-    public function setSubstance(\Infect\BackendBundle\Entity\Substance $substance = null)
+    public function setShape(\Infect\BackendBundle\Entity\Shape $shape)
     {
-        $this->substance = $substance;
+        $this->shape = $shape;
     
         return $this;
     }
 
     /**
-     * Get substance
+     * Get shape
      *
-     * @return \Infect\BackendBundle\Entity\Substance 
+     * @return \Infect\BackendBundle\Entity\Shape 
      */
-    public function getSubstance()
+    public function getShape()
     {
-        return $this->substance;
+        return $this->shape;
     }
 }

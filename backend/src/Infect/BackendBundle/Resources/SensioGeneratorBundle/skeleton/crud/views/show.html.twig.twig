@@ -1,0 +1,54 @@
+{% block extends %}
+    {{ "{% extends 'InfectBackendBundle::main.html.twig' %}" }}
+{% endblock extends %}
+
+{% block body %}
+
+{{ "
+{% block javascript %}
+{% endblock %}
+
+{% block pageTitle %}
+    {% trans %}"}}{{ entity }}{{"{% endtrans %}
+{% endblock %}" }}
+
+{{ "{% block content %}" }}
+
+    <form action="{{ "{{ path('" ~ route_name_prefix ~ "') }}" }}" method="POST" style="float:left;margin-right:10px;">
+        <button type="submit" class="btn btn-info" value="">{{ "{% trans %}" }}Zurück{{ "{% endtrans %}" }}</button>
+    </form>
+
+    <form action="{{ "{{ path('" ~ route_name_prefix ~ "_delete', { 'id': entity.id }) }}" }}" method="post">
+        <input type="hidden" name="_method" value="DELETE" />
+        {{ '{{ form_widget(delete_form) }}' }}
+        <button type="submit" class="btn btn-danger">{{ "{% trans %}" }}Löschen{{ "{% endtrans %}" }}</button>
+    </form>
+
+    <table id="datatable" class="table table-striped table-bordered table-hover">
+        <tbody>
+        {%- for field, metadata in fields %}
+
+            <tr>
+                <th>{{ field|capitalize }}</th>
+
+            {%- if metadata.type in ['date', 'datetime'] %}
+
+                <td>{{ '{{ entity.' ~ field|replace({'_': ''}) ~ '|date(\'Y-m-d H:i:s\') }}' }}</td>
+
+            {%- else %}
+
+                <td>{{ '{{ entity.' ~ field|replace({'_': ''}) ~ ' }}' }}</td>
+
+            {%- endif %}
+
+            </tr>
+
+        {%- endfor %}
+
+        </tbody>
+    </table>
+    
+{{ "{% endblock %}" }}
+{% endblock body %}
+
+

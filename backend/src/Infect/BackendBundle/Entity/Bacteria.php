@@ -23,6 +23,11 @@ class Bacteria
     private $id;
 
     /**
+     * @ORM\Column(type="string", length=200)
+     */
+    private $name;
+
+    /**
      * @var \Infect\BackendBundle\Entity\Species
      *
      * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Species")
@@ -369,5 +374,28 @@ class Bacteria
     public function getLocales()
     {
         return $this->locales;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Bacteria
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

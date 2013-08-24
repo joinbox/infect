@@ -12,18 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class DrugLocale
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
 
     /**
      * @var \Infect\BackendBundle\Entity\Language
-     *
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Language")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_language", referencedColumnName="id")
@@ -33,7 +25,7 @@ class DrugLocale
 
     /**
      * @var \Infect\BackendBundle\Entity\Language
-     *
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Country")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_country", referencedColumnName="id")
@@ -43,7 +35,7 @@ class DrugLocale
 
     /**
      * @var \Infect\BackendBundle\Entity\Drug
-     *
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Drug", inversedBy="locales")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_drug", referencedColumnName="id")
@@ -51,17 +43,11 @@ class DrugLocale
      */
     private $drug;
 
-
-
     /**
-     * Get id
-     *
-     * @return integer 
+     * @ORM\Column(type="string", length=200)
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $name;
+
 
     /**
      * Set language
@@ -130,5 +116,28 @@ class DrugLocale
     public function getDrug()
     {
         return $this->drug;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return DrugLocale
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

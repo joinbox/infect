@@ -71,6 +71,16 @@
         <script src="/js/plugins.js"></script>
         <script src="/js/main.js"></script>
 
+        <script>
+            $(function() {
+                /* Initialize Datatables */
+                $('#example-datatables').dataTable({"aoColumnDefs": [{"bSortable": false, "aTargets": [0]}]});
+                $('#example-datatables2').dataTable();
+                $('#example-datatables3').dataTable();
+            });
+        </script>
+
+
         {% block javascript %}
         {% endblock %}
 
