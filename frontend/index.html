@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html ng-app="infekt" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html ng-app="infekt" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html ng-app="infekt" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html ng-app="infekt" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8" />
+        <title>Infekt</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width" />
+
+        <link rel="stylesheet" href="css/normalize.css" />
+        <link rel="stylesheet" href="css/helpers.css" />
+        <link rel="stylesheet" href="css/fonts.css" />
+        <link rel="stylesheet" href="css/main.css" />
+
+
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script>window.jQuery || document.write('<script src="js/vendor/jquery-2.0.2.min.js"><\/script>')</script>
+
+
+		<script src="js/vendor/angular.min.js"></script>
+		<script src="js/vendor/jquery-ui-1.10.3.custom.min.js"></script>
+
+		<script src="js/plugins.js"></script>
+
+
+
+
+		<!-- Infect Angular Module -->
+		<!-- Base -->
+		<script src="js/angular/infekt/app.js"></script>
+
+		<!-- Factories -->
+		<script src="js/angular/infekt/antibioticsFactory.js"></script>
+		<script src="js/angular/infekt/bacteriaFactory.js"></script>
+		<script src="js/angular/infekt/searchTableFactory.js"></script>
+		<script src="js/angular/infekt/resistencyFactory.js"></script>
+		<script src="js/angular/infekt/filterFactory.js"></script>
+
+		<!-- Controllers -->
+		<script src="js/angular/infekt/infektController.js"></script>
+
+		<!-- Directives -->
+		<script src="js/angular/infekt/resistencyMatrixDirective.js"></script>
+
+
+
+
+		<!-- View stuff -->
+		<script src="js/plugins/searchInput.js"></script>
+
+		<script src="js/main.js"></script>
+
+    </head>
+
+    <body ng-controller="InfektController">
+
+
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+        
+        
+        
+
+	<header class="animated">
+
+		<div class="wrapper">
+
+			<div id="logo" class="animated">
+				<img src="img/logo.png" alt="Infect Logo" id="logo-img" />
+				<h1 class="animated">Infekt</h1>
+			</div>
+			
+			<section id="filter-wrapper">
+			
+				<section id="filter">
+				
+					<div class="wrapper">
+
+						<label>Filter</label>
+						
+						<div id="filter-suggestion-input">
+						
+							<div id="filter-input-wrapper" class="styled-input">
+								<input type="search" id="filter-input" class="searchInput" />
+							</div>
+
+							<div id="filter-suggestion-overlay">
+							</div>
+													
+							<!-- Suggestion needs to look like 
+								<div id="filter-suggestion-overlay">
+									<ul class="filter-suggestion-list flat-list">
+										<li class="filter-list-item">
+											<span class="filter-item-category">Bakterium - Farbigkeit</span>
+											Gram+
+										</li>
+										<li class="filter-list-item">
+											<span class="filter-item-category">Bakterium - Farbigkeit</span>
+											Gram-
+										</li>
+									</ul>
+								</div>
+								-->
+													
+						</div>
+					
+					</div>
+					
+				</section>
+
+				<section id="active-filter">
+
+					<ul class="active-filter-list flat-list">
+					
+						<li>
+							<label class="animated">Bakterium<span class="filter-item-indicator animated">{{getFilterCount('bacterium')}}</span></label>
+							<ul class="active-filter-item-list flat-list animated">
+								<li ng-repeat="filter in getFilters('bacterium')" class="filter-list-item">
+									<span class="filter-item-category">{{filter.name}}</span>
+									{{filter.value}}
+									<button class="removeFilterButton" ng-click="removeFilter(filter)">x</button>
+								</li>
+
+								</li>
+							</ul>
+						</li>
+
+						<li>
+							<label class="animated">Antibiotikum<span class="filter-item-indicator animated">{{getFilterCount('antibiotic')}}</span></label>
+							<ul class="active-filter-item-list flat-list animated">
+								<li ng-repeat="filter in getFilters('antibiotic')" class="filter-list-item">
+									<span class="filter-item-category">{{filter.name}}</span>
+									{{filter.value}}
+									<button class="removeFilterButton" ng-click="removeFilter(filter)">x</button>
+								</li>
+
+								</li>
+							</ul>
+
+						</li>
+
+						
+						<!--<li>
+							<label class="animated">Antibiotikum <span class="filter-item-indicator animated">0</span></label>
+						</li>
+
+						<li>
+							<label class="animated">Diagnose <span class="filter-item-indicator animated">1</span></label>
+							<ul class="active-filter-item-list flat-list animated">
+								<li class="filter-list-item">
+									<span class="filter-item-category">Diagnose</span>
+									Pneumonie
+								</li>
+							</ul>
+						</li>-->
+						
+					</ul>
+				
+				</section>
+				
+			</section>
+		
+		</div>
+
+	</header>
+
+
+	<section id="content">
+
+
+		<!--<div class="filters" style="margin-top: 58px;">
+			Bacteria: 
+			Antibiotics: 
+			<ul>
+				<li ng-repeat="filter in getFilters('antibiotic')">{{filter.name}}<br/>{{filter.value}}<button class="removeFilterButton" ng-click="removeFilter(filter)">x</button></li>
+			</ul>
+
+		</div>-->
+
+		<!--
+		<ul id="content-switcher-list">
+			<li><button data-for="matrix">Matrix</button></li>
+			<li><button data-for="recommendation">Empfehlung</button></li>
+		</ul>
+		-->
+
+		<section id="matrix">
+
+		<table resistency-matrix class="resistencyMatrix" id="resistence-table">
+			<!-- Content has to  look like 
+				<tr>
+					<th scope="col"></th>
+					<th scope="col" class="vertical">Amox./Clav. (Augmentin)</th>
+					<th scope="col" class="vertical">Amoxicillin (Clamoxyl)</th>
+					<th scope="col" class="vertical">Cefepim (Cefepim Sandoz)</th>
+				</tr>
+
+				<tr>
+					<th scope="row">Corynebacterium jeikeium</th>
+					<td class="good">30%</td>
+					<td class="bad">50%</td>
+					<td class="fair">50%</td>
+				</tr> -->
+		</table>
+
+		
+
+
+
+		</section>
+
+	</section>
+
+
+
+    </body>
+</html>
