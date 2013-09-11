@@ -8,21 +8,35 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class BacteriaType extends AbstractType
 {
+        /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('gram')
-            ->add('aerobic')
-            ->add('aerobicOptional')
-            ->add('anaerobic')
-            ->add('anaerobicOptional')
-            ->add('species')
+            //->add('name')
+            ->add('locales', 'collection', array(
+                    'type'         => new BacteriaLocaleType(),
+                    'allow_add'    => true,
+                    'allow_delete' => true,
+                    'by_reference' => false,                                        
+                ))
+            ->add('gram', null, array('required' => false))
+            ->add('aerobic', null, array('required' => false))
+            ->add('aerobicOptional', null, array('required' => false))
+            ->add('anaerobic', null, array('required' => false))
+            ->add('anaerobicOptional', null, array('required' => false))
+            ->add('species', null, array('required' => true))
             ->add('shape')
             ->add('grouping')
-            ->add('diagnosis')
+            //->add('diagnosis', null, array('required' => false))
         ;
     }
-
+    
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
@@ -30,8 +44,11 @@ class BacteriaType extends AbstractType
         ));
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
-        return 'infect_backendbundle_bacteriatype';
+        return 'infect_backendbundle_bacteria';
     }
 }

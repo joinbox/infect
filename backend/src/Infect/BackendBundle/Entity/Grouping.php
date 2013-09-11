@@ -18,7 +18,7 @@ class Grouping
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -38,7 +38,7 @@ class Grouping
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\GroupingLocale", mappedBy="grouping")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\GroupingLocale", mappedBy="grouping", cascade={"persist", "remove"})
      */
     private $locales;
 
@@ -47,9 +47,15 @@ class Grouping
      */
     public function __construct()
     {
+        $this->locales = new \Doctrine\Common\Collections\ArrayCollection();
         $this->bacterias = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     /**
      * Get id
      *
@@ -124,6 +130,7 @@ class Grouping
      */
     public function addLocale(\Infect\BackendBundle\Entity\GroupingLocale $locales)
     {
+        $locales->setGrouping($this);
         $this->locales[] = $locales;
     
         return $this;

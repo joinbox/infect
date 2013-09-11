@@ -17,7 +17,7 @@ class Compound
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -69,7 +69,7 @@ class Compound
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\CompoundLocale", mappedBy="compound")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\CompoundLocale", mappedBy="compound", cascade={"persist", "remove"})
      */
     private $locales;
 
@@ -82,6 +82,30 @@ class Compound
         $this->substances = new \Doctrine\Common\Collections\ArrayCollection();
         $this->drugs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->locales = new \Doctrine\Common\Collections\ArrayCollection();
+
+        $this->iv = false;
+        $this->po = false;
+    }
+
+    public function __toString()
+    {
+        $out = false;
+
+        foreach ($this->substances as $substance) 
+        {
+            foreach ($substance->getLocales() as $locale) 
+            {
+                if(!$out) $out = '';
+                $out .= $locale->getLanguage()->getName().': '.$locale->getName().' | ';
+            }
+
+            if($out)
+            {
+                $out .= '/';
+            }
+        }
+
+        return $out ? $out : 'no Name';
     }
     
     /**
@@ -247,6 +271,7 @@ class Compound
      */
     public function addLocale(\Infect\BackendBundle\Entity\CompoundLocale $locales)
     {
+        $locales->setCompound($this);
         $this->locales[] = $locales;
     
         return $this;

@@ -1,3 +1,5 @@
+{% set actual_route = app.request.attributes.get('_route') %}  
+
     <!-- Sidebar -->
     <aside id="page-sidebar" class="nav-collapse collapse">
 
@@ -10,119 +12,78 @@
         </form> -->
         <!-- END Sidebar search -->
 
+        <style type="text/css">
+            #primary-nav ul li h5
+            {
+                width: 100%;
+                margin-left: 15px;
+                font-size:12px;
+            }
+        </style>
+
         <!-- Primary Navigation -->
         <nav id="primary-nav">
             <ul>
                 <li>
-                    <a href="{{ path('infect_dashboard') }}" class="active"><i class="icon-fire"></i>Dashboard</a>
+                    <a href="{{ path('infect_dashboard') }}" {% if actual_route == 'infect_dashboard' %}class="active"{% endif %}><i class="icon-fire"></i>Dashboard</a>
+                </li>
+                <li><br></li>
+
+                <li><h5>{% trans %}Resistenz{% endtrans %}</h5></li>
+                <li>
+                    <a href="{{ path('resistance') }}" {% if actual_route == 'resistance' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}resistance{% endtrans %}</a>
+                </li>
+
+                <li><h5>{% trans %}Bakterien{% endtrans %}</h5></li>
+                <li>
+                    <a href="{{ path('bacteria') }}" {% if actual_route == 'bacteria' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}bacteria{% endtrans %}</a>
                 </li>
                 <li>
-                    <a href="#"><i class="icon-magic"></i>UI Elements</a>
-                    <ul>
-                        <li>
-                            <a href="page_ui_general.html"><i class="icon-star"></i>General</a>
-                        </li>
-                        <li>
-                            <a href="page_forms.html"><i class="icon-th-list"></i>Forms</a>
-                        </li>
-                        <li>
-                            <a href="page_tables.html"><i class="icon-table"></i>Tables</a>
-                        </li>
-                    </ul>
+                    <a href="{{ path('genus') }}" {% if actual_route == 'genus' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}genus{% endtrans %}</a>
                 </li>
                 <li>
-                    <a href="#"><i class="icon-leaf"></i>Components</a>
-                    <ul>
-                        <li>
-                            <a href="page_charts.html"><i class="icon-bar-chart"></i>Charts</a>
-                        </li>
-                        <li>
-                            <a href="page_calendar.html"><i class="icon-calendar"></i>Calendar</a>
-                        </li>
-                        <li>
-                            <a href="page_datatables.html"><i class="icon-th"></i>DataTables</a>
-                        </li>
-                        <li>
-                            <a href="page_datatables_editable.html"><i class="icon-pencil"></i>Editable DataTables</a>
-                        </li>
-                        <li>
-                            <a href="page_maps.html"><i class="icon-map-marker"></i>Maps</a>
-                        </li>
-                        <li>
-                            <a href="page_form_validation.html"><i class="icon-warning-sign"></i>Form Validation</a>
-                        </li>
-                        <li>
-                            <a href="page_form_wizard.html"><i class="icon-magic"></i>Form Wizard</a>
-                        </li>
-                        <li>
-                            <a href="page_syntax_highlighting.html"><i class="icon-beaker"></i>Syntax Highlighting</a>
-                        </li>
-                    </ul>
+                    <a href="{{ path('species') }}" {% if actual_route == 'species' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}species{% endtrans %}</a>
                 </li>
                 <li>
-                    <a href="page_typography.html"><i class="icon-font"></i>Typography</a>
+                    <a href="{{ path('grouping') }}" {% if actual_route == 'grouping' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}grouping{% endtrans %}</a>
                 </li>
                 <li>
-                    <a href="page_gallery.html"><i class="icon-picture"></i>Gallery</a>
+                    <a href="{{ path('shape') }}" {% if actual_route == 'shape' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}shape{% endtrans %}</a>
+                </li>
+
+                <li><h5>{% trans %}Antibiotika{% endtrans %}</h5></li>
+                <li>
+                    <a href="{{ path('compound') }}" {% if actual_route == 'compound' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}compound{% endtrans %}</a>
                 </li>
                 <li>
-                    <a href="#"><i class="icon-tint"></i>Icons</a>
-                    <ul>
-                        <li>
-                            <a href="page_glyphicons_pro.html">Glyphicons PRO</a>
-                        </li>
-                        <li>
-                            <a href="page_glyphicons_halflings_pro.html">Glyphicons Halflings PRO</a>
-                        </li>
-                        <li>
-                            <a href="page_fontawesome.html">FontAwesome</a>
-                        </li>
-                        <li>
-                            <a href="page_gemicon.html">Gemicon</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="active">
-                    <a href="#"><i class="icon-file-alt"></i>Pages</a>
-                    <ul>
-                        <li>
-                            <a href="page_inbox.html"><i class="icon-envelope"></i>Inbox</a>
-                        </li>
-                        <li>
-                            <a href="page_chatui.html"><i class="icon-comments"></i>ChatUI</a>
-                        </li>
-                        <li>
-                            <a href="page_search_results.html"><i class="icon-search"></i>Search Results</a>
-                        </li>
-                        <li>
-                            <a href="page_price_tables.html"><i class="icon-ticket"></i>Price Tables</a>
-                        </li>
-                        <li>
-                            <a href="page_article.html"><i class="icon-pencil"></i>Article</a>
-                        </li>
-                        <li>
-                            <a href="page_invoice.html"><i class="icon-book"></i>Invoice</a>
-                        </li>
-                        <li>
-                            <a href="page_profile.html"><i class="icon-user"></i>Profile</a>
-                        </li>
-                        <li>
-                            <a href="page_faq.html"><i class="icon-flag"></i>FAQ</a>
-                        </li>
-                        <li>
-                            <a href="page_errors.html"><i class="icon-warning-sign"></i>Errors</a>
-                        </li>
-                        <li>
-                            <a href="page_blank.html" class="active"><i class="icon-circle-blank"></i>Blank</a>
-                        </li>
-                    </ul>
+                    <a href="{{ path('substanceclass') }}" {% if actual_route == 'substanceclass' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}substanceclass{% endtrans %}</a>
                 </li>
                 <li>
-                    <a href="page_login.html"><i class="icon-off"></i>Login Page</a>
+                    <a href="{{ path('substance') }}" {% if actual_route == 'substance' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}substance{% endtrans %}</a>
                 </li>
                 <li>
-                    <a href="page_landing.html"><i class="icon-rocket"></i>Landing Page</a>
+                    <a href="{{ path('drug') }}" {% if actual_route == 'drug' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}drug{% endtrans %}</a>
                 </li>
+
+                <li><h5>{% trans %}Diagnose{% endtrans %}</h5></li>
+                <li>
+                    <a href="{{ path('diagnosis') }}" {% if actual_route == 'diagnosis' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}diagnosis{% endtrans %}</a>
+                </li>
+                <li>
+                    <a href="{{ path('therapy') }}" {% if actual_route == 'therapy' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}therapy{% endtrans %}</a>
+                </li>
+                <li>
+                    <a href="{{ path('topic') }}" {% if actual_route == 'topic' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}topic{% endtrans %}</a>
+                </li>
+
+                <li><h5>{% trans %}Allgemeine Einstellungen{% endtrans %}</h5></li>
+                <li>
+                    <a href="{{ path('country') }}" {% if actual_route == 'country' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}country{% endtrans %}</a>
+                </li>
+                <li>
+                    <a href="{{ path('language') }}" {% if actual_route == 'language' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}language{% endtrans %}</a>
+                </li>
+
             </ul>
         </nav>
         <!-- END Primary Navigation -->

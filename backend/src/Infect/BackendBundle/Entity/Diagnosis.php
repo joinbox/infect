@@ -17,7 +17,7 @@ class Diagnosis
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -34,7 +34,7 @@ class Diagnosis
     /**
      * @var \Infect\BackendBundle\Entity\Topic
      *
-     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Topic")
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Topic", inversedBy="diagnosis")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_topic", referencedColumnName="id")
      * })
@@ -76,7 +76,7 @@ class Diagnosis
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\DiagnosisLocale", mappedBy="diagnosis")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\DiagnosisLocale", mappedBy="diagnosis", cascade={"persist", "remove"})
      */
     private $locales;
 
@@ -90,6 +90,18 @@ class Diagnosis
         $this->locales = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
+    public function __toString()
+    {
+        $out = false;
+        foreach ($this->getLocales() as $locale) 
+        {
+            if(!$out) $out = "";
+            $out .= $locale->getLanguage()->getName().':'.$locale->getTitle().' | ';
+        }
+
+        return $out ? $out : 'no Name';
+    }
+
     /**
      * Get id
      *
@@ -243,6 +255,7 @@ class Diagnosis
      */
     public function addLocale(\Infect\BackendBundle\Entity\DiagnosisLocale $locales)
     {
+        $locales->setDiagnosis($this);
         $this->locales[] = $locales;
     
         return $this;

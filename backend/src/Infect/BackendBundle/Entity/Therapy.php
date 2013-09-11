@@ -17,14 +17,14 @@ class Therapy
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var \Infect\BackendBundle\Entity\Diagnosis
      *
-     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Diagnosis")
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Diagnosis", inversedBy="therapies")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_diagnosis", referencedColumnName="id")
      * })
@@ -49,7 +49,7 @@ class Therapy
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\TherapyLocale", mappedBy="therapy")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\TherapyLocale", mappedBy="therapy", cascade={"persist", "remove"})
      */
     private $locales;
 
@@ -61,6 +61,18 @@ class Therapy
     {
         $this->compounds = new \Doctrine\Common\Collections\ArrayCollection();
         $this->locales = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        $out = false;
+        foreach ($this->getCompounds() as $compound) 
+        {
+            if(!$out) $out = "";
+            $out .= $compound.' | ';
+        }
+
+        return $out ? $out : 'no Name';
     }
     
     /**
@@ -137,6 +149,7 @@ class Therapy
      */
     public function addLocale(\Infect\BackendBundle\Entity\TherapyLocale $locales)
     {
+        $locales->setTherapy($this);
         $this->locales[] = $locales;
     
         return $this;

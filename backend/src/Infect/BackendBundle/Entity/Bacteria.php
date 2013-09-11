@@ -18,19 +18,19 @@ class Bacteria
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=200, nullable=true)
      */
     private $name;
 
     /**
      * @var \Infect\BackendBundle\Entity\Species
      *
-     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Species")
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Species", inversedBy="bacterias")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_species", referencedColumnName="id")
      * })
@@ -40,7 +40,7 @@ class Bacteria
     /**
      * @var \Infect\BackendBundle\Entity\Shape
      *
-     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Shape")
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Shape", inversedBy="bacterias")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_shape", referencedColumnName="id")
      * })
@@ -50,7 +50,7 @@ class Bacteria
     /**
      * @var \Infect\BackendBundle\Entity\Grouping
      *
-     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Grouping")
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Grouping", inversedBy="bacterias")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_grouping", referencedColumnName="id")
      * })
@@ -95,14 +95,14 @@ class Bacteria
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Infect\BackendBundle\Entity\Diagnosis", mappedBy="bacteria")
+     * @ORM\ManyToMany(targetEntity="Infect\BackendBundle\Entity\Diagnosis", mappedBy="bacterias")
      */
     private $diagnosis;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\BacteriaLocale", mappedBy="bacteria")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\BacteriaLocale", mappedBy="bacteria", cascade={"persist", "remove"})
      */
     private $locales;
 
@@ -112,8 +112,29 @@ class Bacteria
      */
     public function __construct()
     {
+        $this->gram              = false;
+        $this->aerobic           = false;
+        $this->aerobicOptional   = false;
+        $this->anaerobic         = false;
+        $this->anaerobicOptional = false;
+
         $this->diagnosis = new \Doctrine\Common\Collections\ArrayCollection();
         $this->locales = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        $out = false;
+
+        if($this->getSpecies())
+        {
+            if ($this->getSpecies()->getGenus()) 
+            {
+                $out = $this->getSpecies()->getGenus()." ".$this->getSpecies();
+            }
+        }
+
+        return $out ? $out : "no name";
     }
     
     /**
@@ -351,6 +372,7 @@ class Bacteria
      */
     public function addLocale(\Infect\BackendBundle\Entity\BacteriaLocale $locales)
     {
+        $locales->setBacteria($this);
         $this->locales[] = $locales;
     
         return $this;

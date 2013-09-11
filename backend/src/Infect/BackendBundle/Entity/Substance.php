@@ -17,7 +17,7 @@ class Substance
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -53,7 +53,7 @@ class Substance
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\SubstanceLocale", mappedBy="substance")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\SubstanceLocale", mappedBy="substance", cascade={"persist", "remove"})
      */
     private $locales;
 
@@ -66,6 +66,18 @@ class Substance
         $this->substanceClasses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->childs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->locales = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        $out = false;
+        foreach ($this->getLocales() as $locale) 
+        {
+            if(!$out) $out = "";
+            $out .= $locale->getLanguage()->getName().':'.$locale->getName().' | ';
+        }
+
+        return $out ? $out : 'no Name';
     }
     
     /**
@@ -185,6 +197,7 @@ class Substance
      */
     public function addLocale(\Infect\BackendBundle\Entity\SubstanceLocale $locales)
     {
+        $locales->setSubstance($this);
         $this->locales[] = $locales;
     
         return $this;
