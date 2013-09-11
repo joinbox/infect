@@ -1,0 +1,30 @@
+genus:
+    pattern:  /
+    defaults: { _controller: "InfectBackendBundle:Genus:index" }
+
+genus_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "InfectBackendBundle:Genus:show" }
+
+genus_new:
+    pattern:  /new
+    defaults: { _controller: "InfectBackendBundle:Genus:new" }
+
+genus_create:
+    pattern:  /create
+    defaults: { _controller: "InfectBackendBundle:Genus:create" }
+    requirements: { _method: post }
+
+genus_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "InfectBackendBundle:Genus:edit" }
+
+genus_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "InfectBackendBundle:Genus:update" }
+    requirements: { _method: post|put }
+
+genus_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "InfectBackendBundle:Genus:delete" }
+    requirements: { _method: post|delete }

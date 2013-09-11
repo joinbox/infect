@@ -1,0 +1,30 @@
+diagnosis:
+    pattern:  /
+    defaults: { _controller: "InfectBackendBundle:Diagnosis:index" }
+
+diagnosis_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "InfectBackendBundle:Diagnosis:show" }
+
+diagnosis_new:
+    pattern:  /new
+    defaults: { _controller: "InfectBackendBundle:Diagnosis:new" }
+
+diagnosis_create:
+    pattern:  /create
+    defaults: { _controller: "InfectBackendBundle:Diagnosis:create" }
+    requirements: { _method: post }
+
+diagnosis_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "InfectBackendBundle:Diagnosis:edit" }
+
+diagnosis_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "InfectBackendBundle:Diagnosis:update" }
+    requirements: { _method: post|put }
+
+diagnosis_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "InfectBackendBundle:Diagnosis:delete" }
+    requirements: { _method: post|delete }

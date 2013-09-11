@@ -1,0 +1,72 @@
+{% extends 'InfectBackendBundle::main.html.twig' %}
+
+
+{% block javascript %}
+{% endblock %}
+
+{% block pageTitle %}
+     {% trans %}Bacteria{% endtrans %} 
+{% endblock %}
+
+{% block content %}
+
+            <form action="{{ path('bacteria_new') }}" method="POST">
+            <button type="submit" class="btn btn-success">
+                {% trans with {'%entity%': 'Bacteria'|trans} %}%entity% hinzufügen{% endtrans %}
+            </button>        
+        </form>
+    
+    <table id="datatable" class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th class="span1"></th>                                                                <th>Name</th>
+                                                                <th>Gram</th>
+                                                                <th>Aerobic</th>
+                                                                <th>Aerobicoptional</th>
+                                                                <th>Anaerobic</th>
+                                                                <th>Anaerobicoptional</th>
+                                   
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>
+                    <div class="btn-group">
+                        <a href="{{ path('bacteria_edit', { 'id': entity.id }) }}" data-toggle="tooltip" title="{% trans %}editieren{% endtrans %}" class="btn btn-mini btn-success"><i class="icon-pencil"></i></a>
+                        <a href="{{ path('bacteria_show', { 'id': entity.id }) }}" data-toggle="tooltip" title="{% trans %}Details{% endtrans %}" class="btn btn-mini btn-info"><i class="icon-zoom-in"></i></a>
+                    </div>
+                </td>
+                <td>{{ entity }}</td>
+                <td>{% if entity.gram %}
+                        <span class="label label-success" style="width:16px;height:16px;text-align:center;"><i class="icon-ok"></i></span>
+                    {% else %}
+                        <span class="label label-error" style="width:16px;height:16px;text-align:center;"><i class="icon-remove"></i></span>
+                    {% endif %}</td>
+                <td>{% if entity.aerobic %}
+                        <span class="label label-success" style="width:16px;height:16px;text-align:center;"><i class="icon-ok"></i></span>
+                    {% else %}
+                        <span class="label label-error" style="width:16px;height:16px;text-align:center;"><i class="icon-remove"></i></span>
+                    {% endif %}</td>
+                <td>{% if entity.aerobicOptional %}
+                        <span class="label label-success" style="width:16px;height:16px;text-align:center;"><i class="icon-ok"></i></span>
+                    {% else %}
+                        <span class="label label-error" style="width:16px;height:16px;text-align:center;"><i class="icon-remove"></i></span>
+                    {% endif %}</td>
+                <td>{% if entity.anaerobic %}
+                        <span class="label label-success" style="width:16px;height:16px;text-align:center;"><i class="icon-ok"></i></span>
+                    {% else %}
+                        <span class="label label-error" style="width:16px;height:16px;text-align:center;"><i class="icon-remove"></i></span>
+                    {% endif %}</td>                
+                <td>{% if entity.anaerobicOptional %}
+                        <span class="label label-success" style="width:16px;height:16px;text-align:center;"><i class="icon-ok"></i></span>
+                    {% else %}
+                        <span class="label label-error" style="width:16px;height:16px;text-align:center;"><i class="icon-remove"></i></span>
+                    {% endif %}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>     
+
+{% endblock %}
+

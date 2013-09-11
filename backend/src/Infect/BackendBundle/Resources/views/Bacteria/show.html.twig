@@ -1,0 +1,59 @@
+    {% extends 'InfectBackendBundle::main.html.twig' %}
+
+
+
+{% block javascript %}
+{% endblock %}
+
+{% block pageTitle %}
+    {% trans %}Bacteria{% endtrans %}
+{% endblock %}
+
+{% block content %}
+
+    <form action="{{ path('bacteria') }}" method="POST" style="float:left;margin-right:10px;">
+        <button type="submit" class="btn btn-info" value="">{% trans %}Zurück{% endtrans %}</button>
+    </form>
+
+    <form action="{{ path('bacteria_delete', { 'id': entity.id }) }}" method="post">
+        <input type="hidden" name="_method" value="DELETE" />
+        {{ form_widget(delete_form) }}
+        <button type="submit" class="btn btn-danger">{% trans %}Löschen{% endtrans %}</button>
+    </form>
+
+    <table id="datatable" class="table table-striped table-bordered table-hover">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ entity.name }}</td>
+            </tr>
+            <tr>
+                <th>Gram</th>
+                <td>{{ entity.gram }}</td>
+            </tr>
+            <tr>
+                <th>Aerobic</th>
+                <td>{{ entity.aerobic }}</td>
+            </tr>
+            <tr>
+                <th>Aerobicoptional</th>
+                <td>{{ entity.aerobicOptional }}</td>
+            </tr>
+            <tr>
+                <th>Anaerobic</th>
+                <td>{{ entity.anaerobic }}</td>
+            </tr>
+            <tr>
+                <th>Anaerobicoptional</th>
+                <td>{{ entity.anaerobicOptional }}</td>
+            </tr>
+        </tbody>
+    </table>
+    
+{% endblock %}
+
+

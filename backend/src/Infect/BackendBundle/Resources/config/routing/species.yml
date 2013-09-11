@@ -1,0 +1,30 @@
+species:
+    pattern:  /
+    defaults: { _controller: "InfectBackendBundle:Species:index" }
+
+species_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "InfectBackendBundle:Species:show" }
+
+species_new:
+    pattern:  /new
+    defaults: { _controller: "InfectBackendBundle:Species:new" }
+
+species_create:
+    pattern:  /create
+    defaults: { _controller: "InfectBackendBundle:Species:create" }
+    requirements: { _method: post }
+
+species_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "InfectBackendBundle:Species:edit" }
+
+species_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "InfectBackendBundle:Species:update" }
+    requirements: { _method: post|put }
+
+species_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "InfectBackendBundle:Species:delete" }
+    requirements: { _method: post|delete }

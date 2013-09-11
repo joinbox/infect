@@ -1,0 +1,30 @@
+country:
+    pattern:  /
+    defaults: { _controller: "InfectBackendBundle:Country:index" }
+
+country_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "InfectBackendBundle:Country:show" }
+
+country_new:
+    pattern:  /new
+    defaults: { _controller: "InfectBackendBundle:Country:new" }
+
+country_create:
+    pattern:  /create
+    defaults: { _controller: "InfectBackendBundle:Country:create" }
+    requirements: { _method: post }
+
+country_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "InfectBackendBundle:Country:edit" }
+
+country_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "InfectBackendBundle:Country:update" }
+    requirements: { _method: post|put }
+
+country_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "InfectBackendBundle:Country:delete" }
+    requirements: { _method: post|delete }

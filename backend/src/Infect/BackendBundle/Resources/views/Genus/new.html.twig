@@ -1,0 +1,34 @@
+    {% extends 'InfectBackendBundle::main.html.twig' %}
+
+
+
+{% block javascript %}
+{% endblock %}
+
+{% block pageTitle %}
+    {% trans with {'%entity%': 'Genus'|trans} %}%entity% hinzufügen{% endtrans %}
+{% endblock %}
+
+{% block content %}
+
+    <form class="form-horizontal form-box" method="post" action="{{ path('genus_create') }}" {{ form_enctype(form) }}>
+        <h4 class="form-box-header">
+            {% trans %}Genus{% endtrans %}
+        </h4>
+
+        <div class="form-box-content">
+            {{ form_widget(form) }}
+            {{ form_rest(form) }}
+
+            <div class="form-actions">
+                <input type="submit" class="btn btn-success" value="{% trans %}Hinzufügen{% endtrans %}">
+                <a href="{{ path('genus') }}">
+                    <button type="button" class="btn btn-danger" value="">{% trans %}Abbrechen{% endtrans %}</button>
+                </a>
+            </div>
+
+        </div>
+    </form>
+    
+{% endblock %}
+

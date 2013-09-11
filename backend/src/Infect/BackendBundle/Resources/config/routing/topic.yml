@@ -1,0 +1,30 @@
+topic:
+    pattern:  /
+    defaults: { _controller: "InfectBackendBundle:Topic:index" }
+
+topic_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "InfectBackendBundle:Topic:show" }
+
+topic_new:
+    pattern:  /new
+    defaults: { _controller: "InfectBackendBundle:Topic:new" }
+
+topic_create:
+    pattern:  /create
+    defaults: { _controller: "InfectBackendBundle:Topic:create" }
+    requirements: { _method: post }
+
+topic_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "InfectBackendBundle:Topic:edit" }
+
+topic_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "InfectBackendBundle:Topic:update" }
+    requirements: { _method: post|put }
+
+topic_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "InfectBackendBundle:Topic:delete" }
+    requirements: { _method: post|delete }

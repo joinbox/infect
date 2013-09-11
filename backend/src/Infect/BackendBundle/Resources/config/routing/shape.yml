@@ -1,0 +1,30 @@
+shape:
+    pattern:  /
+    defaults: { _controller: "InfectBackendBundle:Shape:index" }
+
+shape_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "InfectBackendBundle:Shape:show" }
+
+shape_new:
+    pattern:  /new
+    defaults: { _controller: "InfectBackendBundle:Shape:new" }
+
+shape_create:
+    pattern:  /create
+    defaults: { _controller: "InfectBackendBundle:Shape:create" }
+    requirements: { _method: post }
+
+shape_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "InfectBackendBundle:Shape:edit" }
+
+shape_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "InfectBackendBundle:Shape:update" }
+    requirements: { _method: post|put }
+
+shape_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "InfectBackendBundle:Shape:delete" }
+    requirements: { _method: post|delete }

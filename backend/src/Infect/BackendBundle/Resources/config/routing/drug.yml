@@ -1,0 +1,30 @@
+drug:
+    pattern:  /
+    defaults: { _controller: "InfectBackendBundle:Drug:index" }
+
+drug_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "InfectBackendBundle:Drug:show" }
+
+drug_new:
+    pattern:  /new
+    defaults: { _controller: "InfectBackendBundle:Drug:new" }
+
+drug_create:
+    pattern:  /create
+    defaults: { _controller: "InfectBackendBundle:Drug:create" }
+    requirements: { _method: post }
+
+drug_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "InfectBackendBundle:Drug:edit" }
+
+drug_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "InfectBackendBundle:Drug:update" }
+    requirements: { _method: post|put }
+
+drug_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "InfectBackendBundle:Drug:delete" }
+    requirements: { _method: post|delete }

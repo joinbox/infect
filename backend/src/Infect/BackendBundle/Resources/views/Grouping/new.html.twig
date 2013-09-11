@@ -1,0 +1,37 @@
+    {% extends 'InfectBackendBundle::main.html.twig' %}
+
+
+
+{% block javascript %}
+    {% include 'InfectBackendBundle:Form:dynamicLocales.js.html.twig' %}
+{% endblock %}
+
+{% block pageTitle %}
+    {% trans with {'%entity%': 'Grouping'|trans} %}%entity% hinzufügen{% endtrans %}
+{% endblock %}
+
+{% block content %}
+
+    <form class="form-horizontal form-box" method="post" action="{{ path('grouping_create') }}" {{ form_enctype(form) }}>
+        <h4 class="form-box-header">
+            {% trans %}Grouping{% endtrans %}
+        </h4>
+
+        <div class="form-box-content">
+             
+            {% include 'InfectBackendBundle:Form:dynamicLocales.html.html.twig' %}
+            {{ form_widget(form) }}
+            {{ form_rest(form) }}
+
+            <div class="form-actions">
+                <input type="submit" class="btn btn-success" value="{% trans %}Hinzufügen{% endtrans %}">
+                <a href="{{ path('grouping') }}">
+                    <button type="button" class="btn btn-danger" value="">{% trans %}Abbrechen{% endtrans %}</button>
+                </a>
+            </div>
+
+        </div>
+    </form>
+    
+{% endblock %}
+
