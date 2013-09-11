@@ -124,17 +124,15 @@ class Bacteria
 
     public function __toString()
     {
-        $out = false;
 
-        if($this->getSpecies())
+        if($this->species)
         {
-            if ($this->getSpecies()->getGenus()) 
-            {
-                $out = $this->getSpecies()->getGenus()." ".$this->getSpecies();
-            }
+            return $this->species->__toString();
         }
-
-        return $out ? $out : "no name";
+        else
+        {
+            return "no name";
+        }        
     }
     
     /**

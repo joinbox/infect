@@ -54,6 +54,11 @@ class Species
 
     public function __toString()
     {
+        if ($this->genus) 
+        {
+            return $this->genus.' '.$this->name;
+        }
+
         return $this->name;
     }
     

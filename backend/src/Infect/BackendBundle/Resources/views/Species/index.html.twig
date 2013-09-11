@@ -34,7 +34,7 @@
                         <a href="{{ path('species_show', { 'id': entity.id }) }}" data-toggle="tooltip" title="{% trans %}Details{% endtrans %}" class="btn btn-mini btn-info"><i class="icon-zoom-in"></i></a>
                     </div>
                 </td>
-                <td>{{ entity.name }}</td>
+                <td>{{ entity }}</td>
                 <td>{% if entity.genus %}
                         <span class="label label-info" style="">{{ entity.genus.name }}</span>
                     {% endif %}</td>
