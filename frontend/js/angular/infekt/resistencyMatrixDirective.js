@@ -271,7 +271,7 @@ Infekt.directive( "resistencyMatrix", function( $compile, FilterFactory ) {
 	}
 
 	return {
-		restrict: "A"
+		restrict: "C"
 		, link	: link
 	}
 
