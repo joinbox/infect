@@ -54,7 +54,7 @@ Infekt.directive( "resistencyMatrix", function( $compile, FilterFactory ) {
 						className = "fair";
 					}
 
-					table.push( "<td class='resistency-" + className + "'>" + resistency + "</td>" );
+					table.push( "<td class='animated resistency-" + className + "'>" + resistency + "</td>" );
 
 				}
 
