@@ -17,7 +17,7 @@ class SubstanceClass
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -31,7 +31,7 @@ class SubstanceClass
     /**
      * @var \Infect\BackendBundle\Entity\Substance
      *
-     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Substance")
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Substance", inversedBy="childs")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_parent", referencedColumnName="id")
      * })
@@ -42,7 +42,7 @@ class SubstanceClass
      /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\SubstanceClassLocale", mappedBy="substanceClass")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\SubstanceClassLocale", mappedBy="substanceClass", cascade={"persist", "remove"})
      */
     private $locales;
 
@@ -53,6 +53,18 @@ class SubstanceClass
     {
         $this->substances = new \Doctrine\Common\Collections\ArrayCollection();
         $this->locales = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        $out = false;
+        foreach ($this->getLocales() as $locale) 
+        {
+            if(!$out) $out = "";
+            $out .= $locale->getLanguage()->getName().':'.$locale->getName().' | ';
+        }
+
+        return $out ? $out : 'no Name';
     }
     
     /**
@@ -129,6 +141,7 @@ class SubstanceClass
      */
     public function addLocale(\Infect\BackendBundle\Entity\SubstanceClassLocale $locales)
     {
+        $locales->setSubstanceClass($this);
         $this->locales[] = $locales;
     
         return $this;

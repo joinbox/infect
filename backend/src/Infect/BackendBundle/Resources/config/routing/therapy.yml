@@ -1,0 +1,30 @@
+therapy:
+    pattern:  /
+    defaults: { _controller: "InfectBackendBundle:Therapy:index" }
+
+therapy_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "InfectBackendBundle:Therapy:show" }
+
+therapy_new:
+    pattern:  /new
+    defaults: { _controller: "InfectBackendBundle:Therapy:new" }
+
+therapy_create:
+    pattern:  /create
+    defaults: { _controller: "InfectBackendBundle:Therapy:create" }
+    requirements: { _method: post }
+
+therapy_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "InfectBackendBundle:Therapy:edit" }
+
+therapy_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "InfectBackendBundle:Therapy:update" }
+    requirements: { _method: post|put }
+
+therapy_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "InfectBackendBundle:Therapy:delete" }
+    requirements: { _method: post|delete }

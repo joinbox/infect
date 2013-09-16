@@ -17,14 +17,14 @@ class Drug
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var \Infect\BackendBundle\Entity\Compound
      *
-     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Compound")
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Compound", inversedBy="drugs")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_compound", referencedColumnName="id")
      * })
@@ -34,7 +34,7 @@ class Drug
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\DiagnosisLocale", mappedBy="diagnosis")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\DrugLocale", mappedBy="drug", cascade={"persist", "remove"})
      */
     private $locales;
 
@@ -82,12 +82,13 @@ class Drug
     /**
      * Add locales
      *
-     * @param \Infect\BackendBundle\Entity\DiagnosisLocale $locales
+     * @param \Infect\BackendBundle\Entity\DrugLocale $locales
      * @return Drug
      */
-    public function addLocale(\Infect\BackendBundle\Entity\DiagnosisLocale $locales)
+    public function addLocale(\Infect\BackendBundle\Entity\DrugLocale $locales)
     {
-        $this->locales[] = $locales;
+        $locales->setDrug($this);
+        $this->locales[] = $locales;        
     
         return $this;
     }
@@ -95,9 +96,9 @@ class Drug
     /**
      * Remove locales
      *
-     * @param \Infect\BackendBundle\Entity\DiagnosisLocale $locales
+     * @param \Infect\BackendBundle\Entity\DrugLocale $locales
      */
-    public function removeLocale(\Infect\BackendBundle\Entity\DiagnosisLocale $locales)
+    public function removeLocale(\Infect\BackendBundle\Entity\DrugLocale $locales)
     {
         $this->locales->removeElement($locales);
     }

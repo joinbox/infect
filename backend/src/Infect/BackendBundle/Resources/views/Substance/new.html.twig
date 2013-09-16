@@ -1,0 +1,46 @@
+    {% extends 'InfectBackendBundle::main.html.twig' %}
+
+
+
+{% block javascript %}
+    {% include 'InfectBackendBundle:Form:dynamicLocales.js.html.twig' %}
+{% endblock %}
+
+{% block pageTitle %}
+    {% trans with {'%entity%': 'Substance'|trans} %}%entity% hinzufügen{% endtrans %}
+{% endblock %}
+
+{% block content %}
+
+    <form class="form-horizontal form-box" method="post" action="{{ path('substance_create') }}" {{ form_enctype(form) }}>
+        <h4 class="form-box-header">
+            {% trans %}Substance{% endtrans %}
+        </h4>
+
+        <div class="form-box-content">
+
+            {% include 'InfectBackendBundle:Form:dynamicLocales.html.html.twig' %}
+            {{ form_widget(form) }}
+            {{ form_rest(form) }}
+
+            <div class="control-group">
+                <label class="control-label">{% trans %}Generate Compound{% endtrans %}</label>
+                <div class="controls">
+                    <div class="input-switch" data-on="success" data-off="danger" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
+                        <input name="generateCompound" type="checkbox" checked>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <input type="submit" class="btn btn-success" value="{% trans %}Hinzufügen{% endtrans %}">
+                <a href="{{ path('substance') }}">
+                    <button type="button" class="btn btn-danger" value="">{% trans %}Abbrechen{% endtrans %}</button>
+                </a>
+            </div>
+
+        </div>
+    </form>
+    
+{% endblock %}
+

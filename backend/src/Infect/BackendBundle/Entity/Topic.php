@@ -17,7 +17,7 @@ class Topic
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -31,7 +31,7 @@ class Topic
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\TopicLocale", mappedBy="topic")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\TopicLocale", mappedBy="topic", cascade={"persist", "remove"})
      */
     private $locales;
 
@@ -44,6 +44,18 @@ class Topic
         $this->locales = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
+    public function __toString()
+    {
+        $out = false;
+        foreach ($this->getLocales() as $locale) 
+        {
+            if(!$out) $out = "";
+            $out .= $locale->getLanguage()->getName().':'.$locale->getTitle().' | ';
+        }
+
+        return $out ? $out : 'no Name';
+    }
+
     /**
      * Get id
      *
@@ -95,6 +107,7 @@ class Topic
      */
     public function addLocale(\Infect\BackendBundle\Entity\TopicLocale $locales)
     {
+        $locales->setTopic($this);
         $this->locales[] = $locales;
     
         return $this;

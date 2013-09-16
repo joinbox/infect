@@ -18,7 +18,7 @@ class Shape
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -38,7 +38,7 @@ class Shape
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\ShapeLocale", mappedBy="shape")
+     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\ShapeLocale", mappedBy="shape", cascade={"persist", "remove"})
      */
     private $locales;
 
@@ -47,7 +47,13 @@ class Shape
      */
     public function __construct()
     {
+        $this->locales = new \Doctrine\Common\Collections\ArrayCollection();
         $this->bacterias = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
     
     /**
@@ -124,6 +130,7 @@ class Shape
      */
     public function addLocale(\Infect\BackendBundle\Entity\ShapeLocale $locales)
     {
+        $locales->setShape($this);
         $this->locales[] = $locales;
     
         return $this;

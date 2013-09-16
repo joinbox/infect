@@ -1,0 +1,30 @@
+grouping:
+    pattern:  /
+    defaults: { _controller: "InfectBackendBundle:Grouping:index" }
+
+grouping_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "InfectBackendBundle:Grouping:show" }
+
+grouping_new:
+    pattern:  /new
+    defaults: { _controller: "InfectBackendBundle:Grouping:new" }
+
+grouping_create:
+    pattern:  /create
+    defaults: { _controller: "InfectBackendBundle:Grouping:create" }
+    requirements: { _method: post }
+
+grouping_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "InfectBackendBundle:Grouping:edit" }
+
+grouping_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "InfectBackendBundle:Grouping:update" }
+    requirements: { _method: post|put }
+
+grouping_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "InfectBackendBundle:Grouping:delete" }
+    requirements: { _method: post|delete }

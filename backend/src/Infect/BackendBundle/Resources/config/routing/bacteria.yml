@@ -1,0 +1,30 @@
+bacteria:
+    pattern:  /
+    defaults: { _controller: "InfectBackendBundle:Bacteria:index" }
+
+bacteria_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "InfectBackendBundle:Bacteria:show" }
+
+bacteria_new:
+    pattern:  /new
+    defaults: { _controller: "InfectBackendBundle:Bacteria:new" }
+
+bacteria_create:
+    pattern:  /create
+    defaults: { _controller: "InfectBackendBundle:Bacteria:create" }
+    requirements: { _method: post }
+
+bacteria_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "InfectBackendBundle:Bacteria:edit" }
+
+bacteria_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "InfectBackendBundle:Bacteria:update" }
+    requirements: { _method: post|put }
+
+bacteria_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "InfectBackendBundle:Bacteria:delete" }
+    requirements: { _method: post|delete }

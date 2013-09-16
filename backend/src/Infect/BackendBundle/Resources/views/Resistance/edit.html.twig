@@ -1,0 +1,45 @@
+    {% extends 'InfectBackendBundle::main.html.twig' %}
+
+
+
+{% block javascript %}
+{% endblock %}
+
+{% block pageTitle %}
+    {% trans with {'%entity%': 'Resistance'|trans} %}%entity% editieren{% endtrans %}
+{% endblock %}
+
+{% block content %}
+
+    <form action="{{ path('resistance_delete', { 'id': entity.id }) }}" method="post">
+        <input type="hidden" name="_method" value="DELETE" />
+        {{ form_widget(delete_form) }}
+        <button type="submit" class="btn btn-danger">{% trans %}Löschen{% endtrans %}</button>
+    </form> 
+
+    <form class="form-horizontal form-box" method="post" action="{{ path('resistance_update', { 'id': entity.id }) }}" {{ form_enctype(edit_form) }}>
+        <input type="hidden" name="_method" value="PUT" />
+        <h4 class="form-box-header">
+            {% trans %}Editieren{% endtrans %}
+        </h4>
+
+        <div class="form-box-content">
+            {{ form_widget(edit_form) }}
+            {{ form_rest(edit_form) }}
+
+            <div class="form-actions">
+                <input type="submit" class="btn btn-success" value="{% trans %}Editieren{% endtrans %}">
+                <a href="{{ path('resistance') }}">
+                    <button type="button" class="btn btn-info" value="">{% trans %}Zurück{% endtrans %}</button>
+                </a>
+                
+            </div>
+
+        </div>
+    </form>
+    
+{% endblock %}
+
+
+
+

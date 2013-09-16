@@ -1,0 +1,30 @@
+substance:
+    pattern:  /
+    defaults: { _controller: "InfectBackendBundle:Substance:index" }
+
+substance_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "InfectBackendBundle:Substance:show" }
+
+substance_new:
+    pattern:  /new
+    defaults: { _controller: "InfectBackendBundle:Substance:new" }
+
+substance_create:
+    pattern:  /create
+    defaults: { _controller: "InfectBackendBundle:Substance:create" }
+    requirements: { _method: post }
+
+substance_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "InfectBackendBundle:Substance:edit" }
+
+substance_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "InfectBackendBundle:Substance:update" }
+    requirements: { _method: post|put }
+
+substance_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "InfectBackendBundle:Substance:delete" }
+    requirements: { _method: post|delete }

@@ -17,7 +17,7 @@ class Species
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -31,7 +31,7 @@ class Species
     /**
      * @var \Infect\BackendBundle\Entity\Genus
      *
-     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Genus")
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Genus", inversedBy="species")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_genus", referencedColumnName="id")
      * })
@@ -50,6 +50,16 @@ class Species
     public function __construct()
     {
         $this->bacterias = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        if ($this->genus) 
+        {
+            return $this->genus.' '.$this->name;
+        }
+
+        return $this->name;
     }
     
     /**

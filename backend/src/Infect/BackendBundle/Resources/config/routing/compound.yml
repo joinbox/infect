@@ -1,0 +1,30 @@
+compound:
+    pattern:  /
+    defaults: { _controller: "InfectBackendBundle:Compound:index" }
+
+compound_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "InfectBackendBundle:Compound:show" }
+
+compound_new:
+    pattern:  /new
+    defaults: { _controller: "InfectBackendBundle:Compound:new" }
+
+compound_create:
+    pattern:  /create
+    defaults: { _controller: "InfectBackendBundle:Compound:create" }
+    requirements: { _method: post }
+
+compound_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "InfectBackendBundle:Compound:edit" }
+
+compound_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "InfectBackendBundle:Compound:update" }
+    requirements: { _method: post|put }
+
+compound_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "InfectBackendBundle:Compound:delete" }
+    requirements: { _method: post|delete }

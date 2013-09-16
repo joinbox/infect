@@ -1,0 +1,63 @@
+<?php
+
+namespace Infect\BackendBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Bacterianame
+ *
+ * @ORM\Table(name="resistance", uniqueConstraints={@ORM\UniqueConstraint(name="bacteria_compound_idx", columns={"id_bacteria", "id_compound"})})
+ * @ORM\Entity
+ */
+class Resistance
+{
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+
+    /**
+     * @var \Infect\BackendBundle\Entity\Bacteria
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Bacteria")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_bacteria", referencedColumnName="id")
+     * })
+     */
+    private $bacteria;
+
+    /**
+     * @var \Infect\BackendBundle\Entity\Compound
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Compound")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_compound", referencedColumnName="id")
+     * })
+     */
+    private $compound;
+
+    /**
+     *
+     * @ORM\Column(name="resistance_manual", type="integer", length=100, nullable=false)
+     */
+    private $resistance_manual;
+
+     /**
+     *
+     * @ORM\Column(name="resistance_fetch", type="integer", length=100, nullable=false)
+     */
+    private $resistance_fetch;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    }
+
+}

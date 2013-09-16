@@ -1,0 +1,30 @@
+resistance:
+    pattern:  /
+    defaults: { _controller: "InfectBackendBundle:Resistance:index" }
+
+resistance_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "InfectBackendBundle:Resistance:show" }
+
+resistance_new:
+    pattern:  /new
+    defaults: { _controller: "InfectBackendBundle:Resistance:new" }
+
+resistance_create:
+    pattern:  /create
+    defaults: { _controller: "InfectBackendBundle:Resistance:create" }
+    requirements: { _method: post }
+
+resistance_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "InfectBackendBundle:Resistance:edit" }
+
+resistance_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "InfectBackendBundle:Resistance:update" }
+    requirements: { _method: post|put }
+
+resistance_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "InfectBackendBundle:Resistance:delete" }
+    requirements: { _method: post|delete }

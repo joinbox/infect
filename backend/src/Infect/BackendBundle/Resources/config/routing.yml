@@ -9,9 +9,65 @@ infect_login:
 infect_login_check:
     pattern:    /login/check
 
-# Bacteria
-infect_bacteria_add:
-    pattern: /bacteria/add/{edit}/{id}
-    defaults: { _controller: InfectBackendBundle:Bacteria:addEdit, edit: '', id: '' }
 
-                
+
+InfectBackendBundle_bacteria:
+    resource: "@InfectBackendBundle/Resources/config/routing/bacteria.yml"
+    prefix:   /bacteria  
+
+InfectBackendBundle_compound:
+    resource: "@InfectBackendBundle/Resources/config/routing/compound.yml"
+    prefix:   /compound
+
+InfectBackendBundle_country:
+    resource: "@InfectBackendBundle/Resources/config/routing/country.yml"
+    prefix:   /country
+
+InfectBackendBundle_diagnosis:
+        resource: "@InfectBackendBundle/Resources/config/routing/diagnosis.yml"
+        prefix:   /diagnosis
+
+InfectBackendBundle_drug:
+        resource: "@InfectBackendBundle/Resources/config/routing/drug.yml"
+        prefix:   /drug
+
+InfectBackendBundle_genus:
+        resource: "@InfectBackendBundle/Resources/config/routing/genus.yml"
+        prefix:   /genus
+
+InfectBackendBundle_grouping:
+        resource: "@InfectBackendBundle/Resources/config/routing/grouping.yml"
+        prefix:   /grouping
+
+InfectBackendBundle_language:
+        resource: "@InfectBackendBundle/Resources/config/routing/language.yml"
+        prefix:   /language
+
+InfectBackendBundle_shape:
+        resource: "@InfectBackendBundle/Resources/config/routing/shape.yml"
+        prefix:   /shape
+
+InfectBackendBundle_species:
+        resource: "@InfectBackendBundle/Resources/config/routing/species.yml"
+        prefix:   /species
+
+InfectBackendBundle_substance:
+        resource: "@InfectBackendBundle/Resources/config/routing/substance.yml"
+        prefix:   /substance
+
+InfectBackendBundle_substanceclass:
+        resource: "@InfectBackendBundle/Resources/config/routing/substanceclass.yml"
+        prefix:   /substanceclass
+
+InfectBackendBundle_therapy:
+        resource: "@InfectBackendBundle/Resources/config/routing/therapy.yml"
+        prefix:   /therapy
+
+InfectBackendBundle_topic:
+        resource: "@InfectBackendBundle/Resources/config/routing/topic.yml"
+        prefix:   /topic
+
+InfectBackendBundle_resistance:
+        resource: "@InfectBackendBundle/Resources/config/routing/resistance.yml"
+        prefix:   /resistance                                                                                                
+

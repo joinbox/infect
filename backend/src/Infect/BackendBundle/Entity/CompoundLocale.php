@@ -23,7 +23,7 @@ class CompoundLocale
     private $language;
 
     /**
-     * @var \Infect\BackendBundle\Entity\Drug
+     * @var \Infect\BackendBundle\Entity\Compound
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Compound", inversedBy="locales")
      * @ORM\JoinColumns({
@@ -35,7 +35,7 @@ class CompoundLocale
         /**
      * @var string
      *
-     * @ORM\Column(name="key", type="string", length=200, nullable=false)
+     * @ORM\Column(name="clue", type="string", length=200, nullable=false)
      */
     private $key;
 

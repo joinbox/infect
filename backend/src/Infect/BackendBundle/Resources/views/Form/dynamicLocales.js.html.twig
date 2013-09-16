@@ -1,0 +1,66 @@
+
+    <script>
+
+
+        jQuery(document).ready(function()
+        {
+            // Get the ul that holds the collection of tags
+            var collectionHolder = $('div.localesBox');
+
+            collectionHolder.find('section').each(function()
+            {
+                addTagFormDeleteLink($(this));
+            });
+
+            // setup an "add a tag" link
+            var $addTagLink = $('<a href="#" class="add_tag_link">{% trans %}Add{% endtrans %}</a>');
+            $('#addLocalesLink').append($addTagLink);
+
+            collectionHolder.data('index', collectionHolder.find(':input').length);
+
+            $addTagLink.on('click', function(e)
+            {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addTagForm(collectionHolder, $('#addLocalesLink'));
+            });
+
+            function addTagForm(collectionHolder, $newLinkLi)
+            {
+                // Get the data-prototype explained earlier
+                var prototype = collectionHolder.data('prototype');
+
+                // get the new index
+                var index = collectionHolder.data('index');
+
+                // Replace '__name__' in the prototype's HTML to
+                // instead be a number based on how many items we have
+                var newForm = prototype.replace(/__name__/g, index);
+
+                // increase the index with one for the next item
+                collectionHolder.data('index', index + 1);
+
+                // Display the form in the page in an li, before the "Add a tag" link li
+                var $newFormLi = $('<section></section>').append(newForm);
+                addTagFormDeleteLink($newFormLi);
+                $('#localesBoxWrapper').after($newFormLi);
+            }
+
+            function addTagFormDeleteLink($tagFormLi) {
+                var $removeFormA = $('<div class="control-group"><label class="control-label"><button type="button" class="btn btn-small btn-inverse">{% trans %}remove{% endtrans %}</button></label></div>');
+                $tagFormLi.append($removeFormA);
+
+                $removeFormA.on('click', function(e) {
+                    // prevent the link from creating a "#" on the URL
+                    e.preventDefault();
+
+                    // remove the li for the tag form
+                    $tagFormLi.remove();
+                });
+            }
+
+        });
+
+    </script>
