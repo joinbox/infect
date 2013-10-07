@@ -21,7 +21,8 @@
             <tr>
                 <th class="span1"></th>
                 <th>{% trans %}Bacteria{% endtrans %}</th>
-                <th>{% trans %}Compound{% endtrans %}</th>                                                                
+                <th>{% trans %}Compound{% endtrans %}</th>
+                <th>Default Resistance</th>
                 <th>Resistance Manual</th>
                 <th>Resistance Fetch</th>                                   
             </tr>
@@ -37,6 +38,15 @@
                 </td>
                 <td>{{ entity.bacteria }}</td>
                 <td>{{ entity.compound }}</td>
+                <td>
+                    {% if entity.defaultResistance == 1 %}
+                        <span class="label label-success" style="">low</span>
+                    {% elseif entity.defaultResistance == 2 %}
+                        <span class="label label-warning" style="">intermediate</span>
+                    {% elseif entity.defaultResistance == 3 %}
+                        <span class="label label-important" style="">high</span>
+                    {% endif %}
+                </td>
                 <td><span class="label label-info" style="">{{ entity.resistancemanual }}</span></td>
                 <td><span class="label label-info" style="">{{ entity.resistancefetch }}</span></td>
             </tr>

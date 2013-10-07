@@ -43,7 +43,7 @@ class Resistance
 
     /**
      *
-     * @ORM\Column(name="resistance_manual", type="integer", length=100, nullable=false)
+     * @ORM\Column(name="resistance_manual", type="integer", length=100, nullable=true)
      */
     private $resistance_manual;
 
@@ -54,12 +54,33 @@ class Resistance
     private $resistance_fetch;
 
     /**
+     *
+     * @ORM\Column(name="default_resistance", type="integer", length=1, nullable=true)
+     */
+    private $default_resistance;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
     }
 
+    /**
+     * @param mixed $default_resistance
+     */
+    public function setDefaultResistance($default_resistance)
+    {
+        $this->default_resistance = $default_resistance;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultResistance()
+    {
+        return $this->default_resistance;
+    }
 
     /**
      * Get id
