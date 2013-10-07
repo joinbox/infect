@@ -69,6 +69,13 @@ class Bacteria
      *
      * @ORM\Column(type="boolean")
      */
+    private $gram_negative;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
     private $aerobic;
 
     /**
@@ -113,6 +120,7 @@ class Bacteria
     public function __construct()
     {
         $this->gram              = false;
+        $this->gram_negative     = false;
         $this->aerobic           = false;
         $this->aerobicOptional   = false;
         $this->anaerobic         = false;
@@ -133,6 +141,22 @@ class Bacteria
         {
             return "no name";
         }        
+    }
+
+    /**
+     * @param boolean $gram_negative
+     */
+    public function setGramNegative($gram_negative)
+    {
+        $this->gram_negative = $gram_negative;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getGramNegative()
+    {
+        return $this->gram_negative;
     }
     
     /**

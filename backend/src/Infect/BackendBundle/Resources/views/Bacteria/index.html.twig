@@ -21,6 +21,7 @@
             <tr>
                 <th class="span1"></th>                                                                <th>Name</th>
                                                                 <th>Gram</th>
+                <th>Gram Negative</th>
                                                                 <th>Aerobic</th>
                                                                 <th>Aerobicoptional</th>
                                                                 <th>Anaerobic</th>
@@ -39,6 +40,11 @@
                 </td>
                 <td>{{ entity }}</td>
                 <td>{% if entity.gram %}
+                        <span class="label label-success" style="width:16px;height:16px;text-align:center;"><i class="icon-ok"></i></span>
+                    {% else %}
+                        <span class="label label-error" style="width:16px;height:16px;text-align:center;"><i class="icon-remove"></i></span>
+                    {% endif %}</td>
+                <td>{% if entity.gramNegative %}
                         <span class="label label-success" style="width:16px;height:16px;text-align:center;"><i class="icon-ok"></i></span>
                     {% else %}
                         <span class="label label-error" style="width:16px;height:16px;text-align:center;"><i class="icon-remove"></i></span>
