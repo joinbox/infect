@@ -1,0 +1,30 @@
+bacteriaSubstanceClass:
+    pattern:  /
+    defaults: { _controller: "InfectBackendBundle:BacteriaSubstanceClass:index" }
+
+bacteriaSubstanceClass_show:
+    pattern:  /{id_bacteria}.bacteria/{id_substanceClass}.substanceClass/show
+    defaults: { _controller: "InfectBackendBundle:BacteriaSubstanceClass:show" }
+
+bacteriaSubstanceClass_new:
+    pattern:  /new
+    defaults: { _controller: "InfectBackendBundle:BacteriaSubstanceClass:new" }
+
+bacteriaSubstanceClass_create:
+    pattern:  /create
+    defaults: { _controller: "InfectBackendBundle:BacteriaSubstanceClass:create" }
+    requirements: { _method: post }
+
+bacteriaSubstanceClass_edit:
+    pattern:  /{id_bacteria}.bacteria/{id_substanceClass}.substanceClass/edit
+    defaults: { _controller: "InfectBackendBundle:BacteriaSubstanceClass:edit" }
+
+bacteriaSubstanceClass_update:
+    pattern:  /{id_bacteria}.bacteria/{id_substanceClass}.substanceClass/update
+    defaults: { _controller: "InfectBackendBundle:BacteriaSubstanceClass:update" }
+    requirements: { _method: post|put }
+
+bacteriaSubstanceClass_delete:
+    pattern:  /{id_bacteria}.bacteria/{id_substanceClass}.substanceClass/delete
+    defaults: { _controller: "InfectBackendBundle:BacteriaSubstanceClass:delete" }
+    requirements: { _method: post|delete }

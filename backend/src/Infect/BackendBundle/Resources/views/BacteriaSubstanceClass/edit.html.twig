@@ -11,13 +11,13 @@
 
 {% block content %}
 
-    <form action="{{ path('resistance_delete', { 'id_bacteria': entity.bacteria.id, 'id_compound': entity.compound.id }) }}" method="post">
+    <form action="{{ path('bacteriaSubstanceClass_delete', { 'id_bacteria': entity.bacteria.id, 'id_substanceClass': entity.substanceClass.id }) }}" method="post">
         <input type="hidden" name="_method" value="DELETE" />
         {{ form_widget(delete_form) }}
         <button type="submit" class="btn btn-danger">{% trans %}Löschen{% endtrans %}</button>
     </form> 
 
-    <form class="form-horizontal form-box" method="post" action="{{ path('resistance_update', { 'id_bacteria': entity.bacteria.id, 'id_compound': entity.compound.id }) }}" {{ form_enctype(edit_form) }}>
+    <form class="form-horizontal form-box" method="post" action="{{ path('bacteriaSubstanceClass_update', { 'id_bacteria': entity.bacteria.id, 'id_substanceClass': entity.substanceClass.id }) }}" {{ form_enctype(edit_form) }}>
         <input type="hidden" name="_method" value="PUT" />
         <h4 class="form-box-header">
             {% trans %}Editieren{% endtrans %}

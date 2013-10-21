@@ -10,7 +10,7 @@
 
 {% block content %}
 
-            <form action="{{ path('resistance_new') }}" method="POST">
+            <form action="{{ path('bacteriaSubstanceClass_new') }}" method="POST">
             <button type="submit" class="btn btn-success">
                 {% trans with {'%entity%': 'Resistance'|trans} %}%entity% hinzufügen{% endtrans %}
             </button>        
@@ -21,7 +21,7 @@
             <tr>
                 <th class="span1"></th>
                 <th>{% trans %}Bacteria{% endtrans %}</th>
-                <th>{% trans %}Compound{% endtrans %}</th>
+                <th>{% trans %}Substance Class{% endtrans %}</th>
                 <th>Resistance Default</th>
                 <th>Resistance User</th>
                 <th>Resistance Import</th>
@@ -32,12 +32,12 @@
             <tr>
                 <td>
                     <div class="btn-group">
-                        <a href="{{ path('resistance_edit', { 'id_bacteria': entity.bacteria.id, 'id_compound': entity.compound.id }) }}" data-toggle="tooltip" title="{% trans %}editieren{% endtrans %}" class="btn btn-mini btn-success"><i class="icon-pencil"></i></a>
-                        <a href="{{ path('resistance_show', { 'id_bacteria': entity.bacteria.id, 'id_compound': entity.compound.id }) }}" data-toggle="tooltip" title="{% trans %}Details{% endtrans %}" class="btn btn-mini btn-info"><i class="icon-zoom-in"></i></a>
+                        <a href="{{ path('bacteriaSubstanceClass_edit', { 'id_bacteria': entity.bacteria.id, 'id_substanceClass': entity.substanceClass.id }) }}" data-toggle="tooltip" title="{% trans %}editieren{% endtrans %}" class="btn btn-mini btn-success"><i class="icon-pencil"></i></a>
+                        <a href="{{ path('bacteriaSubstanceClass_show', { 'id_bacteria': entity.bacteria.id, 'id_substanceClass': entity.substanceClass.id }) }}" data-toggle="tooltip" title="{% trans %}Details{% endtrans %}" class="btn btn-mini btn-info"><i class="icon-zoom-in"></i></a>
                     </div>
                 </td>
                 <td>{{ entity.bacteria }}</td>
-                <td>{{ entity.compound }}</td>
+                <td>{{ entity.substanceClass }}</td>
                 <td>
                     {% if entity.resistanceDefault == 1 %}
                         <span class="label label-success" style="">low</span>

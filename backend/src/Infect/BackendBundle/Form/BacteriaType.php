@@ -22,8 +22,11 @@ class BacteriaType extends AbstractType
                     'allow_delete' => true,
                     'by_reference' => false,                                        
                 ))
-            ->add('gram', null, array('required' => false))
-            ->add('gram_negative', null, array('required' => false))
+            ->add('gram', 'choice', array(
+                    'expanded' => true,
+                    'choices' => array(0 => 'Gram Negative', 1 => 'Gram Positive'),
+                    'required' => false
+                ))
             ->add('aerobic', null, array('required' => false))
             ->add('aerobicOptional', null, array('required' => false))
             ->add('anaerobic', null, array('required' => false))

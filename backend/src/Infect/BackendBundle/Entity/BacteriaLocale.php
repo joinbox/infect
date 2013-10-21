@@ -14,11 +14,6 @@ class BacteriaLocale
 {
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isPrimary;
-
-    /**
      * @var \Infect\BackendBundle\Entity\Language
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Language")
@@ -122,28 +117,5 @@ class BacteriaLocale
     public function getBacteria()
     {
         return $this->bacteria;
-    }
-
-    /**
-     * Set isPrimary
-     *
-     * @param boolean $isPrimary
-     * @return BacteriaLocale
-     */
-    public function setIsPrimary($isPrimary)
-    {
-        $this->isPrimary = $isPrimary;
-    
-        return $this;
-    }
-
-    /**
-     * Get isPrimary
-     *
-     * @return boolean 
-     */
-    public function getIsPrimary()
-    {
-        return $this->isPrimary;
     }
 }

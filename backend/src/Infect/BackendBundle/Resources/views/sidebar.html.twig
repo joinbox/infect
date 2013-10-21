@@ -32,6 +32,7 @@
                 <li><h5>{% trans %}Resistenz{% endtrans %}</h5></li>
                 <li>
                     <a href="{{ path('resistance') }}" {% if actual_route == 'resistance' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}resistance{% endtrans %}</a>
+                    <a href="{{ path('bacteriaSubstanceClass') }}" {% if actual_route == 'bacteriaSubstanceClass' %}class="active"{% endif %}><i class="icon-fire"></i>{% trans %}resistance substanceClass{% endtrans %}</a>
                 </li>
 
                 <li><h5>{% trans %}Bakterien{% endtrans %}</h5></li>

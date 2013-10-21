@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Bacterianame
  *
- * @ORM\Table(name="bacteria_compound", uniqueConstraints={@ORM\UniqueConstraint(name="bacteria_compound_idx", columns={"id_bacteria", "id_compound"})})
+ * @ORM\Table(name="bacteria_substanceClass", uniqueConstraints={@ORM\UniqueConstraint(name="bacteria_substanceClass_idx", columns={"id_bacteria", "id_substanceClass"})})
  * @ORM\Entity
  */
-class Resistance
+class BacteriaSubstanceClass
 {
 
     /**
@@ -24,14 +24,14 @@ class Resistance
     private $bacteria;
 
     /**
-     * @var \Infect\BackendBundle\Entity\Compound
+     * @var \Infect\BackendBundle\Entity\SubstanceClass
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Compound")
+     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\SubstanceClass")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_compound", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="id_substanceClass", referencedColumnName="id")
      * })
      */
-    private $compound;
+    private $substanceClass;
 
     /**
      *
@@ -153,25 +153,19 @@ class Resistance
     }
 
     /**
-     * Set compound
-     *
-     * @param \Infect\BackendBundle\Entity\Compound $compound
-     * @return Resistance
+     * @param \Infect\BackendBundle\Entity\SubstanceClass $substanceClass
      */
-    public function setCompound(\Infect\BackendBundle\Entity\Compound $compound)
+    public function setSubstanceClass($substanceClass)
     {
-        $this->compound = $compound;
-    
-        return $this;
+        $this->substanceClass = $substanceClass;
     }
 
     /**
-     * Get compound
-     *
-     * @return \Infect\BackendBundle\Entity\Compound 
+     * @return \Infect\BackendBundle\Entity\SubstanceClass
      */
-    public function getCompound()
+    public function getSubstanceClass()
     {
-        return $this->compound;
+        return $this->substanceClass;
     }
+
 }

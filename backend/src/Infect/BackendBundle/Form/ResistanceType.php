@@ -17,8 +17,8 @@ class ResistanceType extends AbstractType
         $builder
             ->add('bacteria', null, array('required' => true))
             ->add('compound', null, array('required' => true))
-            ->add('resistance_manual', null, array('required' => false))
-            ->add('default_resistance', 'choice', array(
+            ->add('resistanceUser', null, array('required' => false))
+            ->add('resistanceDefault', 'choice', array(
                 'choices' => array(1 => 'low', 2 => 'intermediate', 3 => 'high'),
                 'required' => false
             ))

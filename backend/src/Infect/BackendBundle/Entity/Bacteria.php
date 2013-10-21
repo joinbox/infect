@@ -23,11 +23,6 @@ class Bacteria
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=200, nullable=true)
-     */
-    private $name;
-
-    /**
      * @var \Infect\BackendBundle\Entity\Species
      *
      * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Species", inversedBy="bacterias")
@@ -60,16 +55,9 @@ class Bacteria
     /**
      * @var boolean
      *
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $gram;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean")
-     */
-    private $gram_negative;
 
     /**
      * @var boolean
@@ -120,7 +108,6 @@ class Bacteria
     public function __construct()
     {
         $this->gram              = false;
-        $this->gram_negative     = false;
         $this->aerobic           = false;
         $this->aerobicOptional   = false;
         $this->anaerobic         = false;
@@ -141,22 +128,6 @@ class Bacteria
         {
             return "no name";
         }        
-    }
-
-    /**
-     * @param boolean $gram_negative
-     */
-    public function setGramNegative($gram_negative)
-    {
-        $this->gram_negative = $gram_negative;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getGramNegative()
-    {
-        return $this->gram_negative;
     }
     
     /**
@@ -420,26 +391,4 @@ class Bacteria
         return $this->locales;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return Bacteria
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
 }
