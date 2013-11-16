@@ -58,7 +58,8 @@ class SubstanceClassListener implements EventSubscriber
                   ORDER BY parent.lft DESC
                   LIMIT 1
 
-            ", array($this->entity->getId()))->fetch()['id'];
+            ", array($this->entity->getId()))->fetch();
+            $parentId = $parentId['id'];
 
             if($parentId)
             {

@@ -35,6 +35,8 @@ class SubstanceClassController extends Controller
                             ->orderBy('node.lft')
                             ->getQuery()->getResult();
 
+
+
         $results = array();
         foreach($entities as $entity)
         {
@@ -203,88 +205,76 @@ class SubstanceClassController extends Controller
         $em = $this->getDoctrine()->getManager();
         $conn = $em->getConnection();
 
-        // how much to increase / decrerase the to be moced subtrees rigth & left
-        $newParentLeft = $entity->getParent() ? $entity->getParent()->getLft() : 0;
-        $gapOffset = ( $newParentLeft ) > $entity->getLft() ? ( $entity->getParent()->getLft() - $entity->getLft() - 1 ) : (( $entity->getLft() - $newParentLeft -1) * -1 );
+        // calculate position adjustment variables
+        $newpos = $entity->getParent()->getLft() + 1;
 
-        // how big is the subtrees range, so we can move all elements between the old & the new parent in the correponding direction
-        $offset = $entity->getRgt() - $entity->getLft() + 1 ;
+        $width    = $entity->getRgt() - $entity->getLft() + 1;
+        $distance = $newpos - $entity->getLft();
+        $tmppos   = $entity->getLft();
 
-        var_dump($gapOffset);
-        var_dump($offset);
-        exit;
-
-        $result_ids = $em->createQueryBuilder()
-            ->select('s.id')
-            ->from('InfectBackendBundle:SubstanceClass', 's')
-            ->where('s.lft >= '.$entity->getLft())
-            ->andWhere('s.rgt <= '.$entity->getRgt())
-            ->getQuery()
-            ->getArrayResult();
-
-        $ids = array();
-        foreach($result_ids as $id)
+        // backwards movement must account for new space
+        if($distance < 0)
         {
-            $ids[] = $id['id'];
+            $distance -= $width;
+            $tmppos += $width;
         }
 
-        if ( $gapOffset > 0 )
-        {
-            // move other nodes to the left, we always have a parent when the gapOffset is positive
 
-            // move the left value
-            $conn->executeUpdate('
-                            UPDATE substanceClass s
-                                SET
-                                    s.lft = s.lft - ( CASE WHEN s.lft > ? THEN ? ELSE 0 END  ),
-                                    s.rgt = s.rgt - ( CASE WHEN s.rgt < ? THEN ? ELSE 0 END  )
-                                WHERE s.rgt > ?
-                                AND s.lft <= ?'
-                , array(
-                    $entity->getRgt(),
-                    $offset,
-                    $entity->getParent()->getLft(),
-                    $offset,
-                    $entity->getRgt(),
-                    $entity->getParent()->getLft(),
-                )
-            );
-
-        }
-        else
-        {
-            // move other nodes to the right
-            $conn->executeUpdate('
-                            UPDATE substanceClass s
-                              SET
-                                s.lft = s.lft + ( CASE WHEN s.lft < ? THEN ? ELSE 0 END  ),
-                                s.rgt = s.rgt + ( CASE WHEN s.rgt > ? THEN ? ELSE 0 END  )
-                              WHERE s.lft < ?
-                              AND s.lft >= ?'
-                , array(
-                    $entity->getLft(),
-                    $offset,
-                    $entity->getParent()->getLft(),
-                    $offset,
-                    $entity->getLft(),
-                    $entity->getParent() ? $entity->getParent()->getLft() : 0,
-                )
-            );
-        }
-
-        // move the subtree to the new location
+        // create new space for subtree
         $conn->executeUpdate('
-                            UPDATE substanceClass s
-                              SET
-                                s.lft = s.lft + ?,
-                                s.rgt = s.rgt + ?
-                              WHERE id IN (?)'
+                            UPDATE substanceClass
+                            SET lft = lft + ?
+                            WHERE lft >= ?'
             , array(
-                $gapOffset,
-                $gapOffset,
-                implode(',', $ids)
+                $width,
+                $newpos
             )
         );
+        $conn->executeUpdate('
+                            UPDATE substanceClass
+                            SET rgt = rgt + ?
+                            WHERE rgt >= ?'
+            , array(
+                $width,
+                $newpos
+            )
+        );
+
+        // move subtree into new space
+        $conn->executeUpdate('
+                            UPDATE substanceClass
+                            SET lft = lft + ?, rgt = rgt + ?
+                            WHERE lft >= ?
+                              AND rgt < ? + ?'
+            , array(
+                $distance,
+                $distance,
+                $tmppos,
+                $tmppos,
+                $width
+            )
+        );
+
+        // remove old space vacated by subtree
+        $conn->executeUpdate('
+                            UPDATE substanceClass
+                            SET lft = lft - ?
+                            WHERE lft > ?'
+            , array(
+                $width,
+                $entity->getRgt()
+            )
+        );
+        $conn->executeUpdate('
+                            UPDATE substanceClass 
+                            SET rgt = rgt - ? 
+                            WHERE rgt > ?'
+            , array(
+                $width,
+                $entity->getRgt()
+            )
+        );
+
     }
 
     /**
