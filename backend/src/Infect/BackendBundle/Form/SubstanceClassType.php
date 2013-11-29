@@ -21,8 +21,11 @@ class SubstanceClassType extends AbstractType
                     'allow_delete' => true,
                     'by_reference' => false,                                        
                 ))
-            ->add('substances', null, array('required' => false))
-            ->add('parent')
+            //->add('substances', null, array('required' => false))
+            ->add('parent', 'entity', array(
+                'class' => 'InfectBackendBundle:SubstanceClass',
+                'required' => false
+            ))
         ;
     }
     

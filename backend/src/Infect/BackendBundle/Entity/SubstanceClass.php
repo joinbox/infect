@@ -29,15 +29,14 @@ class SubstanceClass
     private $substances;
 
     /**
-     * @var \Infect\BackendBundle\Entity\Substance
-     *
-     * @ORM\ManyToOne(targetEntity="Infect\BackendBundle\Entity\Substance", inversedBy="childs")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_parent", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="lft", type="integer")
      */
-    private $parent;
+    private $lft;
 
+    /**
+     * @ORM\Column(name="rgt", type="integer")
+     */
+    private $rgt;
 
      /**
      * @var \Doctrine\Common\Collections\Collection
@@ -45,6 +44,20 @@ class SubstanceClass
      * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\SubstanceClassLocale", mappedBy="substanceClass", cascade={"persist", "remove"})
      */
     private $locales;
+
+    /**
+     * @var id_substanceClass
+     * "virtual property" -> see SubstanceClassListener
+     *
+     */
+    private $parent;
+
+    /**
+     * @var
+     * "virtual property" -> see SubstanceClassListener
+     *
+     */
+    private $depth;
 
     /**
      * Constructor
@@ -65,6 +78,70 @@ class SubstanceClass
         }
 
         return $out ? $out : 'no Name';
+    }
+
+    /**
+     * @param mixed $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param mixed $depth
+     */
+    public function setDepth($depth)
+    {
+        $this->depth = $depth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDepth()
+    {
+        return $this->depth;
+    }
+
+    /**
+     * @param mixed $lft
+     */
+    public function setLft($lft)
+    {
+        $this->lft = $lft;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLft()
+    {
+        return $this->lft;
+    }
+
+    /**
+     * @param mixed $rgt
+     */
+    public function setRgt($rgt)
+    {
+        $this->rgt = $rgt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRgt()
+    {
+        return $this->rgt;
     }
     
     /**
@@ -108,29 +185,6 @@ class SubstanceClass
     public function getSubstances()
     {
         return $this->substances;
-    }
-
-    /**
-     * Set parent
-     *
-     * @param \Infect\BackendBundle\Entity\Substance $parent
-     * @return SubstanceClass
-     */
-    public function setParent(\Infect\BackendBundle\Entity\Substance $parent = null)
-    {
-        $this->parent = $parent;
-    
-        return $this;
-    }
-
-    /**
-     * Get parent
-     *
-     * @return \Infect\BackendBundle\Entity\Substance 
-     */
-    public function getParent()
-    {
-        return $this->parent;
     }
 
     /**

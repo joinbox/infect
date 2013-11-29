@@ -32,7 +32,7 @@ class Substance
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Infect\BackendBundle\Entity\SubstanceClass", inversedBy="substances")
-     * @ORM\JoinTable(name="substance_substanceclass",
+     * @ORM\JoinTable(name="substance_substanceClass",
      *   joinColumns={
      *     @ORM\JoinColumn(name="id_substance", referencedColumnName="id")
      *   },
@@ -43,12 +43,12 @@ class Substance
      */
     private $substanceClasses;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\SubstanceClass", mappedBy="parent")
-     */
-    private $childs;
+//    /**
+//     * @var \Doctrine\Common\Collections\Collection
+//     *
+//     * @ORM\OneToMany(targetEntity="Infect\BackendBundle\Entity\SubstanceClass", mappedBy="parent")
+//     */
+//    private $childs;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -156,38 +156,38 @@ class Substance
         return $this->substanceClasses;
     }
 
-    /**
-     * Add childs
-     *
-     * @param \Infect\BackendBundle\Entity\SubstanceClass $childs
-     * @return Substance
-     */
-    public function addChild(\Infect\BackendBundle\Entity\SubstanceClass $childs)
-    {
-        $this->childs[] = $childs;
-    
-        return $this;
-    }
-
-    /**
-     * Remove childs
-     *
-     * @param \Infect\BackendBundle\Entity\SubstanceClass $childs
-     */
-    public function removeChild(\Infect\BackendBundle\Entity\SubstanceClass $childs)
-    {
-        $this->childs->removeElement($childs);
-    }
-
-    /**
-     * Get childs
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getChilds()
-    {
-        return $this->childs;
-    }
+//    /**
+//     * Add childs
+//     *
+//     * @param \Infect\BackendBundle\Entity\SubstanceClass $childs
+//     * @return Substance
+//     */
+//    public function addChild(\Infect\BackendBundle\Entity\SubstanceClass $childs)
+//    {
+//        $this->childs[] = $childs;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * Remove childs
+//     *
+//     * @param \Infect\BackendBundle\Entity\SubstanceClass $childs
+//     */
+//    public function removeChild(\Infect\BackendBundle\Entity\SubstanceClass $childs)
+//    {
+//        $this->childs->removeElement($childs);
+//    }
+//
+//    /**
+//     * Get childs
+//     *
+//     * @return \Doctrine\Common\Collections\Collection
+//     */
+//    public function getChilds()
+//    {
+//        return $this->childs;
+//    }
 
     /**
      * Add locales

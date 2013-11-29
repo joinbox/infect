@@ -32,7 +32,7 @@
                         <a href="{{ path('substanceclass_show', { 'id': entity.id }) }}" data-toggle="tooltip" title="{% trans %}Details{% endtrans %}" class="btn btn-mini btn-info"><i class="icon-zoom-in"></i></a>
                     </div>
                 </td>
-                <td>
+                <td style="padding-left:{{ entity.depth * 30 }}px;">
                     {% for locale in entity.locales %}
                         <span class="label label-info" style="min-width:25px;text-align:center;margin-right:5px;">{{ locale.language.name }}</span> {{ locale.name }}<br>
                     {% endfor %}

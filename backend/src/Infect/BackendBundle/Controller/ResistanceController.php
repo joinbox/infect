@@ -44,7 +44,7 @@ class ResistanceController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('resistance_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('resistance'));
         }
 
         return $this->render('InfectBackendBundle:Resistance:new.html.twig', array(
@@ -72,17 +72,17 @@ class ResistanceController extends Controller
      * Finds and displays a Resistance entity.
      *
      */
-    public function showAction($id)
+    public function showAction($id_bacteria, $id_compound)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('InfectBackendBundle:Resistance')->find($id);
+        $entity = $em->getRepository('InfectBackendBundle:Resistance')->findOneBy(array('bacteria' => $id_bacteria, 'compound' => $id_compound));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Resistance entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($id_bacteria, $id_compound);
 
         return $this->render('InfectBackendBundle:Resistance:show.html.twig', array(
             'entity'      => $entity,
@@ -93,18 +93,18 @@ class ResistanceController extends Controller
      * Displays a form to edit an existing Resistance entity.
      *
      */
-    public function editAction($id)
+    public function editAction($id_bacteria, $id_compound)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('InfectBackendBundle:Resistance')->find($id);
+        $entity = $em->getRepository('InfectBackendBundle:Resistance')->findOneBy(array('bacteria' => $id_bacteria, 'compound' => $id_compound));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Resistance entity.');
         }
 
         $editForm = $this->createForm(new ResistanceType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($id_bacteria, $id_compound);
 
         return $this->render('InfectBackendBundle:Resistance:edit.html.twig', array(
             'entity'      => $entity,
@@ -117,17 +117,17 @@ class ResistanceController extends Controller
      * Edits an existing Resistance entity.
      *
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, $id_bacteria, $id_compound)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('InfectBackendBundle:Resistance')->find($id);
+        $entity = $em->getRepository('InfectBackendBundle:Resistance')->findOneBy(array('bacteria' => $id_bacteria, 'compound' => $id_compound));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Resistance entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($id_bacteria, $id_compound);
         $editForm = $this->createForm(new ResistanceType(), $entity);
         $editForm->bind($request);
 
@@ -135,7 +135,7 @@ class ResistanceController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('resistance_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('resistance'));
         }
 
         return $this->render('InfectBackendBundle:Resistance:edit.html.twig', array(
@@ -148,14 +148,14 @@ class ResistanceController extends Controller
      * Deletes a Resistance entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, $id_bacteria, $id_compound)
     {
-        $form = $this->createDeleteForm($id);
+        $form = $this->createDeleteForm($id_bacteria, $id_compound);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('InfectBackendBundle:Resistance')->find($id);
+            $entity = $em->getRepository('InfectBackendBundle:Resistance')->findOneBy(array('bacteria' => $id_bacteria, 'compound' => $id_compound));
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Resistance entity.');
@@ -175,10 +175,11 @@ class ResistanceController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm($id)
+    private function createDeleteForm($id_bacteria, $id_compound)
     {
-        return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
+        return $this->createFormBuilder(array('id_bacteria' => $id_bacteria, 'id_compound' => $id_compound))
+            ->add('id_bacteria', 'hidden')
+            ->add('id_compound', 'hidden')
             ->getForm()
         ;
     }

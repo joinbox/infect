@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class BacteriaLocaleType extends AbstractType
+class BacteriaSubstanceClassType extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
@@ -15,11 +15,13 @@ class BacteriaLocaleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('language', null, array(
-                        'required' => true,
-                    )
-                )
-            ->add('name')
+            ->add('bacteria', null, array('required' => true))
+            ->add('substanceClass', null, array('required' => true))
+            ->add('resistanceUser', null, array('required' => false))
+            ->add('resistanceDefault', 'choice', array(
+                'choices' => array(1 => 'low', 2 => 'intermediate', 3 => 'high'),
+                'required' => false
+            ))
         ;
     }
     
@@ -29,7 +31,7 @@ class BacteriaLocaleType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Infect\BackendBundle\Entity\BacteriaLocale'
+            'data_class' => 'Infect\BackendBundle\Entity\BacteriaSubstanceClass'
         ));
     }
 
@@ -38,6 +40,6 @@ class BacteriaLocaleType extends AbstractType
      */
     public function getName()
     {
-        return 'infect_backendbundle_bacteria_locale';
+        return 'infect_backendbundle_bacteriaSubstanceClass';
     }
 }

@@ -69,5 +69,9 @@ InfectBackendBundle_topic:
 
 InfectBackendBundle_resistance:
         resource: "@InfectBackendBundle/Resources/config/routing/resistance.yml"
-        prefix:   /resistance                                                                                                
+        prefix:   /resistance
+
+InfectBackendBundle_bacteriaSubstanceClass:
+        resource: "@InfectBackendBundle/Resources/config/routing/bacteriaSubstanceClass.yml"
+        prefix:   /bacteriaSubstanceClass
 

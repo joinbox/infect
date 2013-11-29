@@ -1,0 +1,5 @@
+services:
+    substanceClass.listener:
+        class: Infect\BackendBundle\Entity\SubstanceClassListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }

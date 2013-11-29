@@ -24,10 +24,28 @@ class SubstanceClassController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('InfectBackendBundle:SubstanceClass')->findAll();
+        //$entities = $em->getRepository('InfectBackendBundle:SubstanceClass')->findAll();
+
+        $entities = $em->createQueryBuilder()
+                            ->select(array('node', '(COUNT(parent.id) - 1) AS depth'))
+                            ->from('InfectBackendBundle:SubstanceClass', 'node')
+                            ->from('InfectBackendBundle:SubstanceClass', 'parent')
+                            ->where('node.lft BETWEEN parent.lft AND parent.rgt')
+                            ->groupBy('node.id')
+                            ->orderBy('node.lft')
+                            ->getQuery()->getResult();
+
+        $results = array();
+        foreach($entities as $entity)
+        {
+            $result = $entity[0];
+            $result->setDepth((int)$entity['depth']);
+
+            $results[] = $result;
+        }
 
         return $this->render('InfectBackendBundle:SubstanceClass:index.html.twig', array(
-            'entities' => $entities,
+            'entities' => $results,
         ));
     }
     /**
@@ -164,6 +182,9 @@ class SubstanceClassController extends Controller
             foreach ($originalLocales as $locale) {
                 $em->remove($locale);
             }
+
+            $this->updateTree($entity);
+
             $em->persist($entity);
             $em->flush();
 
@@ -176,6 +197,96 @@ class SubstanceClassController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
+    private function updateTree($entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $conn = $em->getConnection();
+
+        // how much to increase / decrerase the to be moced subtrees rigth & left
+        $newParentLeft = $entity->getParent() ? $entity->getParent()->getLft() : 0;
+        $gapOffset = ( $newParentLeft ) > $entity->getLft() ? ( $entity->getParent()->getLft() - $entity->getLft() - 1 ) : (( $entity->getLft() - $newParentLeft -1) * -1 );
+
+        // how big is the subtrees range, so we can move all elements between the old & the new parent in the correponding direction
+        $offset = $entity->getRgt() - $entity->getLft() + 1 ;
+
+        var_dump($gapOffset);
+        var_dump($offset);
+        exit;
+
+        $result_ids = $em->createQueryBuilder()
+            ->select('s.id')
+            ->from('InfectBackendBundle:SubstanceClass', 's')
+            ->where('s.lft >= '.$entity->getLft())
+            ->andWhere('s.rgt <= '.$entity->getRgt())
+            ->getQuery()
+            ->getArrayResult();
+
+        $ids = array();
+        foreach($result_ids as $id)
+        {
+            $ids[] = $id['id'];
+        }
+
+        if ( $gapOffset > 0 )
+        {
+            // move other nodes to the left, we always have a parent when the gapOffset is positive
+
+            // move the left value
+            $conn->executeUpdate('
+                            UPDATE substanceClass s
+                                SET
+                                    s.lft = s.lft - ( CASE WHEN s.lft > ? THEN ? ELSE 0 END  ),
+                                    s.rgt = s.rgt - ( CASE WHEN s.rgt < ? THEN ? ELSE 0 END  )
+                                WHERE s.rgt > ?
+                                AND s.lft <= ?'
+                , array(
+                    $entity->getRgt(),
+                    $offset,
+                    $entity->getParent()->getLft(),
+                    $offset,
+                    $entity->getRgt(),
+                    $entity->getParent()->getLft(),
+                )
+            );
+
+        }
+        else
+        {
+            // move other nodes to the right
+            $conn->executeUpdate('
+                            UPDATE substanceClass s
+                              SET
+                                s.lft = s.lft + ( CASE WHEN s.lft < ? THEN ? ELSE 0 END  ),
+                                s.rgt = s.rgt + ( CASE WHEN s.rgt > ? THEN ? ELSE 0 END  )
+                              WHERE s.lft < ?
+                              AND s.lft >= ?'
+                , array(
+                    $entity->getLft(),
+                    $offset,
+                    $entity->getParent()->getLft(),
+                    $offset,
+                    $entity->getLft(),
+                    $entity->getParent() ? $entity->getParent()->getLft() : 0,
+                )
+            );
+        }
+
+        // move the subtree to the new location
+        $conn->executeUpdate('
+                            UPDATE substanceClass s
+                              SET
+                                s.lft = s.lft + ?,
+                                s.rgt = s.rgt + ?
+                              WHERE id IN (?)'
+            , array(
+                $gapOffset,
+                $gapOffset,
+                implode(',', $ids)
+            )
+        );
+    }
+
     /**
      * Deletes a SubstanceClass entity.
      *
@@ -193,8 +304,28 @@ class SubstanceClassController extends Controller
                 throw $this->createNotFoundException('Unable to find SubstanceClass entity.');
             }
 
-            $em->remove($entity);
-            $em->flush();
+            $hasChilds = ($entity->getRgt() - $entity->getLft()) > 1;
+
+            if(!$hasChilds)
+            {
+                $em->remove($entity);
+                $em->flush();
+            }
+            else
+            {
+                $translator = $this->get('translator');
+                $message = $translator->trans(
+                    '%entity% konnte nicht gelöscht werden, da untergeordnete SubstanceClassen vorhanden sind',
+                    array(
+                        '%entity%' => "SubstanceClass"
+                    )
+                );
+
+                $request->getSession()->getFlashBag()->add('error', $message);
+
+                return $this->redirect($this->generateUrl('substanceclass_edit', array('id' => $id)));
+            }
+
         }
 
         return $this->redirect($this->generateUrl('substanceclass'));

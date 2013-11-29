@@ -3,7 +3,7 @@ resistance:
     defaults: { _controller: "InfectBackendBundle:Resistance:index" }
 
 resistance_show:
-    pattern:  /{id}/show
+    pattern:  /{id_bacteria}.bacteria/{id_compound}.compound/show
     defaults: { _controller: "InfectBackendBundle:Resistance:show" }
 
 resistance_new:
@@ -16,15 +16,15 @@ resistance_create:
     requirements: { _method: post }
 
 resistance_edit:
-    pattern:  /{id}/edit
+    pattern:  /{id_bacteria}.bacteria/{id_compound}.compound/edit
     defaults: { _controller: "InfectBackendBundle:Resistance:edit" }
 
 resistance_update:
-    pattern:  /{id}/update
+    pattern:  /{id_bacteria}.bacteria/{id_compound}.compound/update
     defaults: { _controller: "InfectBackendBundle:Resistance:update" }
     requirements: { _method: post|put }
 
 resistance_delete:
-    pattern:  /{id}/delete
+    pattern:  /{id_bacteria}.bacteria/{id_compound}.compound/delete
     defaults: { _controller: "InfectBackendBundle:Resistance:delete" }
     requirements: { _method: post|delete }
