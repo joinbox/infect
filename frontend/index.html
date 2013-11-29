@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="css/main.css" />
 
 
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="js/vendor/jquery-2.0.2.min.js"><\/script>')</script>
 
 
@@ -32,17 +32,18 @@
 		<script src="js/angular/infekt/app.js"></script>
 
 		<!-- Factories -->
+		<script src="js/angular/infekt/httpRequestFactory.js"></script>
 		<script src="js/angular/infekt/antibioticsFactory.js"></script>
 		<script src="js/angular/infekt/bacteriaFactory.js"></script>
 		<script src="js/angular/infekt/searchTableFactory.js"></script>
-		<script src="js/angular/infekt/resistencyFactory.js"></script>
+		<script src="js/angular/infekt/resistanceFactory.js"></script>
 		<script src="js/angular/infekt/filterFactory.js"></script>
 
 		<!-- Controllers -->
 		<script src="js/angular/infekt/infektController.js"></script>
 
 		<!-- Directives -->
-		<script src="js/angular/infekt/resistencyMatrixDirective.js"></script>
+		<script src="js/angular/infekt/resistanceMatrixDirective.js"></script>
 
 
 
@@ -170,6 +171,10 @@
 
 	<section id="content">
 
+		<!-- TEST stuff <ul>
+			<li ng-repeat="antibiotic in antibiotics">{{antibiotic.id}}</li>
+		</ul>-->
+
 
 		<!--<div class="filters" style="margin-top: 58px;">
 			Bacteria: 
@@ -189,7 +194,7 @@
 
 		<section id="matrix">
 
-		<table class="resistencyMatrix" id="resistence-table">
+		<table class="resistanceMatrix" id="resistence-table">
 			<!-- Content has to  look like 
 				<tr>
 					<th scope="col"></th>
