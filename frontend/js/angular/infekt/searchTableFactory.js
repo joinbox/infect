@@ -44,7 +44,7 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 	// object
 	function generateSearchTable() {
 
-		var allData = AntibioticsFactory.getAntibiotics().concat( BacteriaFactory.getBacteria() )
+		var allData = AntibioticsFactory.antibiotics.concat( BacteriaFactory.bacteria )
 
 		// Loop through all bacteria, ab, diagnosis
 		for( var i = 0; i < allData.length; i++ ) {

@@ -1,18 +1,20 @@
 
-// I'm the directive for the resistency matrix, and I do
+// I'm the directive for the resistance matrix, and I do
 // - create the table
 // - highlight elements on hover
 // - Adjust column and row visibility depending on the filters applied
 // 
 // All data must be loaded, before I am called
-Infekt.directive( "resistencyMatrix", function( $compile, FilterFactory ) {
+Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 	function link( $scope, element, attributes ) {
 
-		// I create the HTML code for the resistency-matrix table. 
+		// I create the HTML code for the resistance-matrix table. 
 		// Afterwards I call $compile on it and add the compiled code to 
-		// the DOM (.resistencyMatrix)
+		// the DOM (.resistanceMatrix)
 		function createTable( data ) {
+
+			console.log( "Create matrix with data %o", data );
 
 			var table 	= [];
 
@@ -20,9 +22,11 @@ Infekt.directive( "resistencyMatrix", function( $compile, FilterFactory ) {
 			// create table head
 			//
 			table.push( "<thead><tr><th></th>" );
-			var antibiotics = $scope.getAntibioticsSorted();
-			for( var i = 0; i < antibiotics.length; i++ ) {
-				table.push( "<th scope='col' class='vertical'>" + antibiotics[ i ].name + "</th>" );
+
+			// Take first row of data (bacterium; see getResistanceTable) to get antibacteria's names; take resistance
+			// property that contains all antibiotics
+			for( var i = 0; i < data[ 0 ].resistances.length; i++ ) {
+				table.push( "<th scope='col' class='vertical'><span>" + data[ 0 ].resistances[ i ].antibiotic.name + "</span></th>" );
 			}
 			table.push( "</thead></tr>" );
 
@@ -30,31 +34,33 @@ Infekt.directive( "resistencyMatrix", function( $compile, FilterFactory ) {
 			// table body
 			//
 			table.push( "<tbody>" );
+
+
+			// Go through 
 			for( var i = 0; i < data.length; i++ ) {
 
 				// Row
 				table.push( "<tr>" );
 
 				// Row title
-				table.push( "<th scope='col'>" + data[ i ].bacterium.species + " " + data[ i ].bacterium.genus + "</th>" );
+				table.push( "<th scope='row'>" + data[ i ].bacterium.species + " " + data[ i ].bacterium.genus + "</th>" );
 				
-				// Cells with resistencies
-				for( var j = 0; j < data[ i ].resistencies.length; j++ ) {
+				// Cells with resistances
+				for( var j = 0; j < data[ i ].resistances.length; j++ ) {
 
-					var resistency 		= data[ i ].resistencies[ j ].value
+					var resistance 		= data[ i ].resistances[ j ].resistances.value
 
-
-					// Add classes to cells, depending on resistency data
+					// Add classes to cells, depending on resistance data
 					var className 	= "bad";
 
-					if( resistency > 0.6 ) { 
+					if( resistance > 0.6 ) { 
 						className = "good";
 					}
-					else if ( resistency > 0.3 ) {
+					else if ( resistance > 0.3 ) {
 						className = "fair";
 					}
 
-					table.push( "<td class='animated resistency-" + className + "'>" + resistency + "</td>" );
+					table.push( "<td class='animated resistance-" + className + "'>" + resistance + "</td>" );
 
 				}
 
@@ -65,14 +71,41 @@ Infekt.directive( "resistencyMatrix", function( $compile, FilterFactory ) {
 
 
 			$compile( table.join( "" ) )( $scope )
-				.appendTo( $( ".resistencyMatrix" ) );
+				.appendTo( $( ".resistanceMatrix" ) );
 
 		}
 
 
 
+
+
+
+		//
 		// Create the table
-		createTable( $scope.getResistencyTable() );
+		//
+
+		// Redraw table every time resistances change
+
+		// antibiotics and bacteria do not need to be watched, as changes on them automatically
+		// call ResistanceFactory.getResistances()
+		$scope.$watch( 'resistances', function() {
+
+			console.log( "REDRAW table with %o", $scope.antibiotics )
+
+			var tableContents = $scope.getResistanceTable();
+
+			// Table can't be drawn, because there's no content: return
+			if( tableContents.length == 0 ) {
+				return;
+			}
+
+			createTable( tableContents );
+
+		}, true );
+
+
+
+
 
 
 
@@ -81,9 +114,9 @@ Infekt.directive( "resistencyMatrix", function( $compile, FilterFactory ) {
 		// I listen to mouseovers of cells; if it happens, I determine if 
 		// the user hovered a colum or row title. If he did, I highlight the whole
 		// row/col, else just the single cell and it's titles (row/col).
-		element.find( "th, td" )
-			.on( "mouseenter", function() {
-		
+		element.on( "mouseenter", "th, td", function() {
+				
+				
 				// If on title on a row: set highlightRow to row number			
 				var highlightRow = $( this ).is( ":first-child" );
 				var rowNr = element.find( "tr" ).index( $( this ).parent() );
@@ -92,13 +125,13 @@ Infekt.directive( "resistencyMatrix", function( $compile, FilterFactory ) {
 				var highlightCol = $( this ).is( "th" );
 				// Get colNr, when col is highlighted
 				if( highlightCol ) {
-					var colNr = $( ".resistencyMatrix th" ).index( $( this ) ) + 1;
+					var colNr = $( ".resistanceMatrix th" ).index( $( this ) ) + 1;
 				}
 				else {
 					var colNr = $( $( this ).parents( "tr:first" ).find( "td" ) ).index( $( this ) ) + 1;
 				}
 
-				console.log( "highlightRow: %o rowNr %o, highlightCol: %o colNr %o", highlightRow, rowNr, highlightCol, colNr );
+				//console.log( "highlightRow: %o rowNr %o, highlightCol: %o colNr %o", highlightRow, rowNr, highlightCol, colNr );
 
 				// Mouse over top left cell: Don't do anything;
 				if( highlightRow === 0 || highlightCol === 0 ) {
@@ -160,7 +193,7 @@ Infekt.directive( "resistencyMatrix", function( $compile, FilterFactory ) {
 				return;
 			}
 
-			console.log( "resistencyMatrixDirective: filter that changed was %o, update Table", changedFilter );
+			console.log( "resistanceMatrixDirective: filter that changed was %o, update Table", changedFilter );
 			
 			if( changedFilter == "bacterium" ) {
 				updateRowVisibility();
@@ -224,7 +257,7 @@ Infekt.directive( "resistencyMatrix", function( $compile, FilterFactory ) {
 				var itemVisible 	= checkItemAgainstFilters( allAntibiotics[ i ], filters ) ? "show" : "hide";
 				var colNr = i + 2;
 
-				var cells 		= $( ".resistencyMatrix" ).find( "td:nth-child(" + colNr + "), th:nth-child(" + ( colNr ) + ")" );
+				var cells 		= $( ".resistanceMatrix" ).find( "td:nth-child(" + colNr + "), th:nth-child(" + ( colNr ) + ")" );
 
 				cells[ itemVisible ]();
 
@@ -244,7 +277,7 @@ Infekt.directive( "resistencyMatrix", function( $compile, FilterFactory ) {
 		// SearchTableFactory.searchTable
 		function checkItemAgainstFilters( item, filters ) {
 
-			console.log( "resistencyMatrixDirective: check if item %o matches filters %o", item, filters );
+			console.log( "resistanceMatrixDirective: check if item %o matches filters %o", item, filters );
 
 			// Loop through filter array
 			for( var i = 0; i < filters.length; i++ ) {
@@ -253,13 +286,13 @@ Infekt.directive( "resistencyMatrix", function( $compile, FilterFactory ) {
 				// no need to continue
 				// Test with $( "body").scope().getFilters().bacterium[ 0 ].containers.indexOf( $( "body" ).scope().getBacteriaSorted()[ 2 ] );
 				if( filters[ i ].containers.indexOf( item ) == -1 ) {
-					console.log( "resistencyMatrixDirective: item %o doesnt match filter %o", item, filters[ i ] );
+					console.log( "resistanceMatrixDirective: item %o doesnt match filter %o", item, filters[ i ] );
 					return false;
 				}
 			}
 
 			// item was in all filters.containers: return true
-			console.log( "resistencyMatrixDirective: item %o did match all filters %o", item, filters );
+			console.log( "resistanceMatrixDirective: item %o did match all filters %o", item, filters );
 			return true;
 
 		}

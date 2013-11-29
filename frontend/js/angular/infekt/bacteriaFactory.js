@@ -1,7 +1,9 @@
 // I contain all the bacteria
-Infekt.factory( 'BacteriaFactory', function() {
+Infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 
-	var bacteria = [ {
+
+
+	/*var bacteria = [ {
 			name: "one"
 			, id: 1 
 			, ltainName: "teas klsdjf lkj flös"
@@ -33,12 +35,165 @@ Infekt.factory( 'BacteriaFactory', function() {
 			, anaerobic: true
 			, gram: "gram-"
 			, type: "bacterium"
-		} ]
+		} ]*/
+
+
+
+
+
+
+
+	/***********************************************************************************************
+	/
+	/  Helper functions
+	/
+	***********************************************************************************************/
+
+
+
+
+	/***********************************************************************************************
+	/  Parse server data
+	***********************************************************************************************/
+	
+	function parseBacteria( data ) {
+
+		var bacts = [];
+
+		// Loop data
+		for( var i = 0; i < data.length; i++ ) {
+
+			// Transform rawBact to bact
+			var rawBact 	= data[ i ]
+				, bact 		= {
+					id 				: rawBact.id
+					, latinName 	: rawBact.name
+					, species 		: rawBact.species
+					, genus 		: rawBact.genus
+					, shape 		: rawBact.shape
+					, aerobic 		: rawBact.aerobic
+					, anaerobic 	: rawBact.anaerobic
+					, gram 			: rawBact.gram
+					, type 			: "bacterium"
+				};	
+
+			bacts.push( bact );
+
+		}
+
+		console.log( "parseBacteria returns %o", bacts );
+
+		return bacts;
+
+	}
+
+
+
+
+
+
+
+	/***********************************************************************************************
+	/  Get server data
+	***********************************************************************************************/
+
+	var httpPromise;
+	var fetchBacteria = function() {
+
+		var url = infektSettings.apiUrls.base + "/" + infektSettings.apiUrls.bacteria + "?" + infektSettings.apiKeyName + "=" + infektSettings.apiKey + "&noc=" + new Date().getTime();
+		console.log( "ULR for bacteria: %o", url );
+
+		if( !httpPromise ) {
+			httpPromise = $http( { method: "GET", url: url } );	
+		} 
+
+		return httpPromise;
+
+	}
+
+
+
+
+
+
+
+	/***********************************************************************************************
+	/
+	/  FACTORY
+	/
+	***********************************************************************************************/
+
 
 	var factory = {};
+
+	factory.bacteria = [];
+	factory.promiseObject = null;
+
+
 	factory.getBacteria = function() {
-		return bacteria;
+
+
+		// Should be
+		// RequestFactory.get( url, parseFunction, variableToStore );
+			
+		console.log( "getBacterai");
+
+		var deferred = $q.defer();
+
+		// Request is running:
+		// Return promiseObject, that has a .then method attached
+		/*if( factory.promiseObject ) {
+			console.log( "RETURN http-PROMISE %o", factory.promiseObject );
+			return factory.promiseObject;
+		}*/
+
+		// Bacteria not yet gotten: Make call to server
+		if( factory.bacteria.length == 0 ) {
+			
+			console.error( "Fetch bacteria" );
+
+			factory.promiseObject = fetchBacteria().then( function( response ) {
+				factory.promiseObject = null;
+
+				// Bacteria hasn't been set before 
+				if( factory.bacteria.length == 0 ) {
+					factory.bacteria = parseBacteria( response.data );
+				}
+
+				console.log( "Resolve getBacteria - return %o from server data %o", factory.bacteria, response.data );
+				deferred.resolve( factory.bacteria );
+
+			}, function() {
+				alert( "Couldn't fetch bacteria from server" );
+			} );
+		
+		}
+
+		// Bacteria ready: return
+		else {
+			console.log( "done" );
+			deferred.resolve( factory.bacteria );
+		}
+
+		return deferred.promise;
+
 	}
+
+
+	// Return bacterium with id id
+	factory.getById = function( id ) {
+
+		for( var i = 0; i < factory.bacteria.length; i++ ) {
+
+			if( factory.bacteria [ i ].id == id ) {
+				return factory.bacteria[ i ];
+			}
+
+		} 
+
+	}
+
+
 
 	return factory;
 

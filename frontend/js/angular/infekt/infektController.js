@@ -1,9 +1,39 @@
-Infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, BacteriaFactory, ResistencyFactory, SearchTableFactory, FilterFactory ) {
+Infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, BacteriaFactory, ResistanceFactory, SearchTableFactory, FilterFactory ) {
+
+	$scope.antibiotics = [];
+	$scope.bacteria = [];
+	$scope.resistances = [];
 
 
-	$scope.bacteria = BacteriaFactory.getBacteria();
-	$scope.antibiotics = AntibioticsFactory.getAntibiotics();
-	$scope.resistencies = ResistencyFactory.getResistencies();
+
+	// Get antibiotics
+	AntibioticsFactory
+		.getAntibiotics()
+		.then( function( data ) {
+
+			$scope.antibiotics = data;
+
+		} );
+
+
+	// Get bacteria
+	BacteriaFactory
+		.getBacteria()
+		.then( function( data ) {
+
+			$scope.bacteria = data;
+
+		} );
+
+
+	// Get and calculate resistances
+	ResistanceFactory
+		.getResistances()
+		.then( function( data ) {
+			$scope.resistances = data;
+		} );
+
+
 
 
 
@@ -14,19 +44,19 @@ Infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 	/
 	***********************************************************************************************/
 
-	// I'm there to sort the anitiobitcs (needed by getAntibioticsSorted)
-	// must be the same as antibioticResistencySortFunction
+	// I'm there to sort the antibiotics (needed by getAntibioticsSorted)
+	// must be the same as antibioticResistanceSortFunction
 	var antibioticSortFunction = function( a, b ) {
 		return a.name > b.name;
 	}
 
-	// I'm there to sort the resistency table returned by getResistencyTable
+	// I'm there to sort the resistance table returned by getResistanceTable
 	// must be the same as antibioticSortFunction
-	var antibioticResistencySortFunction = function( a, b ) {
+	var antibioticResistanceSortFunction = function( a, b ) {
 		return a.antibiotic.name > b.antibiotic.name;
 	}
 
-	// I sort bacteria (getResistencyTable stuff) alphabetically for rows
+	// I sort bacteria (getResistanceTable stuff) alphabetically for rows
 	// must be the same as bacteriumSortFunction
 	var bacteriumRowSortFunction = function( a, b ) {
 		return a.bacterium.name > b.bacterium.name;
@@ -95,7 +125,7 @@ Infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 
 	/***********************************************************************************************
 	/
-	/  RESISTENCY TABLE 
+	/  resistance TABLE 
 	/
 	***********************************************************************************************/
 
@@ -106,24 +136,31 @@ Infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 	}
 
 	// I return the $scope.bacteria, sorted by the same mechanism that sorts me for the display
-	// of the resistencyMatrix. I'm needed to filter the reistencyMatrix table. 
+	// of the resistanceMatrix. I'm needed to filter the reistencyMatrix table. 
 	$scope.getBacteriaSorted = function() {
 		return $scope.bacteria.sort( bacteriumSortFunction );
 	}
 
 
 
-	// I return the matrix, i.e. the table body of the resistencies
+	// I return the matrix, i.e. the table body of the resistances
 	// formatted to match the matrix structure; I'm needed to output
 	// the table
-	$scope.getResistencyTable = function() {
+	$scope.getResistanceTable = function() {
 
-		// I'm an array, containing «rows» of bacteria and their resistencies in relation
+
+		// ResistanceTable's not yet ready (data not yet gotten from server) 
+		if( !$scope.resistances || $scope.resistances.length == 0 ) {
+			console.error( "getResistanceTable returns empty result" );
+			return [];
+		}
+
+		// I'm an array, containing «rows» of bacteria and their resistances in relation
 		// to antibiotics
 		//
-		//	[ { bacterium: bacterium
-		//		, resistencies: [ {            -- sorted with antibioticSortFunction
-		//			antibiotic: antibiotic
+		//	[ { bacterium: bacterium 			-- row
+		//		, resistances: [ {      		-- sorted with antibioticSortFunction
+		//			antibiotic: antibiotic 		-- column
 		//			, value: int(0-100)
 		//		} );
 		//	} ] ;
@@ -131,53 +168,89 @@ Infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 		//
 		var ret = [];
 
-		for( var i = 0; i < $scope.resistencies.length; i++ ) {
 
-			var row = getBacteriumRow( $scope.resistencies[ i ].bacterium );
-			row.resistencies.push( {
-				antibiotic 	: $scope.resistencies[ i ].antibiotic 
-				, value 	: $scope.resistencies[ i ].value
-			} );
+
+		// Go through bacteria 
+		// (and not resistances, because not all resistance data may be availalble, therefore
+		// rows may be missing )
+		for( var i = 0; i < $scope.bacteria.length; i++ ) {
+
+			var bact = $scope.bacteria[ i ];
+
+
+			// Create bootstrap row for this bacterium: 
+			// {
+			// 		bacterium 		: *bacteriumObject*
+			// 		resistances 	: []
+			// }
+			
+			var row = {
+				bacterium 		: $scope.bacteria[ i ] 
+				, resistances 	: []
+			};
+
+
+			// Push 
+			//
+			// {
+			// 		antibiotic: *antibioticObject*
+			// 		resistance: { value: *val*, type: *type* }
+			// } 
+			//
+			// to row.resistances
+
+			// Loop antibiotics 
+			for( var j = 0; j < $scope.antibiotics.length; j++ ) {
+
+				var ab 		= $scope.antibiotics[ j ]
+					, res 	= getResistance( bact, ab );
+
+				row.resistances.push( {
+					antibiotic 		: ab
+					, resistances  	: {
+						value  		: res.value
+						, type 		: res.type
+					}
+				} )
+			
+			}
+
+			// Push row to return value
+			ret.push( row );
 
 		}
 
 
 
-		// Returns the «row» of ret containing a certain bacterium; 
-		// row.bacterium contains the bacterium's name, row.resistencies the resistencies (not yet sorted or complete)
-		// If the row doesn't exist yet, it's created
-		function getBacteriumRow( bacterium ) {
+		// Returns the resistance object for the bacterium bact and the
+		// antibiotic ab (helper function)
+		function getResistance( bact, ab ) {
 
-			// Go through ret table, return ret[ i ], if it's bacterium matches
-			// bacterium
-			for( var i = 0; i < ret.length; i++ ) {
-				if( ret[ i ].bacterium == bacterium ) {
-					return ret[ i ];
+			for( var i = 0; i < $scope.resistances.length; i++ ) {
+				var res = $scope.resistances[ i ];
+				if( res.antibiotic == ab && res.bacterium == bact ) {
+					return res;
 				}
 			}
 
-			// No matches found; create row
-			var newRow = {
-				bacterium 		: bacterium
-				, resistencies 	: []
+			return {
+				value 		: "0"
+				, type 		: "missing"
 			};
-			console.error( "created row %o", newRow );
-			ret.push( newRow );
-			return newRow;
 
 		}
 
+		console.error( "getResistanceTable: ret before sorting: %o", ret );
 
-		console.error( "ret before sorting: %o", ret );
 
 
-		// Sort resistencies
+		// Sort resistances
 		for( var i = 0; i < ret.length; i++ ) {
-			console.error( "sort %o by .antibiotic.name", ret[ i ].resistencies )
-			ret[ i ].resistencies.sort( antibioticResistencySortFunction );
+			//console.error( "sort %o by .antibiotic.name", ret[ i ].resistances )
+			ret[ i ].resistances.sort( antibioticResistanceSortFunction );
 		}	
 
-		console.error( ret );
+		console.error( "get bacterium row returns unsorted %o", ret );
 		return ret.sort( bacteriumRowSortFunction );
 
 	}

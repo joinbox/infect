@@ -56,19 +56,19 @@ Infekt.factory( 'FilterFactory', function() {
 		if( name ) {
 
 			if( !filters[ name ] ) {
-				console.error( "infektController: getFilters called with name that doesn't exist in filters: %o vs %o", name, filters );
+				//console.error( "infektController: getFilters called with name that doesn't exist in filters: %o vs %o", name, filters );
 				return [];
 			}
 
 			else {
-				console.log( "infektControler: getFilters returns %o for name %s", filters[ name ], name );
+				//console.log( "infektControler: getFilters returns %o for name %s", filters[ name ], name );
 				return filters[ name ];
 			}
 
 
 		}
 
-		console.log( "infektController: getFilters returns all filters %o", filters );
+		//console.log( "infektController: getFilters returns all filters %o", filters );
 		return filters;
 
 	}

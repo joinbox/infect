@@ -8,6 +8,7 @@
 
 		// Render item specificially
 		_renderItem: function( ul, item ) {
+			console.log( "renderItem with %o", item )
 			return $( "<li class='filter-list-item'></li>" )
 				.append( "<a><span class='filter-item-category'>" + item.containers[ 0 ].type + " - " + item.name + "</span>" + item.value + "</a>" )
 				.appendTo( ul );
