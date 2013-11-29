@@ -129,6 +129,7 @@ label
 	display:block;
 	font: normal 1.3rem/1 futura_ltbold, Arial, sans-serif;
 	margin-right:15px;
+	letter-spacing: 0.2rem;
 	text-transform:uppercase;
 }
 input
@@ -318,6 +319,7 @@ header:hover #logo h1
 	font: normal 1.3rem/1 futura_ltbook, Arial, sans-serif;
 	padding-bottom:8px;
 	border-bottom:1px solid rgb(255, 255, 255);
+	letter-spacing: 0.1rem;
 }
 .active-filter-list label:only-child
 {
@@ -395,7 +397,7 @@ header:hover .active-filter-item-list
 
 #content
 {
-	margin-top:200px;
+	margin-top:120px;
 }
 
 #resistence-table
@@ -406,11 +408,27 @@ header:hover .active-filter-item-list
 #resistence-table th
 {
 	font-weight:normal;
+	position: relative;
 }
+
+#resistence-table th span {
+	position: absolute;
+}
+
 #resistence-table th[scope="col"]
 {
 	vertical-align: bottom;
+	-webkit-transform: rotate(-70deg) translate( 10px, -12px);
 }
+
+#resistence-table th[scope="row"] 
+{
+	text-align: right;
+	padding-right: 10px;
+	vertical-align: middle;
+	width: 20rem;
+}
+
 #resistence-table td
 {
 	position:relative;
@@ -434,15 +452,15 @@ header:hover .active-filter-item-list
 	z-index:1;
 	border:none;
 }
-#resistence-table .resistency-bad
+#resistence-table .resistance-bad
 {
 	background-color:rgb(225, 225, 225);
 }
-#resistence-table .resistency-fair
+#resistence-table .resistance-fair
 {
 	background-color:rgb(240, 126, 4);
 }
-#resistence-table .resistency-good
+#resistence-table .resistance-good
 {
 	background-color:rgb(183, 185, 14);
 }
