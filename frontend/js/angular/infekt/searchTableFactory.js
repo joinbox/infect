@@ -1,7 +1,9 @@
 
 
 // I create a hashTable for all values of antibiotics, bacteria and diagnosis to speed up searches
-Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFactory ) {
+Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFactory, TranslationFactory ) {
+
+
 
 	// I contain hashes for fast searching, i.e. Objects looking like 
 	// { 
@@ -9,9 +11,11 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 	//	 , value: string
 	//   , containers: [ pointer to antibiotic | diagnosis | bacterium ]
 	// }
-
 	var searchTable = [];
+
+	// Factory that will be returned
 	var factory = {};
+
 	
 
 	// I return an array with pointers to an object contained in searchTable with name «name» (and value, if provided), 
@@ -39,12 +43,15 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 
 
 
+
+
 	// I generate the searchTable array from the data in AntibioticFactory, BacteriaFactory and DiagnosisFactory
 	// by taking all their object's properties and valuesand making single objects out of them that point to their original
 	// object
 	function generateSearchTable() {
 
 		var allData = AntibioticsFactory.antibiotics.concat( BacteriaFactory.bacteria )
+		console.error( "generateSearchTable - allData: %o", allData );
 
 		// Loop through all bacteria, ab, diagnosis
 		for( var i = 0; i < allData.length; i++ ) {
@@ -76,9 +83,18 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 
 		}
 
-		console.error( "HashTable: %o", searchTable );
+
+		console.error( "Hash Table:" );
+		for( var i = 0; i < searchTable.length; i++ ) {
+			console.log( "%s - %s", searchTable[ i ].humanName, searchTable[ i ].humanValue )
+		}		
+
+		window.st = searchTable;
 
 	}
+
+
+
 
 
 
@@ -88,17 +104,34 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 	// that points to the original data source
 	// {
 	//	  name: string	
+	//	  , humanName: string	/* human readable name, localized */
+	//	  , humanValue: string	/* human readable value, localized */
 	//	  , value: string	
 	//	  , pointer: pointer to antibio, bact, diagnosis	
 	// }
 
 	function addToTable( obj ) {
 
+		// Translate value and name of property that has to be stored into 
+		// human readables
+		var translatedObj = TranslationFactory.translate( obj.pointer, obj.name );
+
+
+		// Translator says property is not human readable (returns false): 
+		// Don't addd it to table
+		if( translatedObj === false ) {
+			//console.log( "Don't add property %o to table", obj.name );
+			return false;
+		}
+
+
+		//console.error( "translated %o: %o into %o: %o", obj.name, obj.value, translatedObj.name, translatedObj.value );
+
 		var inTable = isInTable( obj.name, obj.value );
+		//console.log( "addToTable %s - %s - %o", obj.name, obj.value, obj.pointer );
 
 		// Value and name were already in table: push obj to containers of the match
 		if( inTable.length > 0 ) {
-			console.log( "hashTable: push %o to existing object %o", obj, inTable );
 			inTable[ 0 ].containers.push( obj.pointer );
 		}
 
@@ -106,11 +139,16 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 			var newObj = {
 				name 			: obj.name
 				, value 		: obj.value
+				, humanName 	: translatedObj.name
+				, humanValue 	: translatedObj.value
 				, containers	: [ obj.pointer ]
 			}
-			console.log( "create object %o for hashTable", newObj );
 
+			//console.log( "Create object %o for hash table - %o", translatedObj.name, obj.pointer );
+
+			console.error( newObj.humanValue );
 			searchTable.push( newObj );
+
 		}
 
 	}
@@ -132,12 +170,14 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 		// Go through searchTable, look up searchString in it's values
 		for( var i = 0; i < searchTable.length; i++ ) {
 			// Make searchTable[ i ].value to a string, as int won't know indexOf
-			if( ( searchTable[ i ].value + "" ).indexOf( searchString ) > -1 ) {
+			console.error( searchTable[ i ].humanValue );
+			if( ( searchTable[ i ].humanValue + "" ).toLowerCase().indexOf( searchString.toLowerCase() ) > -1 || 
+				(  searchTable[ i ].humanName + "").toLowerCase().indexOf( searchString.toLowerCase() ) > -1 ) {
 				results.push( searchTable[ i ] );
 			}
 		}
 
-		console.log( "findTerm returns %o", results );
+		console.log( "findTerm returns %o – searched in table %o", results, searchTable );
 		return results;
 
 	}

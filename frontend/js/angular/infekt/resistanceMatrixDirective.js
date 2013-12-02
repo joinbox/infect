@@ -117,18 +117,30 @@ Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 		element.on( "mouseenter", "th, td", function() {
 				
 				
-				// If on title on a row: set highlightRow to row number			
+				//
+				// Highlight ROW
+				//
+
+				// If on title on a row (first-child of a tr): set highlightRow to row number			
 				var highlightRow = $( this ).is( ":first-child" );
+
+				// Get row number
 				var rowNr = element.find( "tr" ).index( $( this ).parent() );
 
-				// If on title on a col: set highlightCol to col number
-				var highlightCol = $( this ).is( "th" );
-				// Get colNr, when col is highlighted
+
+				//
+				// Highlight COLUMN
+				//
+
+				// If on title of a col: set highlightCol to true
+				var highlightCol = $( this ).is( "th" ) && $( this ).attr( 'scope' ) == "col";
+
+				// Get column number
 				if( highlightCol ) {
-					var colNr = $( ".resistanceMatrix th" ).index( $( this ) ) + 1;
+					var colNr = $( ".resistanceMatrix tr:first th" ).index( $( this ) ) + 1;
 				}
 				else {
-					var colNr = $( $( this ).parents( "tr:first" ).find( "td" ) ).index( $( this ) ) + 1;
+					var colNr = $( $( this ).closest( "tr" ).find( "td" ) ).index( $( this ) ) + 1;
 				}
 
 				//console.log( "highlightRow: %o rowNr %o, highlightCol: %o colNr %o", highlightRow, rowNr, highlightCol, colNr );
@@ -149,14 +161,16 @@ Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 				// Highlight col
 				else if( highlightCol ) {
-					element.find( "tr" ).find( "td:nth-child(" + colNr + "), th:nth-child(" + colNr + ")" ).css( 'opacity', 1 );
+					element.find( "tr" ).find( "td:nth-child(" + colNr + "), th[scope='col']:nth-child(" + colNr + ")" ).css( 'opacity', 1 );
 				}
 
 				// Highlight single cell
 				else {
 					$( this ).css( 'opacity', 1 );
-					element.find( "th:nth-child(" + ( colNr + 1 ) + ")").css( 'opacity', 1 );
-					element.find( "tr:nth-child(" + rowNr + ") th:first" ).css( 'opacity', 1 );
+					// col title
+					element.find( "th[scope='col']:nth-child(" + ( colNr + 1 ) + ")").css( 'opacity', 1 );
+					// row title
+					element.find( "tr:nth-child(" + rowNr + ") th" ).css( 'opacity', 1 );
 				}
 
 
@@ -245,14 +259,14 @@ Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			// If they don't match filter, hide them. Else show them.
 			var allAntibiotics = $scope.getAntibioticsSorted();
 
-			console.error( "allAntibiotics: %o", allAntibiotics );
+			//console.error( "allAntibiotics: %o", allAntibiotics );
 
 			var toHide = [];
 			var toShow = [];
 
 			for( var i = 0; i < allAntibiotics.length; i++ ) {
 
-				console.error( "check antibiotic %o", allAntibiotics[ i ].name );
+				//console.error( "check antibiotic %o", allAntibiotics[ i ].name );
 
 				var itemVisible 	= checkItemAgainstFilters( allAntibiotics[ i ], filters ) ? "show" : "hide";
 				var colNr = i + 2;
@@ -277,7 +291,7 @@ Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 		// SearchTableFactory.searchTable
 		function checkItemAgainstFilters( item, filters ) {
 
-			console.log( "resistanceMatrixDirective: check if item %o matches filters %o", item, filters );
+			//console.log( "resistanceMatrixDirective: check if item %o matches filters %o", item, filters );
 
 			// Loop through filter array
 			for( var i = 0; i < filters.length; i++ ) {
@@ -286,13 +300,13 @@ Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 				// no need to continue
 				// Test with $( "body").scope().getFilters().bacterium[ 0 ].containers.indexOf( $( "body" ).scope().getBacteriaSorted()[ 2 ] );
 				if( filters[ i ].containers.indexOf( item ) == -1 ) {
-					console.log( "resistanceMatrixDirective: item %o doesnt match filter %o", item, filters[ i ] );
+					//console.log( "resistanceMatrixDirective: item %o doesnt match filter %o", item, filters[ i ] );
 					return false;
 				}
 			}
 
 			// item was in all filters.containers: return true
-			console.log( "resistanceMatrixDirective: item %o did match all filters %o", item, filters );
+			//console.log( "resistanceMatrixDirective: item %o did match all filters %o", item, filters );
 			return true;
 
 		}

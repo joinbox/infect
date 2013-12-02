@@ -79,6 +79,8 @@ Infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 	***********************************************************************************************/
 
 	// I return the list of filters that match term
+	// and give back the results for the filter type-ahead control
+	// Wraps SearchTableFactory.findTerm
 	$scope.filterSearchList = function( term ) {
 		var results = SearchTableFactory.findTerm( term );
 		console.log( "filter for %s returns %o", term, results );
