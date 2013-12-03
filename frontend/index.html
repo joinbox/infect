@@ -119,7 +119,8 @@
 					
 						<li>
 							<label class="animated">Bakterium<span class="filter-item-indicator animated">{{getFilterCount('bacterium')}}</span></label>
-							<ul class="active-filter-item-list flat-list animated">
+
+							<ul class="active-filter-item-list flat-list animated" data-ng-if="getFilters('bacterium').length">
 								<li ng-repeat="filter in getFilters('bacterium')" class="filter-list-item">
 									<span class="filter-item-category">{{filter.name}}</span>
 									{{filter.value}}
@@ -132,7 +133,7 @@
 
 						<li>
 							<label class="animated">Antibiotikum<span class="filter-item-indicator animated">{{getFilterCount('antibiotic')}}</span></label>
-							<ul class="active-filter-item-list flat-list animated">
+							<ul class="active-filter-item-list flat-list animated" data-ng-if="getFilters('antibiotic').length">
 								<li ng-repeat="filter in getFilters('antibiotic')" class="filter-list-item">
 									<span class="filter-item-category">{{filter.name}}</span>
 									{{filter.value}}
