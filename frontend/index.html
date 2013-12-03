@@ -18,13 +18,10 @@
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="js/vendor/jquery-2.0.2.min.js"><\/script>')</script>
 
-
 		<script src="js/vendor/angular.min.js"></script>
 		<script src="js/vendor/jquery-ui-1.10.3.custom.min.js"></script>
 
 		<script src="js/plugins.js"></script>
-
-
 
 
 		<!-- Infect Angular Module -->
@@ -117,10 +114,10 @@
 
 					<ul class="active-filter-list flat-list">
 					
-						<li>
-							<label class="animated">Bakterium<span class="filter-item-indicator animated">{{getFilterCount('bacterium')}}</span></label>
+						<li data-ng-if="getFilters('bacterium').length">
+							<label class="animated">Bakterium</label>
 
-							<ul class="active-filter-item-list flat-list animated" data-ng-if="getFilters('bacterium').length">
+							<ul class="active-filter-item-list flat-list animated">
 								<li ng-repeat="filter in getFilters('bacterium')" class="filter-list-item">
 									<span class="filter-item-category">{{filter.name}}</span>
 									{{filter.value}}
@@ -131,9 +128,9 @@
 							</ul>
 						</li>
 
-						<li>
-							<label class="animated">Antibiotikum<span class="filter-item-indicator animated">{{getFilterCount('antibiotic')}}</span></label>
-							<ul class="active-filter-item-list flat-list animated" data-ng-if="getFilters('antibiotic').length">
+						<li data-ng-if="getFilters('antibiotic').length">
+							<label class="animated">Antibiotikum</label>
+							<ul class="active-filter-item-list flat-list animated">
 								<li ng-repeat="filter in getFilters('antibiotic')" class="filter-list-item">
 									<span class="filter-item-category">{{filter.name}}</span>
 									{{filter.value}}

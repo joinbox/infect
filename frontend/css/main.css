@@ -20,7 +20,6 @@ textarea {
 html
 {
 	font-size: 62.5%;
-	-webkit-transform-style: preserve-3d;
 }
 body {
 
@@ -178,21 +177,19 @@ header
 	z-index:10;
 	top:0;
 	width:100%;
-	height:71px;
+	/*height:71px;
+	height:106px;*/
 	overflow: hidden;
 	background-color:rgb(255, 255, 255);
 	border-bottom:1px solid rgb(210, 210, 210);
 }
-/*header:hover
-{
-	height:300px;
-}*/
 #logo
 {
 	width:50px;
 	background-color:rgb(183, 185, 14);
 	padding:20px 20px;
 	text-align: center;
+	/*vertical-align:middle;*/
 }
 #logo *
 {
@@ -208,23 +205,19 @@ header
 	width:50px;
 	margin-bottom:12px;
 }
-header #logo h1
+/*header #logo h1
 {
 	opacity:0;
 }
-/*header:hover #logo
-{
-	padding-top:100px;
-}*/
 header:hover #logo h1
 {
 	opacity:1;
-}
+}*/
 #filter-wrapper
 {
 	display:table;
 	width:100%;
-	padding:30px 40px;
+	padding:30px 0;
 }
 #filter-wrapper > *
 {
@@ -234,7 +227,7 @@ header:hover #logo h1
 #filter
 {
 	width:300px;
-	padding-right:100px;
+	padding:0 100px 0 40px;
 }
 #filter label
 {
@@ -307,6 +300,7 @@ header:hover #logo h1
 	display:table;
 	width:100%;
 	max-width:700px;
+	padding-right:100px;
 }
 .active-filter-list
 {
@@ -318,23 +312,31 @@ header:hover #logo h1
 	display:table-cell;
 	width:33.333%;
 	padding-right:40px;
+
+}
+.active-filter-list > li:only-child
+{
+
+border-right:solid blue 40px;
+padding-right:50%;
+
 }
 .active-filter-list label
 {
 	position:relative;
 	font: normal 1.3rem/1 futura_ltbook, Arial, sans-serif;
 	padding-bottom:8px;
-	border-bottom:1px solid rgb(255, 255, 255);
+	border-bottom:1px solid rgb(225, 225, 225);
 	letter-spacing: 0.1rem;
 }
 .active-filter-list label:only-child
 {
 	color:rgb(200, 200, 200);
 }
-header:hover .active-filter-list label
+/*header:hover .active-filter-list label
 {
 	border-bottom-color:rgb(225, 225, 225);
-}
+}*/
 /* Filter Indicators */
 .filter-item-indicator
 {
@@ -384,14 +386,14 @@ label:only-child .filter-item-indicator:before
 {
 	border-right:5px solid rgb(225, 225, 225);
 }
-header:hover .filter-item-indicator
+/*header:hover .filter-item-indicator
 {
 	opacity:0;
-}
-.active-filter-item-list
+}*/
+/*.active-filter-item-list
 {
 	opacity:0;
-}
+}*/
 .active-filter-list li label
 {
 	opacity:0;
@@ -400,10 +402,10 @@ header:hover .filter-item-indicator
 {
 	opacity:1;
 }
-header:hover .active-filter-item-list
+/*header:hover .active-filter-item-list
 {
 	opacity:1;
-}
+}*/
 
 
 
@@ -411,12 +413,12 @@ header:hover .active-filter-item-list
 
 #content
 {
-	margin-top:120px;
+	margin-top:80px;
 }
 
 #resistence-table
 {
-	max-width:90%;
+	margin:0 40px 40px 40px;
 	border-collapse:separate;
 	font: normal 1.5rem/1.5 futura_ltcondensed, Arial, sans-serif;
 }
@@ -438,10 +440,10 @@ header:hover .active-filter-item-list
 
 #resistence-table th[scope="row"] 
 {
-	text-align: right;
-	padding-right: 10px;
+	text-align:right;
+	padding:0 10px 0 0;
 	vertical-align: middle;
-	width: 20rem;
+	white-space: nowrap;
 }
 
 #resistence-table td
