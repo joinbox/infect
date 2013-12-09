@@ -273,7 +273,7 @@ header:hover #logo h1
 	padding:5px 0;
 	background-color:rgb(255, 255, 255);
 }
-.filter-list-item span
+.filter-item-category
 {
 	display:block;
 	overflow: hidden;
@@ -316,9 +316,8 @@ header:hover #logo h1
 }
 .active-filter-list > li:only-child
 {
-
-border-right:solid blue 40px;
-padding-right:50%;
+	border-right:solid transparent 40px;
+	padding-right:50%;
 
 }
 .active-filter-list label
