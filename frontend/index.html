@@ -18,13 +18,10 @@
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="js/vendor/jquery-2.0.2.min.js"><\/script>')</script>
 
-
 		<script src="js/vendor/angular.min.js"></script>
 		<script src="js/vendor/jquery-ui-1.10.3.custom.min.js"></script>
 
 		<script src="js/plugins.js"></script>
-
-
 
 
 		<!-- Infect Angular Module -->
@@ -57,7 +54,7 @@
 
     </head>
 
-    <body ng-controller="InfektController">
+    <body data-ng-controller="InfektController">
 
 
         <!--[if lt IE 7]>
@@ -76,9 +73,9 @@
 				<h1 class="animated">Infekt</h1>
 			</div>
 			
-			<section id="filter-wrapper">
+			<div id="filter-wrapper">
 			
-				<section id="filter">
+				<div id="filter">
 				
 					<div class="wrapper">
 
@@ -112,38 +109,42 @@
 					
 					</div>
 					
-				</section>
+				</div>
 
-				<section id="active-filter">
+				<div id="active-filter">
 
 					<ul class="active-filter-list flat-list">
 					
+						<!--<li data-ng-if="getFilters('bacterium').length">-->
 						<li>
-							<label class="animated">Bakterium<span class="filter-item-indicator animated">{{getFilterCount('bacterium')}}</span></label>
+							<label class="animated">Bakterium</label>
 
-							<ul class="active-filter-item-list flat-list animated" data-ng-if="getFilters('bacterium').length">
+							<ul class="active-filter-item-list flat-list animated">
 								<li ng-repeat="filter in getFilters('bacterium')" class="filter-list-item">
-									<span class="filter-item-category">{{filter.name}}</span>
+									<div class="filter-item-category">{{filter.name}}</div>
 									{{filter.value}}
 									<button class="removeFilterButton" ng-click="removeFilter(filter)">x</button>
 								</li>
-
+								
+								<!-- "oder" -->
+								<li class="filter-list-item">
+									<div class="filter-item-category">Form</div>
+									<div class="filter-item-value">Stäbchen <button class="removeFilterButton" ng-click="removeFilter(filter)">x</button></div> oder <div class="filter-item-value">Kokken <button class="removeFilterButton" ng-click="removeFilter(filter)">x</button></div>
+									
 								</li>
+								
 							</ul>
 						</li>
 
-						<li>
-							<label class="animated">Antibiotikum<span class="filter-item-indicator animated">{{getFilterCount('antibiotic')}}</span></label>
-							<ul class="active-filter-item-list flat-list animated" data-ng-if="getFilters('antibiotic').length">
+						<li data-ng-if="getFilters('antibiotic').length">
+							<label class="animated">Antibiotikum</label>
+							<ul class="active-filter-item-list flat-list animated">
 								<li ng-repeat="filter in getFilters('antibiotic')" class="filter-list-item">
 									<span class="filter-item-category">{{filter.name}}</span>
 									{{filter.value}}
 									<button class="removeFilterButton" ng-click="removeFilter(filter)">x</button>
 								</li>
-
-								</li>
 							</ul>
-
 						</li>
 
 						
@@ -163,9 +164,9 @@
 						
 					</ul>
 				
-				</section>
+				</div>
 				
-			</section>
+			</div>
 		
 		</div>
 
@@ -176,17 +177,12 @@
 
 		<section id="matrix">
 
-		<table class="resistanceMatrix" id="resistence-table">
-		</table>
-
-		
-
-
+			<table class="resistanceMatrix" id="resistence-table">
+			</table>
 
 		</section>
 
 	</section>
-
 
 
     </body>
