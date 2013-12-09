@@ -43,7 +43,7 @@ Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 				table.push( "<tr>" );
 
 				// Row title
-				table.push( "<th scope='row'>" + data[ i ].bacterium.species + " " + data[ i ].bacterium.genus + "</th>" );
+				table.push( "<th scope='row'>" + data[ i ].bacterium.genus + " " + data[ i ].bacterium.species + "</th>" );
 				
 				// Cells with resistances
 				for( var j = 0; j < data[ i ].resistances.length; j++ ) {
@@ -52,6 +52,11 @@ Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 					// Add classes to cells, depending on resistance data
 					var className 	= "bad";
+
+					// No resistance data available
+					if( resistance === null ) {
+						className = "notAvailable"
+					}
 
 					if( resistance > 0.6 ) { 
 						className = "good";
@@ -143,7 +148,7 @@ Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 					var colNr = $( $( this ).closest( "tr" ).find( "td" ) ).index( $( this ) ) + 1;
 				}
 
-				//console.log( "highlightRow: %o rowNr %o, highlightCol: %o colNr %o", highlightRow, rowNr, highlightCol, colNr );
+				console.log( "highlightRow: %o rowNr %o, highlightCol: %o colNr %o", highlightRow, rowNr, highlightCol, colNr );
 
 				// Mouse over top left cell: Don't do anything;
 				if( highlightRow === 0 || highlightCol === 0 ) {
@@ -170,7 +175,7 @@ Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 					// col title
 					element.find( "th[scope='col']:nth-child(" + ( colNr + 1 ) + ")").css( 'opacity', 1 );
 					// row title
-					element.find( "tr:nth-child(" + rowNr + ") th" ).css( 'opacity', 1 );
+					element.find( "tr:nth-child(" + rowNr + ") th[scope='row']" ).css( 'opacity', 1 );
 				}
 
 

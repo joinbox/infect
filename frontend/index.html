@@ -54,6 +54,7 @@
 
 		<script src="js/main.js"></script>
 
+
     </head>
 
     <body ng-controller="InfektController">
@@ -88,11 +89,11 @@
 							<div id="filter-input-wrapper" class="styled-input">
 								<input type="search" id="filter-input" class="searchInput" />
 							</div>
-
+<!--
 							<div id="filter-suggestion-overlay">
 							</div>
-													
-							<!-- Suggestion needs to look like 
+	-->												
+							<!-- Suggestion needs to look like -->
 								<div id="filter-suggestion-overlay">
 									<ul class="filter-suggestion-list flat-list">
 										<li class="filter-list-item">
@@ -105,7 +106,7 @@
 										</li>
 									</ul>
 								</div>
-								-->
+								
 													
 						</div>
 					
@@ -173,44 +174,9 @@
 
 	<section id="content">
 
-		<!-- TEST stuff <ul>
-			<li ng-repeat="antibiotic in antibiotics">{{antibiotic.id}}</li>
-		</ul>-->
-
-
-		<!--<div class="filters" style="margin-top: 58px;">
-			Bacteria: 
-			Antibiotics: 
-			<ul>
-				<li ng-repeat="filter in getFilters('antibiotic')">{{filter.name}}<br/>{{filter.value}}<button class="removeFilterButton" ng-click="removeFilter(filter)">x</button></li>
-			</ul>
-
-		</div>-->
-
-		<!--
-		<ul id="content-switcher-list">
-			<li><button data-for="matrix">Matrix</button></li>
-			<li><button data-for="recommendation">Empfehlung</button></li>
-		</ul>
-		-->
-
 		<section id="matrix">
 
 		<table class="resistanceMatrix" id="resistence-table">
-			<!-- Content has to  look like 
-				<tr>
-					<th scope="col"></th>
-					<th scope="col" class="vertical">Amox./Clav. (Augmentin)</th>
-					<th scope="col" class="vertical">Amoxicillin (Clamoxyl)</th>
-					<th scope="col" class="vertical">Cefepim (Cefepim Sandoz)</th>
-				</tr>
-
-				<tr>
-					<th scope="row">Corynebacterium jeikeium</th>
-					<td class="good">30%</td>
-					<td class="bad">50%</td>
-					<td class="fair">50%</td>
-				</tr> -->
 		</table>
 
 		

@@ -66,7 +66,7 @@ Infekt.factory( 'ResistanceFactory', function( AntibioticsFactory, BacteriaFacto
 				, ab 				= AntibioticsFactory.getById( abId )
 				, resistance		= data.resistanceImport
 				, resistanceType
-				, resistanceOrder 	= [ "resistanceImport", "resistanceUser", "classResistanceDefault", "resistanceDefault" ];
+				, resistanceOrder 	= [ "resistanceImport", "resistanceUser", "classResistanceDefault", "resistanceDefault" ]; // classResistanceDefault und resistanceDefault: Keine Zahl anzeigen
 
 			// Get resistance (by checking, if data.orderName is given)
 			for( var n = 0; n < resistanceOrder.length; n++ ) {
