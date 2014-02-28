@@ -24,13 +24,14 @@
     "test",
     "tests"
   ],
-  "_release": "1122576c91",
+  "_release": "ca1b00c750",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "1122576c91a4c28d06a31ede190d06b6c0c1925b"
+    "commit": "ca1b00c7506cc0813eac3e74ee0842f6f7e9fe25"
   },
   "_source": "git://github.com/joinbox/angularModules.git",
   "_target": "*",
-  "_originalSource": "fxstr-angular-typeahead"
+  "_originalSource": "fxstr-angular-typeahead",
+  "_direct": true
 }

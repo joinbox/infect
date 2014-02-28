@@ -2,7 +2,7 @@
 <!--[if lt IE 7]>      <html ng-app="infekt" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html ng-app="infekt" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html ng-app="infekt" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html ng-app="infekt" class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html ng-app="infekt" class="no-js" lang="de-ch"> <!--<![endif]-->
     <head>
         <meta charset="utf-8" />
         <title>Infekt</title>
@@ -21,8 +21,7 @@
 		<!-- Vendor -->
 		<script src="js/vendor/bower_components/angular/angular.js"></script>
 		<script src="js/vendor/bower_components/fxstr-angular-typeahead/fxstr-angular-typeahead/typeaheadDirective.js"></script>
-
-		<script src="js/vendor/jquery-ui-1.10.3.custom.min.js"></script>
+		<script src="js/vendor/bower_components/angular-translate/angular-translate.js"></script>
 
 		<script src="js/plugins.js"></script>
 
@@ -47,6 +46,9 @@
 		<!-- Directives -->
 		<script src="js/angular/infekt/resistanceMatrixDirective.js"></script>
 
+		<!-- Filters -->
+		<script src="js/angular/infekt/joinFilter.js"></script>
+
 
 
 		<!-- View stuff -->
@@ -62,9 +64,6 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
         
-        
-        
-
 	<header class="animated">
 
 		<div class="wrapper">
@@ -85,13 +84,13 @@
 						<div id="filter-suggestion-input">
 						
 							<div id="filter-input-wrapper" class="styled-input">
-								<input type="search" ng-model="searchFieldValue" class="typeaheadDirective" typeahead-empty-data-source="getDefaultResults" typeahead-data-source="getAllSearchTerms()" typeahead-max-results="5" typeahead-search-term-function="returnSearchTerm" typeahead-select-handler="selectHandlerCallback" typeahead-template-url="templates/infektResultListTemplate.html"></input>
+								<input type="search" ng-model="searchFieldValue" class="typeaheadDirective" typeahead-empty-data-source="getDefaultResults" typeahead-data-source="getAllSearchTerms()" typeahead-max-results="9" typeahead-search-term-function="returnSearchTerm" typeahead-select-handler="selectHandlerCallback" typeahead-template-url="templates/infektResultListTemplate.html" typeahead-insert-after="#filter-input-wrapper"></input>
 							</div>
 
 
 							<!-- Suggestion needs to look like -->
-							
-								<div id="typeahead-result-list">
+							<!--
+								<div id="filter-suggestion-overlay">
 									<ul class="filter-suggestion-list flat-list">
 										<li class="filter-list-item">
 											<span class="filter-item-category">Bakterium - Farbigkeit</span>
@@ -103,7 +102,7 @@
 										</li>
 									</ul>
 								</div>
-							
+							-->
 								
 													
 						</div>
@@ -115,39 +114,40 @@
 				<div id="active-filter">
 
 					<ul class="active-filter-list flat-list">
-					
-						<!--<li data-ng-if="getFilters('bacterium').length">-->
-						<li>
-							<label class="animated">Bakterium</label>
+	
+
+
+						<li ng-repeat="type in ['bacterium','antibiotic']" data-ng-if="getFilterCount(type)">
+							<label class="animated">{{ type | translate }}</label>
 
 							<ul class="active-filter-item-list flat-list animated">
-								<li ng-repeat="filter in getFilters('bacterium')" class="filter-list-item">
-									<div class="filter-item-category">{{filter.name}}</div>
-									{{filter.value}}
-									<button class="removeFilterButton" ng-click="removeFilter(filter)">x</button>
-								</li>
-								
-								<!-- "oder" -->
-								<li class="filter-list-item">
-									<div class="filter-item-category">Form</div>
-									<div class="filter-item-value">Stäbchen <button class="removeFilterButton" ng-click="removeFilter(filter)">x</button></div> oder <div class="filter-item-value">Kokken <button class="removeFilterButton" ng-click="removeFilter(filter)">x</button></div>
-									
+
+								<!-- Filter (per property of bacterium) -->
+								<li ng-repeat="filter in getFilters(type)" class="filter-list-item">
+									<div class="filter-item-category">{{filter[ 0 ].humanName}}</div>
+									<!-- SubFilter (per filter of certain property) -->
+									<span ng-repeat="subFilter in filter">
+										{{subFilter.humanValue}} <button class="removeFilterButton" ng-click="removeFilter(subFilter)">&times;</button> <span ng-if="!$last">oder</span>
+									</span>
 								</li>
 								
 							</ul>
 						</li>
 
-						<li data-ng-if="getFilters('antibiotic').length">
+<!--
+						<li data-ng-if="getFilterCount('antibiotic')">
 							<label class="animated">Antibiotikum</label>
 							<ul class="active-filter-item-list flat-list animated">
 								<li ng-repeat="filter in getFilters('antibiotic')" class="filter-list-item">
-									<span class="filter-item-category">{{filter.name}}</span>
-									{{filter.value}}
-									<button class="removeFilterButton" ng-click="removeFilter(filter)">x</button>
+									<div ng-repeat="subFilter in filter">
+										<span class="filter-item-category">{{filter.humanName}}</span>
+										{{filter.humanValue}}
+										<button class="removeFilterButton" ng-click="removeFilter(filter)">x</button>
+									</div>
 								</li>
 							</ul>
 						</li>
-
+-->
 						
 						<!--<li>
 							<label class="animated">Antibiotikum <span class="filter-item-indicator animated">0</span></label>

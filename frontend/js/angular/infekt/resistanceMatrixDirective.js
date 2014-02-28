@@ -294,6 +294,25 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 
 
+		// Scroll: FIX table head (add class .fixed to tableHead after scrolling too much)
+		$( window ).scroll( function() {
+			var tableHead 		= element.find( "thead:first" )
+				, tableHeadTop 	= tableHead.offset().top - parseInt( $( "#content" ).css( 'margin-top' ), 10 )
+				, scrollTop 	= $( document ).scrollTop();
+
+			if( tableHeadTop < scrollTop ) {
+				tableHead.addClass( "fixed" );
+			}
+			else {
+				tableHead.removeClass( "fixed" );
+			}
+
+		} );
+
+
+
+
+
 
 
 		// I check, if the item i matches filters, i.e. if it's properties and their values are the same

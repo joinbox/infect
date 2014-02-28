@@ -1,10 +1,12 @@
 <div class='no-results' ng-show='noResults'>Keine Resultate</div>
 
-<ul style="background-color:red" ng-hide='noResults'>
+<ul class="filter-suggestion-list flat-list" ng-hide='noResults'>
 
-	{{ match }}
-	<li style='border:1px solid black' ng-repeat='match in matches' ng-class='{active: isActive($index)}'>{{match.name}}</li>
+	<li class="filter-list-item" ng-repeat="match in matches" ng-class="{active: isActive( $index) }" data-original="{{match|json}}">
+		<span class="filter-item-category">{{ match.type | translate }} - {{ match.humanName }}</span>
+		{{ match.humanValue }}
+	</li>
 
-	<li class='more-results' ng-show='tooManyResults'>… und {{tooManyResults}} weitere Resultate</li>
+	<li class='more-results' ng-show='tooManyResults'>… und {{tooManyResults}} mehr.</li>
 
 </ul>
