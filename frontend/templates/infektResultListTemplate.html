@@ -1,0 +1,10 @@
+<div class='no-results' ng-show='noResults'>Keine Resultate</div>
+
+<ul style="background-color:red" ng-hide='noResults'>
+
+	{{ match }}
+	<li style='border:1px solid black' ng-repeat='match in matches' ng-class='{active: isActive($index)}'>{{match.name}}</li>
+
+	<li class='more-results' ng-show='tooManyResults'>… und {{tooManyResults}} weitere Resultate</li>
+
+</ul>
