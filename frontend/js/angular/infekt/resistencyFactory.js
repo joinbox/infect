@@ -1,4 +1,4 @@
-Infekt.factory( 'ResistencyFactory', function( AntibioticsFactory, BacteriaFactory ) {
+infekt.factory( 'ResistencyFactory', function( AntibioticsFactory, BacteriaFactory ) {
 
 	var resistencies = [ { 
 			bacterium		: BacteriaFactory.getBacteria()[ 0 ]

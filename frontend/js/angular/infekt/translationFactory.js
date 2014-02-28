@@ -3,7 +3,7 @@
 // words ( i.e. { gram: 1 } becomes {name: "Gram", value: "Gram Positiv" } )
 //
 
-Infekt.factory( 'TranslationFactory', function( $http, $q ) {
+infekt.factory( 'TranslationFactory', function( $http, $q ) {
 
 	// Contains translations for all properties of bacteria and antibiotics
 
@@ -113,9 +113,9 @@ Infekt.factory( 'TranslationFactory', function( $http, $q ) {
 
 
 		// SUBSTANCE CLASSES
-		, substanceClasses : {
+		/*, substanceClasses : {
 			name 		: "Substanzklasse(n)"
-		}
+		}*/
 
 
 
@@ -136,6 +136,12 @@ Infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		}
 
 
+		// LATIN
+		, latinName 	: {
+			name 		: "Name (Latein)"
+		}
+
+
 	}
 
 
@@ -149,7 +155,7 @@ Infekt.factory( 'TranslationFactory', function( $http, $q ) {
 
 	// Takes an object and a name (of a property) of this object that is to be translated;
 	// returns the translated form of it
-	factory.translate = function( object, propertyName ) {
+	factory.translate = function( object, propertyName, propertyValue ) {
 
 		//console.log( "translate object %o - propertyName %o", object, propertyName );
 
@@ -159,6 +165,23 @@ Infekt.factory( 'TranslationFactory', function( $http, $q ) {
 			name: propertyName
 			, value: object[ propertyName ]
 		}
+
+
+		if( propertyName === "substances" ) {
+			return {
+				name 	: "Substanz"
+				, value : propertyValue.localeName + " (" + propertyValue.names.join( ", " ) + ")"
+			}
+		};
+
+
+		if( propertyName === "substanceClasses" ) {
+			console.error(" SUBSTCLA %o - obj %o, propName %o", object.substanceClasses, object, propertyName );
+			return {
+				name 	: "Substanzklassen"
+				, value : propertyValue.localeName + " (" + propertyValue.names.join( ", " ) + ")"
+			}
+		};
 
 
 

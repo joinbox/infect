@@ -1,16 +1,12 @@
 
 
 // I create a hashTable for all values of antibiotics, bacteria and diagnosis to speed up searches
-Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFactory, TranslationFactory ) {
+infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFactory, TranslationFactory ) {
 
 
 
-	// I contain hashes for fast searching, i.e. Objects looking like 
-	// { 
-	// 	name: string
-	//	 , value: string
-	//   , containers: [ pointer to antibiotic | diagnosis | bacterium ]
-	// }
+	// I contain hashes for fast searching, i.e. Objects looking like @see addToTable(), 
+	// called searchTableFactoryObjects
 	var searchTable = [];
 
 	// Factory that will be returned
@@ -50,6 +46,13 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 	// object
 	function generateSearchTable() {
 
+		// Bacteria or AB not yet ready
+		if( AntibioticsFactory.antibiotics.length === 0 || BacteriaFactory.bacteria.length === 0 ) {
+			console.error( "AB/Bact not yet ready; dint generateSearchTable()" );
+			return;
+		}
+
+
 		var allData = AntibioticsFactory.antibiotics.concat( BacteriaFactory.bacteria )
 		console.error( "generateSearchTable - allData: %o", allData );
 
@@ -60,6 +63,7 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 			for( var j in allData[ i ] ) {
 
 				// If value of property j is an array, call addToTable for every single array item
+				// Is especially the case on substances and substanceClasses
 				if( Object.prototype.toString.call( allData[ i ][ j ] ) === '[object Array]' ) {
 					for( var n in allData[ i ][ j ] ) {
 						addToTable( {
@@ -87,7 +91,7 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 		console.error( "Hash Table:" );
 		for( var i = 0; i < searchTable.length; i++ ) {
 			console.log( "%s - %s", searchTable[ i ].humanName, searchTable[ i ].humanValue )
-		}		
+		}
 
 		window.st = searchTable;
 
@@ -99,7 +103,7 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 
 
 
-	// Takes an obj, structured like the one for searchTable*, and adds it to the searchTable
+	// Takes an obj, structured like the one for searchTable, and adds it to the searchTable
 	// If an object with the respective values does already exist, a new container is added 
 	// that points to the original data source
 	// {
@@ -110,11 +114,18 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 	//	  , pointer: pointer to antibio, bact, diagnosis	
 	// }
 
+	// @param {Object} obj  	obj with properties: name, value, pointer, @see generateSearchTable()
+	
 	function addToTable( obj ) {
+
+		if( obj.name == "substanceClasses" ) {
+			console.error( "addToTable %o", obj );
+		}
 
 		// Translate value and name of property that has to be stored into 
 		// human readables
-		var translatedObj = TranslationFactory.translate( obj.pointer, obj.name );
+		var translatedObj = TranslationFactory.translate( obj.pointer, obj.name, obj.value );
+		//console.log( "translated is %o", translatedObj.value );
 
 
 		// Translator says property is not human readable (returns false): 
@@ -136,8 +147,10 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 		}
 
 		else {
+			//console.error( "searchTable – start new object with %o", obj );
 			var newObj = {
 				name 			: obj.name
+				, type 			: obj.pointer.type
 				, value 		: obj.value
 				, humanName 	: translatedObj.name
 				, humanValue 	: translatedObj.value
@@ -146,7 +159,6 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 
 			//console.log( "Create object %o for hash table - %o", translatedObj.name, obj.pointer );
 
-			console.error( newObj.humanValue );
 			searchTable.push( newObj );
 
 		}
@@ -155,11 +167,22 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 
 
 
+	// I return the whole searchTable
+	factory.getTerms = function() {
+
+		if( searchTable.length == 0 ) {
+			generateSearchTable();
+		}
+
+		return searchTable;
+
+	}
+
 
 
 
 	// I go through the searchTable array and return all elements, whose values match searchString, as an array
-	factory.findTerm = function( searchString ) {
+	/*factory.findTerm = function( searchString ) {
 
 		if( searchTable.length == 0 ) {
 			generateSearchTable();
@@ -180,7 +203,7 @@ Infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 		console.log( "findTerm returns %o – searched in table %o", results, searchTable );
 		return results;
 
-	}
+	}*/
 
 	return factory;
 

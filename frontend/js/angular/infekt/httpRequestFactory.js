@@ -1,4 +1,4 @@
-Infekt.factory( 'HttpRequestFactory', function( $http, $rootScope ) {
+infekt.factory( 'HttpRequestFactory', function( $http, $rootScope ) {
 
 	var factory = {};
 	return factory;

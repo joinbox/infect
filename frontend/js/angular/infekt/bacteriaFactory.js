@@ -1,5 +1,5 @@
 // I contain all the bacteria
-Infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
+infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 
 
 
@@ -56,6 +56,16 @@ Infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 	/  Parse server data
 	***********************************************************************************************/
 	
+	var parseShapes = function( shapes ) {
+
+		var ret = [];
+		for( var i = 0; i < shapes.length; i++ ) {
+			ret.push( shapes[ i ].name );
+		}
+
+	}
+
+
 	function parseBacteria( data ) {
 
 		var bacts = [];
@@ -71,17 +81,19 @@ Infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 					, species 		: rawBact.species
 					, genus 		: rawBact.genus
 					, shape 		: rawBact.shape
+					, shapeLocales 	: parseShapes( rawBact.shapeLocales ) // locales in an array
 					, aerobic 		: rawBact.aerobic
 					, anaerobic 	: rawBact.anaerobic
 					, gram 			: rawBact.gram
 					, type 			: "bacterium"
 				};	
 
+
 			bacts.push( bact );
 
 		}
 
-		console.log( "parseBacteria returns %o", bacts );
+		console.log( "parsedBacteria - made %o from %o", bacts, data );
 
 		return bacts;
 
@@ -126,6 +138,10 @@ Infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 
 	var factory = {};
 
+
+	/**
+	*
+	*/
 	factory.bacteria = [];
 	factory.promiseObject = null;
 
@@ -136,7 +152,7 @@ Infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 		// Should be
 		// RequestFactory.get( url, parseFunction, variableToStore );
 			
-		console.log( "getBacterai");
+		console.log( "getBacteria");
 
 		var deferred = $q.defer();
 
@@ -150,8 +166,6 @@ Infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 		// Bacteria not yet gotten: Make call to server
 		if( factory.bacteria.length == 0 ) {
 			
-			console.error( "Fetch bacteria" );
-
 			factory.promiseObject = fetchBacteria().then( function( response ) {
 				factory.promiseObject = null;
 
@@ -160,7 +174,7 @@ Infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 					factory.bacteria = parseBacteria( response.data );
 				}
 
-				console.log( "Resolve getBacteria - return %o from server data %o", factory.bacteria, response.data );
+				//console.log( "Resolve getBacteria - return %o from server data %o", factory.bacteria, response.data );
 				deferred.resolve( factory.bacteria );
 
 			}, function() {
@@ -171,7 +185,6 @@ Infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 
 		// Bacteria ready: return
 		else {
-			console.log( "done" );
 			deferred.resolve( factory.bacteria );
 		}
 

@@ -1,4 +1,4 @@
-Infekt.factory( 'ResistanceFactory', function( AntibioticsFactory, BacteriaFactory, $http, $q ) {
+infekt.factory( 'ResistanceFactory', function( AntibioticsFactory, BacteriaFactory, $http, $q ) {
 
 
 		/*return [ { 
@@ -49,10 +49,7 @@ Infekt.factory( 'ResistanceFactory', function( AntibioticsFactory, BacteriaFacto
 	// Creates the relation between bacteria, antibiotics
 	function parseResistances( data ) {
 
-
-
-
-		console.error( "Parse resistances %o", data );
+		console.log( "Parse resistances" );
 
 		var res = [];
 
@@ -180,7 +177,7 @@ Infekt.factory( 'ResistanceFactory', function( AntibioticsFactory, BacteriaFacto
 			fetchResistances().then( function( resp ) {
 
 				factory.resistances = parseResistances( resp.data );
-				console.error( "ResistanceFactory.resistances is %o", factory.resistances );
+				console.log( "ResistanceFactory.resistances is %o" );
 
 				deferred.resolve( factory.resistances );
 

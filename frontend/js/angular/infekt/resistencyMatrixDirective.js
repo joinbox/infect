@@ -5,7 +5,7 @@
 // - Adjust column and row visibility depending on the filters applied
 // 
 // All data must be loaded, before I am called
-Infekt.directive( "resistencyMatrix", function( $compile, FilterFactory ) {
+infekt.directive( "resistencyMatrix", function( $compile, FilterFactory ) {
 
 	function link( $scope, element, attributes ) {
 

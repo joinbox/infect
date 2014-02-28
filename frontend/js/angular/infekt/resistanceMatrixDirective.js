@@ -5,7 +5,7 @@
 // - Adjust column and row visibility depending on the filters applied
 // 
 // All data must be loaded, before I am called
-Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
+infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 	function link( $scope, element, attributes ) {
 
@@ -95,8 +95,6 @@ Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 		// call ResistanceFactory.getResistances()
 		$scope.$watch( 'resistances', function() {
 
-			console.log( "REDRAW table with %o", $scope.antibiotics )
-
 			var tableContents = $scope.getResistanceTable();
 
 			// Table can't be drawn, because there's no content: return
@@ -157,32 +155,35 @@ Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 
 				// Lighten all elements
-				element.find( "th, td" ).css( 'opacity', 0.3 );
+				var highlightedClass = 'highlighted';
+
+				// Remove old highlight
+				element.find( "th." + highlightedClass + ", td." + highlightedClass ).removeClass( highlightedClass );
 
 				// Highlight row
 				if( highlightRow ) {
-					element.find( "tr:nth-child( " + rowNr + ") td, tr:nth-child( " + rowNr + ") th" ).css( 'opacity', 1 );
+					element.find( "tr:nth-child( " + rowNr + ") td, tr:nth-child( " + rowNr + ") th" ).addClass( highlightedClass );
 				}
 
 				// Highlight col
 				else if( highlightCol ) {
-					element.find( "tr" ).find( "td:nth-child(" + colNr + "), th[scope='col']:nth-child(" + colNr + ")" ).css( 'opacity', 1 );
+					element.find( "tr" ).find( "td:nth-child(" + colNr + "), th[scope='col']:nth-child(" + colNr + ")" ).addClass( highlightedClass );
 				}
 
 				// Highlight single cell
 				else {
-					$( this ).css( 'opacity', 1 );
+					//$( this ).css( 'opacity', 1 );
 					// col title
-					element.find( "th[scope='col']:nth-child(" + ( colNr + 1 ) + ")").css( 'opacity', 1 );
+					element.find( "th[scope='col']:nth-child(" + ( colNr + 1 ) + ")").addClass( highlightedClass );
 					// row title
-					element.find( "tr:nth-child(" + rowNr + ") th[scope='row']" ).css( 'opacity', 1 );
+					element.find( "tr:nth-child(" + rowNr + ") th[scope='row']" ).addClass( highlightedClass );
 				}
 
 
 
 			} )
 			.on( "mouseleave", function() {
-				element.find( "th, td" ).css( 'opacity', 1 );
+				//element.find( "th, td" ).css( 'opacity', 1 );
 			} );
 
 
@@ -197,10 +198,10 @@ Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			
 			// Check for type of filter that changed (bacterium, antibiotic, diagnosis) -- every change leads to a change in the length 
 			// of the array, as there's no replacement option
-			var changedFilter;
+			/*var changedFilter;
 			for( var i in newFilter ) {
-				console.log( newFilter[ i ].length );
-				if( newFilter[ i ].length !== oldFilter[ i ].length ) {
+				console.log( countProperties( newFilter[ i ] ) );
+				if( countProperties( newFilter[ i ] ) !== countProperties( oldFilter[ i ] ) ) {
 					changedFilter = i;
 					break;
 				}
@@ -220,7 +221,11 @@ Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 			else if ( changedFilter == "antibiotic" ) {
 				updateColVisibility();
-			}
+			}*/
+
+			// #todo
+			updateColVisibility();
+			updateRowVisibility();
 
 		}, true )
 
@@ -294,20 +299,36 @@ Infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 		// I check, if the item i matches filters, i.e. if it's properties and their values are the same
 		// as the ones given in filters. Item is an antibiotic or a bacterium, filter is an array with items from 
 		// SearchTableFactory.searchTable
+		// If item matches filters, returns true. Else false.
 		function checkItemAgainstFilters( item, filters ) {
 
 			//console.log( "resistanceMatrixDirective: check if item %o matches filters %o", item, filters );
 
-			// Loop through filter array
-			for( var i = 0; i < filters.length; i++ ) {
+			// Loop through filter types (substance, gram etc)
+			for( var type in filters ) {
 
-				// item is not contained in filter[ i ].containers: return false as soon as this happens, 
-				// no need to continue
-				// Test with $( "body").scope().getFilters().bacterium[ 0 ].containers.indexOf( $( "body" ).scope().getBacteriaSorted()[ 2 ] );
-				if( filters[ i ].containers.indexOf( item ) == -1 ) {
-					//console.log( "resistanceMatrixDirective: item %o doesnt match filter %o", item, filters[ i ] );
+				var filterType 					= filters[ type ]
+					, filtersMatched 			= 0;
+
+				// Loop through filters for each filter type
+				for( var i = 0; i < filterType.length; i++ ) {
+
+					// item is not contained in filter[ i ].containers: return false as soon as this happens, 
+					// no need to continue
+					// Test with $( "body").scope().getFilters().bacterium[ 0 ].containers.indexOf( $( "body" ).scope().getBacteriaSorted()[ 2 ] );
+
+					if( filterType[ i ].containers.indexOf( item ) !== -1 ) {
+						//console.log( "resistanceMatrixDirective: item %o doesnt match filter %o", item, filters[ i ] );
+						filtersMatched++;
+					}
+
+				}
+
+				// No filter matched for this type
+				if( filtersMatched == 0 ) {
 					return false;
 				}
+
 			}
 
 			// item was in all filters.containers: return true

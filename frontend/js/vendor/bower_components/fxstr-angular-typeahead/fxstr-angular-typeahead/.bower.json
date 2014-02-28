@@ -1,0 +1,36 @@
+{
+  "name": "fxstr-angular-typeahead",
+  "main": "typeaheadDirective.js",
+  "authors": [
+    "Felix Steiner <felix@joinbox.com>"
+  ],
+  "description": "Simple typeahead directive for angular",
+  "keywords": [
+    "angular",
+    "typeahead",
+    "ui",
+    "directive",
+    "dropdown"
+  ],
+  "dependencies": {
+    "angular": "1.2.9"
+  },
+  "license": "MIT",
+  "homepage": "http://joinbox.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "ca1b00c750",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "ca1b00c7506cc0813eac3e74ee0842f6f7e9fe25"
+  },
+  "_source": "git://github.com/joinbox/angularModules.git",
+  "_target": "*",
+  "_originalSource": "fxstr-angular-typeahead"
+}

@@ -1,4 +1,4 @@
-Infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, BacteriaFactory, ResistanceFactory, SearchTableFactory, FilterFactory ) {
+infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, BacteriaFactory, ResistanceFactory, SearchTableFactory, FilterFactory ) {
 
 	$scope.antibiotics = [];
 	$scope.bacteria = [];
@@ -81,14 +81,50 @@ Infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 	// I return the list of filters that match term
 	// and give back the results for the filter type-ahead control
 	// Wraps SearchTableFactory.findTerm
-	$scope.filterSearchList = function( term ) {
-		var results = SearchTableFactory.findTerm( term );
-		console.log( "filter for %s returns %o", term, results );
-		return results;
+
+
+
+
+	/******************************
+	/  Search
+	******************************/
+	$scope.searchFieldValue = "";
+
+	// Returns all items displayed when nothing was entered in search field
+	$scope.getDefaultResults = function() {
+		return [ /*{
+			humanName: "test"
+			, humanValue: ["testVal"]
+		}*/ ];
 	}
 
 
+	// Returns all items that may be searched
+	// i.e. all terms from SearchTableFactory minus terms already added to filter
+	$scope.getAllSearchTerms = function() {	
+		var terms = SearchTableFactory.getTerms();
 
+		// Remove terms already used
+		for( var i = 0; i < terms.length; i++ ) {
+
+		}
+
+		return terms;
+	}
+
+
+	// Returns a string to be searched for every item 
+	$scope.returnSearchTerm = function( item ) {
+		return item.humanValue + " " + item.value;
+	}
+
+	// Handler that is called when an typeahead proposition is selected
+	$scope.selectHandlerCallback = function( item ) {
+		$scope.addFilter( item );
+	}
+
+
+	// See FilterFactory.addFilter
 	$scope.addFilter = function( obj ) {
 		console.log( "infektController: add to filter %o", obj );
 		FilterFactory.addFilter( obj );
@@ -108,6 +144,10 @@ Infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 		FilterFactory.removeFilter( obj );
 	}
 
+	// Returns true if 
+	$scope.isInFilter = function( ) {
+
+	}
 
 
 
