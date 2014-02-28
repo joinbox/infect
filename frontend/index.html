@@ -18,10 +18,14 @@
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="js/vendor/jquery-2.0.2.min.js"><\/script>')</script>
 
-		<script src="js/vendor/angular.min.js"></script>
+		<!-- Vendor -->
+		<script src="js/vendor/bower_components/angular/angular.js"></script>
+		<script src="js/vendor/bower_components/fxstr-angular-typeahead/fxstr-angular-typeahead/typeaheadDirective.js"></script>
+
 		<script src="js/vendor/jquery-ui-1.10.3.custom.min.js"></script>
 
 		<script src="js/plugins.js"></script>
+
 
 
 		<!-- Infect Angular Module -->
@@ -45,10 +49,7 @@
 
 
 
-
 		<!-- View stuff -->
-		<script src="js/plugins/searchInput.js"></script>
-
 		<script src="js/main.js"></script>
 
 
@@ -84,14 +85,13 @@
 						<div id="filter-suggestion-input">
 						
 							<div id="filter-input-wrapper" class="styled-input">
-								<input type="search" id="filter-input" class="searchInput" />
+								<input type="search" ng-model="searchFieldValue" class="typeaheadDirective" typeahead-empty-data-source="getDefaultResults" typeahead-data-source="getAllSearchTerms()" typeahead-max-results="5" typeahead-search-term-function="returnSearchTerm" typeahead-select-handler="selectHandlerCallback" typeahead-template-url="templates/infektResultListTemplate.html"></input>
 							</div>
-<!--
-							<div id="filter-suggestion-overlay">
-							</div>
-	-->												
+
+
 							<!-- Suggestion needs to look like -->
-								<div id="filter-suggestion-overlay">
+							
+								<div id="typeahead-result-list">
 									<ul class="filter-suggestion-list flat-list">
 										<li class="filter-list-item">
 											<span class="filter-item-category">Bakterium - Farbigkeit</span>
@@ -103,6 +103,7 @@
 										</li>
 									</ul>
 								</div>
+							
 								
 													
 						</div>
