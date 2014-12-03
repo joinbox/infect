@@ -1,14 +1,16 @@
-/*
- * HTML5 Boilerplate
- *
- * What follows is the result of much research on cross-browser styling.
- * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
- * Kroc Camen, and the H5BP dev community and team.
- */
+@import "shared/normalize.css";
+@import "shared/helpers.css";
+@import "shared/responsive.css";
+@import "shared/print.css";
 
-/* ==========================================================================
-   Base styles: opinionated defaults
-   ========================================================================== */
+@import "shared/fonts.css";
+
+@import "shared/variables.less";
+
+
+
+
+
 
 html,
 button,
@@ -23,6 +25,8 @@ html
 }
 body {
 
+	margin:0;
+
 	font: normal 1.4rem/1.3 futura_ltbook, Arial, sans-serif;
 	color:rgb(50, 50, 50);
 	
@@ -30,6 +34,8 @@ body {
 	text-rendering: optimizeLegibility;
 	
 }
+
+
 
 /*
  * Remove text-shadow in selection highlight: h5bp.com/i
