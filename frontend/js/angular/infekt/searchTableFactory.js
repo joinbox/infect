@@ -48,7 +48,7 @@ infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 
 		// Bacteria or AB not yet ready
 		if( AntibioticsFactory.antibiotics.length === 0 || BacteriaFactory.bacteria.length === 0 ) {
-			console.error( "AB/Bact not yet ready; dint generateSearchTable()" );
+			//console.error( "AB/Bact not yet ready; dint generateSearchTable()" );
 			return;
 		}
 
@@ -88,12 +88,9 @@ infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 		}
 
 
-		console.error( "Hash Table:" );
-		for( var i = 0; i < searchTable.length; i++ ) {
-			console.log( "%s - %s", searchTable[ i ].humanName, searchTable[ i ].humanValue )
-		}
+		console.error( "Hash Table: %o", searchTable );
 
-		window.st = searchTable;
+		//window.st = searchTable;
 
 	}
 

@@ -48,24 +48,35 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 				// Cells with resistances
 				for( var j = 0; j < data[ i ].resistances.length; j++ ) {
 
-					var resistance 		= data[ i ].resistances[ j ].resistances.value
+					var resistance 			= data[ i ].resistances[ j ].resistances;
+
+					// Element's class attribute
+					var className
+					// Value of td
+						, cellValue;
 
 					// Add classes to cells, depending on resistance data
-					var className 	= "bad";
-
-					// No resistance data available
-					if( resistance === null ) {
-						className = "notAvailable"
+					if( resistance.value === null ) {
+						className	= 'not-available';
+						cellValue	= '&nbsp'; // Line needs to have a certain height
 					}
 
-					if( resistance > 0.6 ) { 
-						className = "good";
-					}
-					else if ( resistance > 0.3 ) {
-						className = "fair";
+					else if( resistance.value < 0.33 ) {
+						className	= 'low';
+						cellValue	= 'L';
 					}
 
-					table.push( "<td class='animated resistance-" + className + "'>" + resistance + "</td>" );
+					else if (resistance.value < 0.66 ) {
+						className	= 'intermediate';
+						cellValue	= 'I';
+					}
+
+					else {
+						className	= 'high';
+						cellValue	= 'H';
+					}
+
+					table.push( "<td data-resistance-type=\'" + resistance.type + "\' data-resistance-value=\'" +  resistance.value + "\' class='animated resistance-" + className + "'>" + cellValue + "</td>" );
 
 				}
 
@@ -180,11 +191,54 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 				}
 
 
+				// Display resistance value
+				if( $( this ).is( 'td') ) {
+					displayHoverValue( $( this ) );
+				}
+
 
 			} )
-			.on( "mouseleave", function() {
-				//element.find( "th, td" ).css( 'opacity', 1 );
+			.on( "mouseleave", 'th, td', function() {
+
+				// Display letter (H, L, I)
+				if( $( this ).is( 'td' ) ) {
+					displayRegularValue( $( this ) );
+				}
+
 			} );
+
+
+
+		/**
+		* On hovering, display value (number)
+		*/
+		function displayHoverValue( td ) {
+
+			var type		= td.data( 'resistanceType' )
+				, value		= td.data( 'resistanceValue' );
+
+			// Type is (class)ResistanceDefault: Don't display numbers
+			if( type === 'classResistanceDefault' || type === 'resistanceDefault' ) {
+				return;
+			}
+
+			td
+				// Store original text (for mouseleave)
+				.data( 'originalText', $( this ).text() )
+				.text( $( this ).data( 'resistanceValue' ) );
+
+		}
+
+
+		/**
+		* On mouseleave, display simpler value 
+		*/
+		function displayRegularValue( td ) {
+
+			if( td.data( 'originalText' ) ) {
+				td.text( $( this ).data( 'originalText' ) );
+			}
+		}
 
 
 

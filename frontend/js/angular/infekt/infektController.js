@@ -276,9 +276,8 @@ infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 			}
 
 			return {
-				value 		: "0"
-				, type 		: "missing"
-			};
+				value		: null
+			}
 
 		}
 

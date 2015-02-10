@@ -176,7 +176,7 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 
 
 		if( propertyName === "substanceClasses" ) {
-			console.error(" SUBSTCLA %o - obj %o, propName %o", object.substanceClasses, object, propertyName );
+			//console.error(" SUBSTCLA %o - obj %o, propName %o", object.substanceClasses, object, propertyName );
 			return {
 				name 	: "Substanzklassen"
 				, value : propertyValue.localeName + " (" + propertyValue.names.join( ", " ) + ")"
