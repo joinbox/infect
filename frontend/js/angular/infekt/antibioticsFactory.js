@@ -20,27 +20,17 @@ infekt.factory( 'AntibioticsFactory', function( $http, $q ) {
 			var antibiotic = {
 				id 					: data[ i ].id 
 				, name 				: data[ i ].substances[ 0 ].name || "no name"
-				, substances		: [] // Array with all substanceClass names contained in this antibiotic
-				, substanceClasses 	: [] // Array with all substance names contained in this antibiotic
+				, substances		: [] // Array with all substance names contained in this antibiotic
+				, substanceClasses 	: [] // Array with all substanceClass names contained in this antibiotic
 				, po 				: data[ i ].po
 				, iv 				: data[ i ].iv
 				, type 				: "antibiotic"
 			}
 
 			// Get substances
-			/*for( var j = 0; j < data[ i ].substances.length; j++ ) {
-				antibiotic.substances.push( data[ i ].substances[ j ].name );
-			}*/
 			antibiotic.substances = parseSubstances( data[ i ].substances );
 
 			antibiotic.substanceClasses = parseSubstances( data[ i ].substanceClasses );
-
-			console.error( antibiotic.substanceClasses );
-
-			//Get substanceClasses (parents of substances)
-			/*for( var j = 0; j < data[ i ].substanceClasses.length; j++ ) {
-				antibiotic.substanceClasses.push( data[ i ].substanceClasses[ j ].name );
-			}*/
 
 			//console.log( "Formatted antibiotic to return: %o", antibiotic );
 			ab.push( antibiotic );

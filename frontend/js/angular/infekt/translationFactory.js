@@ -17,11 +17,11 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 	//			}
 	//		}
 	// 
-	// If property should not be displayed, the following format is
-	// used: 
-	
+	// If property should not be displayed, return false. 
+	//
+	// «values» may be a function that takes the value of the object as an argument and
+	// needs to return a string
 
-	// 		propertyName 		: false
 
 
 
@@ -63,8 +63,8 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 
 
 		// ID
-		, id 			: false
 		// no need to translate id / make it human readable
+		, id 			: false
 
 
 
@@ -113,9 +113,13 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 
 
 		// SUBSTANCE CLASSES
-		/*, substanceClasses : {
+		, substanceClasses : {
 			name 		: "Substanzklasse(n)"
-		}*/
+			, values	: function( propertyValue ) {
+				console.error( propertyValue );
+				return propertyValue.localeName + " (" + propertyValue.names.join( ", " ) + ")";
+			}
+		}
 
 
 
@@ -123,6 +127,9 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		// SUBSTANCES
 		, substances : {
 			name 		: "Substanzen"
+			, values	: function( propertyValue ) {
+				return propertyValue.localeName + " (" + propertyValue.names.join( ", " ) + ")";
+			}
 		}
 
 
@@ -157,7 +164,6 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 	// returns the translated form of it
 	factory.translate = function( object, propertyName, propertyValue ) {
 
-		//console.log( "translate object %o - propertyName %o", object, propertyName );
 
 		// Prefill returned object; take over name and
 		// get default value of object
@@ -167,29 +173,12 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		}
 
 
-		if( propertyName === "substances" ) {
-			return {
-				name 	: "Substanz"
-				, value : propertyValue.localeName + " (" + propertyValue.names.join( ", " ) + ")"
-			}
-		};
-
-
-		if( propertyName === "substanceClasses" ) {
-			//console.error(" SUBSTCLA %o - obj %o, propName %o", object.substanceClasses, object, propertyName );
-			return {
-				name 	: "Substanzklassen"
-				, value : propertyValue.localeName + " (" + propertyValue.names.join( ", " ) + ")"
-			}
-		};
-
-
-
 		// (Temporarily) store translation for property and values
 		var translation = propertyTranslator[ propertyName ];
 
 
-		// Translation returns false
+
+		// Translation returns false: Explicitly ignore this value
 		if( translation === false ) {
 			return false;
 		}
@@ -210,20 +199,25 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		ret.name = propertyTranslator[ propertyName ].name;
 
 
-
 		//
 		// Get translation for propertyName's VALUE
 		//
 
-		var value = object[ propertyName ];
+
+		// value returns a function
+		if( angular.isFunction( translation.values ) ) {
+			ret.value = translation.values( propertyValue );
+		}
 		
 		// No translation found for value
-		//console.log( "check translation %o for value %o", translation, value )
-		if( !translation.values || !translation.values[ value ] ) {
-			return ret;
+		else if( !translation.values || !translation.values[ propertyValue ] ) {
+			// Don't do anything
 		}
 
-		ret.value = translation.values[ value ];
+		// Use regular translation
+		else {
+			ret.value = translation.values[ propertyValue ];
+		}
 
 		return ret;
 

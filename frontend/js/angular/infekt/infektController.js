@@ -193,7 +193,7 @@ infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 
 		// ResistanceTable's not yet ready (data not yet gotten from server) 
 		if( !$scope.resistances || $scope.resistances.length == 0 ) {
-			console.error( "getResistanceTable returns empty result" );
+			console.log( "InfektController: getResistanceTable returns empty result" );
 			return [];
 		}
 

@@ -7,6 +7,16 @@
 // All data must be loaded, before I am called
 infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
+	// Sort function for bacteria (alphabetically)
+	function sortByGenus( a, b ) {
+		return a.bacterium.genus + a.bacterium.species < b.bacterium.genus + b.bacterium.species ? -1 : 1;
+	}
+
+	// Sort function for antibiotics
+	function sortByAntibiotic( a, b ) {
+		return a.antibiotic.name < b.antibiotic.name ? -1 : 1;
+	}
+
 	function link( $scope, element, attributes ) {
 
 		// I create the HTML code for the resistance-matrix table. 
@@ -18,6 +28,8 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 			var table 	= [];
 
+
+
 			//
 			// create table head
 			//
@@ -25,16 +37,20 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 			// Take first row of data (bacterium; see getResistanceTable) to get antibacteria's names; take resistance
 			// property that contains all antibiotics
-			for( var i = 0; i < data[ 0 ].resistances.length; i++ ) {
+			for( var i = 0; i < data[ 0 ].resistances.sort( sortByAntibiotic ).length; i++ ) {
 				table.push( "<th scope='col' class='vertical'><span>" + data[ 0 ].resistances[ i ].antibiotic.name + "</span></th>" );
 			}
 			table.push( "</thead></tr>" );
+
+
 
 			//
 			// table body
 			//
 			table.push( "<tbody>" );
 
+			// Sort bacteria alphabetically
+			data.sort( sortByGenus );
 
 			// Go through 
 			for( var i = 0; i < data.length; i++ ) {
@@ -46,34 +62,68 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 				table.push( "<th scope='row'>" + data[ i ].bacterium.genus + " " + data[ i ].bacterium.species + "</th>" );
 				
 				// Cells with resistances
-				for( var j = 0; j < data[ i ].resistances.length; j++ ) {
+				var sortedResistances = data[ i ].resistances.sort( sortByAntibiotic );
+				for( var j = 0; j < sortedResistances.length; j++ ) {
 
-					var resistance 			= data[ i ].resistances[ j ].resistances;
+					var resistance 			= sortedResistances[ j ].resistances;
 
-					// Element's class attribute
 					var className
-					// Value of td
 						, cellValue;
 
-					// Add classes to cells, depending on resistance data
-					if( resistance.value === null ) {
-						className	= 'not-available';
-						cellValue	= '&nbsp'; // Line needs to have a certain height
+
+					// Default resistances: 
+					// 1: low
+					// 2: intermediate
+					// 3: high
+					// Only display H/L/I, but not values
+					if( resistance.type === 'classResistanceDefault' || resistance.type === 'resistanceDefault' ) {
+						cellValue = '';
+						switch( resistance.value ) {
+							case 1: 
+								className = 'low';
+								cellValue = 'L';
+								break;
+							case 2:
+								className = 'intermediate';
+								cellValue = 'I';
+								break;
+							case 3:
+								className = 'high';
+								cellValue = 'H';
+								break;
+							default:
+								className = 'not-available';
+						}
 					}
 
-					else if( resistance.value < 0.33 ) {
-						className	= 'low';
-						cellValue	= 'L';
-					}
 
-					else if (resistance.value < 0.66 ) {
-						className	= 'intermediate';
-						cellValue	= 'I';
-					}
-
+					// Detailed values: numbers betwee 0 and 1, 
+					// < 0.33: low
+					// < 0.66: intermediate
+					// < 1: high
 					else {
-						className	= 'high';
-						cellValue	= 'H';
+	
+						// Add classes to cells, depending on resistance data
+						if( resistance.value === null ) {
+							className	= 'not-available';
+							cellValue	= '&nbsp'; // Line needs to have a certain height
+						}
+
+						else if( resistance.value < 0.33 ) {
+							className	= 'low';
+							cellValue	= 'L';
+						}
+
+						else if (resistance.value < 0.66 ) {
+							className	= 'intermediate';
+							cellValue	= 'I';
+						}
+
+						else {
+							className	= 'high';
+							cellValue	= 'H';
+						}
+
 					}
 
 					table.push( "<td data-resistance-type=\'" + resistance.type + "\' data-resistance-value=\'" +  resistance.value + "\' class='animated resistance-" + className + "'>" + cellValue + "</td>" );
