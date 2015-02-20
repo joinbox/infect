@@ -51,6 +51,9 @@ infekt.factory( 'ResistanceFactory', function( AntibioticsFactory, BacteriaFacto
 
 		console.log( "Parse resistances" );
 
+		// debug
+		window.resistances = data;
+
 		var res = [];
 
 		// Loop data
@@ -63,15 +66,23 @@ infekt.factory( 'ResistanceFactory', function( AntibioticsFactory, BacteriaFacto
 				, ab 				= AntibioticsFactory.getById( abId )
 				, resistance		= data.resistanceImport
 				, resistanceType
-				, resistanceOrder 	= [ "resistanceImport", "resistanceUser", "classResistanceDefault", "resistanceDefault" ]; // classResistanceDefault und resistanceDefault: Keine Zahl anzeigen
+				, resistanceOrder 	= [ 'resistanceImport', 'resistanceUser', 'classResistanceUser', 'classResistanceDefault', 'resistanceDefault' ]; // classResistanceDefault and resistanceDefault: Don't display number
+
+			/*if( bact.id === 33 ) {
+				console.error( data[ i ] );
+			}*/
+
 
 			// Get resistance (by checking, if data.orderName is given)
 			for( var n = 0; n < resistanceOrder.length; n++ ) {
+
+				// Result found
 				if( data[ i ][ resistanceOrder[ n ] ] ) {
 					resistance = data[ i ][ resistanceOrder[ n ] ];
 					resistanceType = resistanceOrder[ n ];
-					continue;
+					break;
 				}
+
 			}
 
 			// Value missing: set to null
@@ -87,6 +98,16 @@ infekt.factory( 'ResistanceFactory', function( AntibioticsFactory, BacteriaFacto
 				, value 		: resistance
 				, type 			: resistanceType
 			} );
+
+			// Debug
+			/*if( bact.id === 33 ) {
+				console.error( res[ res.length - 1 ] );
+			}*/
+
+			/*if( bact.latinName.indexOf( 'Neisseria' ) > -1 ) {
+				console.error( 'ness %o, %o, %o', ab, resistance, resistanceType );
+				console.error( bact );
+			}*/
 
 		}
 

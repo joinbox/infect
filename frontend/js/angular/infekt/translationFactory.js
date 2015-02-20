@@ -116,7 +116,7 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		, substanceClasses : {
 			name 		: "Substanzklasse(n)"
 			, values	: function( propertyValue ) {
-				console.error( propertyValue );
+				//console.error( propertyValue );
 				return propertyValue.localeName + " (" + propertyValue.names.join( ", " ) + ")";
 			}
 		}

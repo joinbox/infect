@@ -68,6 +68,9 @@ infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 
 	function parseBacteria( data ) {
 
+		// debug
+		window.bacteria = data;
+
 		var bacts = [];
 
 		// Loop data

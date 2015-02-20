@@ -53,13 +53,13 @@ infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 	// I'm there to sort the resistance table returned by getResistanceTable
 	// must be the same as antibioticSortFunction
 	var antibioticResistanceSortFunction = function( a, b ) {
-		return a.antibiotic.name > b.antibiotic.name;
+		return a.antibiotic.name > b.antibiotic.name ? 1 : -1;
 	}
 
 	// I sort bacteria (getResistanceTable stuff) alphabetically for rows
 	// must be the same as bacteriumSortFunction
 	var bacteriumRowSortFunction = function( a, b ) {
-		return a.bacterium.name > b.bacterium.name;
+		return a.bacterium.genus + a.bacterium.species > b.bacterium.genus + b.bacterium.species ? 1 : -1;
 	}
 
 	// I sort bacteria; must be the same as bacteriumRowSortFunction

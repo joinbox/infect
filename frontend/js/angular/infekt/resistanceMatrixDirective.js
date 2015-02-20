@@ -7,15 +7,6 @@
 // All data must be loaded, before I am called
 infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
-	// Sort function for bacteria (alphabetically)
-	function sortByGenus( a, b ) {
-		return a.bacterium.genus + a.bacterium.species < b.bacterium.genus + b.bacterium.species ? -1 : 1;
-	}
-
-	// Sort function for antibiotics
-	function sortByAntibiotic( a, b ) {
-		return a.antibiotic.name < b.antibiotic.name ? -1 : 1;
-	}
 
 	function link( $scope, element, attributes ) {
 
@@ -37,8 +28,8 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 			// Take first row of data (bacterium; see getResistanceTable) to get antibacteria's names; take resistance
 			// property that contains all antibiotics
-			for( var i = 0; i < data[ 0 ].resistances.sort( sortByAntibiotic ).length; i++ ) {
-				table.push( "<th scope='col' class='vertical'><span>" + data[ 0 ].resistances[ i ].antibiotic.name + "</span></th>" );
+			for( var i = 0; i < data[ 0 ].resistances.length; i++ ) {
+				table.push( "<th scope='col' class='vertical' data-antibiotic-id='" + data[ 0 ].resistances[ i ].antibiotic.id + "'><span>" + data[ 0 ].resistances[ i ].antibiotic.name + "</span></th>" );
 			}
 			table.push( "</thead></tr>" );
 
@@ -49,23 +40,20 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			//
 			table.push( "<tbody>" );
 
-			// Sort bacteria alphabetically
-			data.sort( sortByGenus );
-
-			// Go through 
+			// Go through data
+			// Sort is done in the controller
 			for( var i = 0; i < data.length; i++ ) {
 
 				// Row
-				table.push( "<tr>" );
+				table.push( "<tr data-bacterium-id='" + data[ i ].bacterium.id + "'>" );
 
 				// Row title
 				table.push( "<th scope='row'>" + data[ i ].bacterium.genus + " " + data[ i ].bacterium.species + "</th>" );
 				
 				// Cells with resistances
-				var sortedResistances = data[ i ].resistances.sort( sortByAntibiotic );
-				for( var j = 0; j < sortedResistances.length; j++ ) {
+				for( var j = 0; j < data[ i ].resistances.length; j++ ) {
 
-					var resistance 			= sortedResistances[ j ].resistances;
+					var resistance 			= data[ i ].resistances[ j ].resistances;
 
 					var className
 						, cellValue;
@@ -97,32 +85,47 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 					}
 
 
+					// Type is missing: No data available.
+					// Don't display anything at all
+					else if( !resistance.type ) {
+
+						className = 'not-available';
+						cellValue = '&nbsp;';
+
+					}
+
+
 					// Detailed values: numbers betwee 0 and 1, 
 					// < 0.33: low
 					// < 0.66: intermediate
 					// < 1: high
 					else {
+
+						//console.error( resistance );
 	
 						// Add classes to cells, depending on resistance data
 						if( resistance.value === null ) {
 							className	= 'not-available';
-							cellValue	= '&nbsp'; // Line needs to have a certain height
+							cellValue	= '&nbsp'; // Gives the cell some height
 						}
 
-						else if( resistance.value < 0.33 ) {
+						else if( resistance.value < 33 ) {
 							className	= 'low';
 							cellValue	= 'L';
 						}
 
-						else if (resistance.value < 0.66 ) {
+						else if (resistance.value < 66 ) {
 							className	= 'intermediate';
 							cellValue	= 'I';
+							//cellValue = resistance.value;
 						}
 
 						else {
 							className	= 'high';
 							cellValue	= 'H';
 						}
+
+						//console.error( cellValue );
 
 					}
 
@@ -207,7 +210,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 					var colNr = $( $( this ).closest( "tr" ).find( "td" ) ).index( $( this ) ) + 1;
 				}
 
-				console.log( "highlightRow: %o rowNr %o, highlightCol: %o colNr %o", highlightRow, rowNr, highlightCol, colNr );
+				//console.log( "highlightRow: %o rowNr %o, highlightCol: %o colNr %o", highlightRow, rowNr, highlightCol, colNr );
 
 				// Mouse over top left cell: Don't do anything;
 				if( highlightRow === 0 || highlightCol === 0 ) {
@@ -267,15 +270,17 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			var type		= td.data( 'resistanceType' )
 				, value		= td.data( 'resistanceValue' );
 
+			//console.error( '%o - %o', type, value );
+
 			// Type is (class)ResistanceDefault: Don't display numbers
-			if( type === 'classResistanceDefault' || type === 'resistanceDefault' ) {
+			if( type === 'classResistanceDefault' || type === 'resistanceDefault' || type === 'undefined' ) {
 				return;
 			}
 
 			td
 				// Store original text (for mouseleave)
-				.data( 'originalText', $( this ).text() )
-				.text( $( this ).data( 'resistanceValue' ) );
+				.data( 'originalText', td.text() )
+				.text( value );
 
 		}
 
@@ -284,9 +289,9 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 		* On mouseleave, display simpler value 
 		*/
 		function displayRegularValue( td ) {
-
 			if( td.data( 'originalText' ) ) {
-				td.text( $( this ).data( 'originalText' ) );
+				td.text( td.data( 'originalText' ) );
+				td.removeData( 'originalText' );
 			}
 		}
 
@@ -300,34 +305,6 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 		// Watch for changes of getFilters in $scope (watch deeply!); when they change, update the table
 		$scope.$watch( 'getFilters()', function( newFilter, oldFilter) {
 			
-			// Check for type of filter that changed (bacterium, antibiotic, diagnosis) -- every change leads to a change in the length 
-			// of the array, as there's no replacement option
-			/*var changedFilter;
-			for( var i in newFilter ) {
-				console.log( countProperties( newFilter[ i ] ) );
-				if( countProperties( newFilter[ i ] ) !== countProperties( oldFilter[ i ] ) ) {
-					changedFilter = i;
-					break;
-				}
-			}
-
-			// Filter didn't change
-			if( !changedFilter ) {
-				console.error( "Filter didn't change though $watch fired: old %o vs. new %o", oldFilter, newFilter );
-				return;
-			}
-
-			console.log( "resistanceMatrixDirective: filter that changed was %o, update Table", changedFilter );
-			
-			if( changedFilter == "bacterium" ) {
-				updateRowVisibility();
-			}
-
-			else if ( changedFilter == "antibiotic" ) {
-				updateColVisibility();
-			}*/
-
-			// #todo
 			updateColVisibility();
 			updateRowVisibility();
 
@@ -342,8 +319,10 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 		function updateRowVisibility() {
 
-			// Get filters for bacteria
+			// Get filters for ba	cteria
 			var filters = FilterFactory.getFilters( 'bacterium' );
+
+			console.log( 'Bacteria filters: %o', filters );
 
 			// Loop through all bacterias – they need to have the same order that was used to create the table;
 			// If they don't match filter, hide them. Else show them.
@@ -353,9 +332,8 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 				var itemVisible = checkItemAgainstFilters( allBacteria[ i ], filters ) ? "show" : "hide";
 
 				// Add 1 to i for the table header row
-				var row 		= element.find( "tbody tr:nth-child(" + ( i + 1 ) + ")" );
+				var row 		= element.find( "tbody tr[data-bacterium-id='" + allBacteria[ i ].id + "']" );
 
-				// Call hide/show
 				row[ itemVisible ]();
 
 			}
@@ -373,19 +351,21 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			// If they don't match filter, hide them. Else show them.
 			var allAntibiotics = $scope.getAntibioticsSorted();
 
-			//console.error( "allAntibiotics: %o", allAntibiotics );
-
 			var toHide = [];
 			var toShow = [];
 
 			for( var i = 0; i < allAntibiotics.length; i++ ) {
 
-				//console.error( "check antibiotic %o", allAntibiotics[ i ].name );
-
+				// Check if current item should be visible or not
 				var itemVisible 	= checkItemAgainstFilters( allAntibiotics[ i ], filters ) ? "show" : "hide";
-				var colNr = i + 2;
 
-				var cells 		= $( ".resistanceMatrix" ).find( "td:nth-child(" + colNr + "), th:nth-child(" + ( colNr ) + ")" );
+				// Get column number for current antibiotic
+				var colNr			= $( '.resistanceMatrix thead [data-antibiotic-id=\'' + allAntibiotics[ i ].id + '\'' ).index();
+
+				console.error( colNr );
+
+				// Get all cells of current antibiotic; index is 0-based, nth-child not
+				var cells 			= $( ".resistanceMatrix" ).find( "td:nth-child(" + ( colNr + 1 ) + "), th:nth-child(" + ( ( colNr + 1 ) ) + ")" );
 
 				cells[ itemVisible ]();
 
@@ -419,29 +399,46 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 
 
-		// I check, if the item i matches filters, i.e. if it's properties and their values are the same
-		// as the ones given in filters. Item is an antibiotic or a bacterium, filter is an array with items from 
-		// SearchTableFactory.searchTable
-		// If item matches filters, returns true. Else false.
+		/**
+		* I check, if the item i matches filters, i.e. if it's properties and their values are the same
+		* as the ones given in filters. 
+		*
+		* @param item			antibiotic or bacterium
+		* @param filter			Array with items from SearchTableFactory.searchTable
+		*
+		* @return <Boolean>		true if item matches filter, else false
+		*/
 		function checkItemAgainstFilters( item, filters ) {
 
-			//console.log( "resistanceMatrixDirective: check if item %o matches filters %o", item, filters );
+			console.log( "resistanceMatrixDirective: check if item %o matches filters %o", item, filters );
 
-			// Loop through filter types (substance, gram etc)
+
+			// For this type of item (bacteria or antibiotic) no filters were chosen, i.e. filter object has no properties: 
+			// There's nothing to hide, just return true
+			var filterPropertyCount = 0; 
+			for( var i in filters ) {
+				filterPropertyCount++;
+			}
+			if( filterPropertyCount == 0 ) {
+				return true;
+			}
+
+
+			// Loop through filter types (substance, gram etc) – contains multiple results for that type of filter
 			for( var type in filters ) {
 
 				var filterType 					= filters[ type ]
+
+					// Number of filters that have matched for this type; if type is gram and value is 1 or 0, 
+					// and bacterium is gram+, filtersMatched will be 1
 					, filtersMatched 			= 0;
 
 				// Loop through filters for each filter type
 				for( var i = 0; i < filterType.length; i++ ) {
 
-					// item is not contained in filter[ i ].containers: return false as soon as this happens, 
-					// no need to continue
-					// Test with $( "body").scope().getFilters().bacterium[ 0 ].containers.indexOf( $( "body" ).scope().getBacteriaSorted()[ 2 ] );
+					//console.error( "is match? %o %o %o %o", item.genus, filterType[ i ].containers.indexOf( item ), item );
 
 					if( filterType[ i ].containers.indexOf( item ) !== -1 ) {
-						//console.log( "resistanceMatrixDirective: item %o doesnt match filter %o", item, filters[ i ] );
 						filtersMatched++;
 					}
 
