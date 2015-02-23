@@ -8,17 +8,129 @@
         "less" : "00000000-0000-0000-0000-000000000000"
       }
     },
-    "less\/shared\/helpers.css" : {
-      "output" : "less\/shared\/helpers.out.css"
+    "less\/shared\/mixins\/tab-focus.less" : {
+      "output" : "less\/shared\/mixins\/tab-focus.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
     },
-    "less\/shared\/responsive.css" : {
-      "output" : "less\/shared\/responsive.out.css"
+    "less\/shared\/mixins\/responsive-visibility.less" : {
+      "output" : "less\/shared\/mixins\/responsive-visibility.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
     },
-    "less\/shared\/fonts.css" : {
-      "output" : "less\/shared\/fonts.out.css"
+    "less\/shared\/mixins\/text-overflow.less" : {
+      "output" : "less\/shared\/mixins\/text-overflow.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
     },
-    "less\/shared\/normalize.css" : {
-      "output" : "less\/shared\/normalize.out.css"
+    "less\/shared\/mixins\/nav-divider.less" : {
+      "output" : "less\/shared\/mixins\/nav-divider.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/gradients.less" : {
+      "output" : "less\/shared\/mixins\/gradients.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/normalize.less" : {
+      "output" : "less\/shared\/normalize.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/grid-framework.less" : {
+      "output" : "less\/shared\/mixins\/grid-framework.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/progress-bar.less" : {
+      "output" : "less\/shared\/mixins\/progress-bar.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/vendor-prefixes.less" : {
+      "output" : "less\/shared\/mixins\/vendor-prefixes.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/reset-filter.less" : {
+      "output" : "less\/shared\/mixins\/reset-filter.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/scaffolding.less" : {
+      "output" : "less\/shared\/scaffolding.css"
+    },
+    "less\/shared\/mixins\/labels.less" : {
+      "output" : "less\/shared\/mixins\/labels.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/grid.less" : {
+      "output" : "less\/shared\/mixins\/grid.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins.less" : {
+      "imports" : [
+        "less\/shared\/mixins\/hide-text.less",
+        "less\/shared\/mixins\/opacity.less",
+        "less\/shared\/mixins\/image.less",
+        "less\/shared\/mixins\/labels.less",
+        "less\/shared\/mixins\/reset-filter.less",
+        "less\/shared\/mixins\/resize.less",
+        "less\/shared\/mixins\/responsive-visibility.less",
+        "less\/shared\/mixins\/size.less",
+        "less\/shared\/mixins\/tab-focus.less",
+        "less\/shared\/mixins\/text-emphasis.less",
+        "less\/shared\/mixins\/text-overflow.less",
+        "less\/shared\/mixins\/vendor-prefixes.less",
+        "less\/shared\/mixins\/alerts.less",
+        "less\/shared\/mixins\/buttons.less",
+        "less\/shared\/mixins\/panels.less",
+        "less\/shared\/mixins\/pagination.less",
+        "less\/shared\/mixins\/list-group.less",
+        "less\/shared\/mixins\/nav-divider.less",
+        "less\/shared\/mixins\/forms.less",
+        "less\/shared\/mixins\/progress-bar.less",
+        "less\/shared\/mixins\/table-row.less",
+        "less\/shared\/mixins\/background-variant.less",
+        "less\/shared\/mixins\/border-radius.less",
+        "less\/shared\/mixins\/gradients.less",
+        "less\/shared\/mixins\/clearfix.less",
+        "less\/shared\/mixins\/center-block.less",
+        "less\/shared\/mixins\/nav-vertical-align.less",
+        "less\/shared\/mixins\/grid-framework.less",
+        "less\/shared\/mixins\/grid.less"
+      ],
+      "output" : "less\/shared\/mixins.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/table-row.less" : {
+      "output" : "less\/shared\/mixins\/table-row.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/background-variant.less" : {
+      "output" : "less\/shared\/mixins\/background-variant.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
     },
     "less\/styles.less" : {
       "isUserOutput" : true,
@@ -27,19 +139,121 @@
         "less" : "00000000-0000-0000-0000-000000000000"
       },
       "imports" : [
-        "less\/shared\/normalize.css",
-        "less\/shared\/helpers.css",
-        "less\/shared\/responsive.css",
-        "less\/shared\/print.css",
-        "less\/shared\/fonts.css",
-        "less\/shared\/variables.less"
+        "less\/shared\/mixins.less",
+        "less\/shared\/normalize.less",
+        "less\/shared\/fonts.less",
+        "less\/shared\/variables.less",
+        "less\/shared\/scaffolding.less",
+        "less\/shared\/main.less"
       ]
+    },
+    "less\/shared\/mixins\/nav-vertical-align.less" : {
+      "output" : "less\/shared\/mixins\/nav-vertical-align.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/size.less" : {
+      "output" : "less\/shared\/mixins\/size.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/fonts.less" : {
+      "output" : "less\/shared\/fonts.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/image.less" : {
+      "output" : "less\/shared\/mixins\/image.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/list-group.less" : {
+      "output" : "less\/shared\/mixins\/list-group.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/resize.less" : {
+      "output" : "less\/shared\/mixins\/resize.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
     },
     "css\/styles.css" : {
       "output" : "css\/styles.out.css"
     },
-    "less\/shared\/print.css" : {
-      "output" : "less\/shared\/print.out.css"
+    "less\/shared\/mixins\/hide-text.less" : {
+      "output" : "less\/shared\/mixins\/hide-text.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/opacity.less" : {
+      "output" : "less\/shared\/mixins\/opacity.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/alerts.less" : {
+      "output" : "less\/shared\/mixins\/alerts.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/main.less" : {
+      "output" : "less\/shared\/main.css"
+    },
+    "less\/shared\/mixins\/text-emphasis.less" : {
+      "output" : "less\/shared\/mixins\/text-emphasis.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/pagination.less" : {
+      "output" : "less\/shared\/mixins\/pagination.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/clearfix.less" : {
+      "output" : "less\/shared\/mixins\/clearfix.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/buttons.less" : {
+      "output" : "less\/shared\/mixins\/buttons.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/panels.less" : {
+      "output" : "less\/shared\/mixins\/panels.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/center-block.less" : {
+      "output" : "less\/shared\/mixins\/center-block.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/border-radius.less" : {
+      "output" : "less\/shared\/mixins\/border-radius.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    "less\/shared\/mixins\/forms.less" : {
+      "output" : "less\/shared\/mixins\/forms.css",
+      "profiles" : {
+        "less" : "00000000-0000-0000-0000-000000000000"
+      }
     }
   },
   "flows" : {
