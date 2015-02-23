@@ -265,6 +265,30 @@ header:hover #logo h1
 	text-overflow: ellipsis;
 	padding:5px 0;
 	background-color:rgb(255, 255, 255);
+	
+	// Remove button
+	.removeFilterButton {
+		border:none;
+		background-color:transparent;
+		color:rgb(175, 175, 175);
+		outline:none;
+		padding:.05rem .3rem;
+		font-weight:bold;
+		
+		&:hover {
+			box-shadow:none;
+			background-color:@infekt-green;
+			color:rgb(255, 255, 255);
+		}
+	}
+	
+	// Hover .filter-list-item
+	&:hover {
+		.removeFilterButton {
+
+		}
+	}
+	
 }
 .filter-item-category
 {
@@ -460,15 +484,22 @@ label:only-child .filter-item-indicator:before
 	//color: rgb( 150, 150, 150 );
 }
 
-#resistence-table td:hover
+#resistence-table td:not(.resistance-not-available):hover
 {
-	background-color: red !important;
+	//background-color: red !important;
 	color: black;
+	box-shadow:0 0 6rem rgba(0, 0, 0, .5);
 }
 
 #resistence-table th.highlighted,
 #resistence-table td.highlighted {
-	background-color: yellow !important;
+	//background-color: yellow !important;
+	
+	&.resistance-high,
+	&.resistance-intermediate,
+	&.resistance-low {
+		background-color:rgb(243, 255, 111);
+	}
 }
 
 
@@ -483,17 +514,25 @@ label:only-child .filter-item-indicator:before
 	z-index:1;
 	border:none;
 }
-#resistence-table .resistance-bad
+#resistence-table .resistance-bad,
+#resistence-table .resistance-low
 {
 	background-color:rgb(225, 225, 225);
 }
-#resistence-table .resistance-fair
+#resistence-table .resistance-fair,
+#resistence-table .resistance-intermediate
 {
 	background-color:rgb(240, 126, 4);
+	background-color:rgb(210, 174, 114);
 }
-#resistence-table .resistance-good
+#resistence-table .resistance-good,
+#resistence-table .resistance-high
 {
 	background-color:rgb(183, 185, 14);
+}
+#resistence-table .resistance-not-available {
+	background-color: transparent;
+	box-shadow:inset 0 0 1px rgb(210, 210, 210);
 }
 #resistence-table .rotated
 {
