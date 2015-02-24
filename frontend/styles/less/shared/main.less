@@ -441,8 +441,7 @@ label:only-child .filter-item-indicator:before
 	font: normal 1.5rem/1.5 futura_ltcondensed, Arial, sans-serif;
 	cursor:default;
 }
-#resistence-table th
-{
+#resistence-table th {
 	font-weight:normal;
 	position: relative;
 }
@@ -451,22 +450,20 @@ label:only-child .filter-item-indicator:before
 	position: absolute;
 }
 
-#resistence-table th[scope="col"]
-{
+#resistence-table th[scope="col"] {
 	vertical-align: bottom;
 	-webkit-transform: rotate(-70deg) translate( 10px, -12px);
+	white-space:nowrap;
 }
 
-#resistence-table th[scope="row"] 
-{
+#resistence-table th[scope="row"] {
 	text-align:right;
 	padding:0 10px 0 0;
 	vertical-align: middle;
 	white-space: nowrap;
 }
 
-#resistence-table td
-{
+#resistence-table td {
 	position:relative;
 	padding:0;
 	border:3px solid rgb(255, 255, 255);
@@ -479,8 +476,7 @@ label:only-child .filter-item-indicator:before
 }
 
 
-#resistence-table:hover td
-{
+#resistence-table:hover td {
 	//background-color: rgb( 245, 245, 245 ) !important;
 	//color: rgb( 150, 150, 150 );
 }
@@ -494,8 +490,7 @@ label:only-child .filter-item-indicator:before
 	
 }
 
-#resistence-table th.highlighted,
-#resistence-table td.highlighted {
+#resistence-table th.highlighted {
 	//background-color: yellow !important;
 	
 	&.resistance-high,
@@ -508,11 +503,12 @@ label:only-child .filter-item-indicator:before
 
 #resistence-table td:not(.resistance-not-available):hover
 {
-	-moz-transform:scale(1.5);
-	-webkit-transform:scale(1.5);
-	-ms-transform:scale(1.5);
-	-o-transform:scale(1.5);
-	transform:scale(1.5);
+	
+	-moz-transform:translate3d(0,0,0) scale(1.5);
+	-webkit-transform:translate3d(0,0,0) scale(1.5);
+	-ms-transform:translate3d(0,0,0) scale(1.5);
+	-o-transform:translate3d(0,0,0) scale(1.5);
+	transform:translate3d(0,0,0) scale(1.5);
 	
 	z-index:1;
 	border:none;
