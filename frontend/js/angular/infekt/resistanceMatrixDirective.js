@@ -142,6 +142,9 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			$compile( table.join( "" ) )( $scope )
 				.appendTo( $( ".resistanceMatrix" ) );
 
+			// Make thead sticky
+			$( '.resistanceMatrix' ).floatThead();
+
 		}
 
 
