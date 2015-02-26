@@ -143,7 +143,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 				.appendTo( $( ".resistanceMatrix" ) );
 
 			// Make thead sticky
-			$( '.resistanceMatrix' ).floatThead();
+			//$( '.resistanceMatrix' ).floatThead();
 
 		}
 
@@ -229,7 +229,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 				// Highlight row
 				if( highlightRow ) {
-					element.find( "tr:nth-child( " + rowNr + ") td, tr:nth-child( " + rowNr + ") th" ).addClass( highlightedClass );
+					element.find( "tbody tr:nth-child( " + rowNr + ") td, tbody tr:nth-child( " + rowNr + ") th" ).addClass( highlightedClass );
 				}
 
 				// Highlight col
