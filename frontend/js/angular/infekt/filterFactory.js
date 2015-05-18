@@ -9,7 +9,7 @@ infekt.factory( 'FilterFactory', function() {
 		diagnosis 		: {}
 		, bacterium 	: {}
 		, antibiotic 	: {}
-	}
+	};
 
 
 	var factory = {};
@@ -56,7 +56,7 @@ infekt.factory( 'FilterFactory', function() {
 
 		return len;
 
-	}
+	};
 
 
 
@@ -81,7 +81,7 @@ infekt.factory( 'FilterFactory', function() {
 		//console.log( "infektController: getFilters returns all filters %o", filters );
 		return filters;
 
-	}
+	};
 
 
 
@@ -115,7 +115,7 @@ infekt.factory( 'FilterFactory', function() {
 
 		console.log( "FilterFactory: add property %o to filter %o", obj, filter );
 
-	}
+	};
 
 
 
@@ -159,7 +159,7 @@ infekt.factory( 'FilterFactory', function() {
 		console.error( "Filter %o could not be removed from filters %o, because it was not found", obj, filter );
 
 
-	}
+	};
 
 	return factory;
 
