@@ -19,13 +19,13 @@ infekt.factory( 'AntibioticsFactory', function( $http, $q ) {
 
 			var antibiotic = {
 				id 					: data[ i ].id 
-				, name 				: data[ i ].substances[ 0 ].name || "no name"
+				, name 				: data[ i ].name || "no name"
 				, substances		: [] // Array with all substance names contained in this antibiotic
 				, substanceClasses 	: [] // Array with all substanceClass names contained in this antibiotic
 				, po 				: data[ i ].po
 				, iv 				: data[ i ].iv
 				, type 				: "antibiotic"
-			}
+			};
 
 			// Get substances
 			antibiotic.substances = parseSubstances( data[ i ].substances );
@@ -40,7 +40,7 @@ infekt.factory( 'AntibioticsFactory', function( $http, $q ) {
 		console.log( "AntibioticsFactory: newly formatted antibiotics %o, was %o", ab, data );
 		return ab;
 
-	}
+	};
 
 
 
@@ -76,7 +76,7 @@ infekt.factory( 'AntibioticsFactory', function( $http, $q ) {
 				}
 				return false;
 			}
-		}
+		};
 
 
 
@@ -124,7 +124,7 @@ infekt.factory( 'AntibioticsFactory', function( $http, $q ) {
 
 		return ret;
 
-	}
+	};
 
 
 
@@ -148,7 +148,7 @@ infekt.factory( 'AntibioticsFactory', function( $http, $q ) {
 		
 		return httpPromise;
 
-	}
+	};
 
 
 
@@ -198,7 +198,7 @@ infekt.factory( 'AntibioticsFactory', function( $http, $q ) {
 
 			fetchAntibiotics().then( function( response ) {
 
-				if( factory.antibiotics.length == 0 ) {
+				if( factory.antibiotics.length === 0 ) {
 					factory.antibiotics = parseAntibiotics( response.data );
 				}
 
@@ -212,7 +212,7 @@ infekt.factory( 'AntibioticsFactory', function( $http, $q ) {
 
 		return deferred.promise;
 
-	}
+	};
 
 
 
@@ -228,7 +228,7 @@ infekt.factory( 'AntibioticsFactory', function( $http, $q ) {
 
 		} 
 
-	}
+	};
 
 
 
