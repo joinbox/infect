@@ -1,4 +1,4 @@
-# Infekt
+# Infect
 
 ## How to use the frontend (dev mode)
 

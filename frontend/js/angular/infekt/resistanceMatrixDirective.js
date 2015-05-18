@@ -165,7 +165,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			var tableContents = $scope.getResistanceTable();
 
 			// Table can't be drawn, because there's no content: return
-			if( tableContents.length == 0 ) {
+			if( tableContents.length === 0 ) {
 				return;
 			}
 
@@ -311,7 +311,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			updateColVisibility();
 			updateRowVisibility();
 
-		}, true )
+		}, true );
 
 
 
@@ -374,7 +374,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 			}
 
-		};
+		}
 
 
 
@@ -422,7 +422,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			for( var i in filters ) {
 				filterPropertyCount++;
 			}
-			if( filterPropertyCount == 0 ) {
+			if( filterPropertyCount === 0 ) {
 				return true;
 			}
 
@@ -448,7 +448,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 				}
 
 				// No filter matched for this type
-				if( filtersMatched == 0 ) {
+				if( filtersMatched === 0 ) {
 					return false;
 				}
 
@@ -469,7 +469,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 	return {
 		restrict: "C"
 		, link	: link
-	}
+	};
 
 } );
 
