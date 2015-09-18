@@ -1,0 +1,25 @@
+{
+	"name"					: "infect-frontend"
+	, "version"				: "0.0.1"
+	, "main"				: ""
+	, "dependencies"		: {
+		"angular"					: "1.4.x"
+		, "zepto"					: "1.1.x"
+		, "angular-translate"		: "2.7.x"
+		, "fxstr-angular-typeahead"	: "1.0.x"
+	}
+	, "ignore"				: [
+	]
+	, "license"				: "MIT"
+	, "authors"				: [
+		{ 
+			"name"			: "Felix Steiner"
+			, "email"		: "felix@joinbox.com"
+			, "homepage"	: "http://joinbox.com" 
+		}
+	]
+	, "repository"			: {
+		"type"				: "git"
+		, "url"				: "git://github.com/joinbox/infect.git"
+	}
+}

@@ -42,7 +42,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 			// Go through data
 			// Sort is done in the controller
-			for( var i = 0; i < data.length; i++ ) {
+			for( i = 0; i < data.length; i++ ) {
 
 				// Row
 				table.push( "<tr data-bacterium-id='" + data[ i ].bacterium.id + "'>" );
@@ -139,8 +139,10 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			table.push( "</tbody>" );
 
 
-			$compile( table.join( "" ) )( $scope )
-				.appendTo( $( ".resistanceMatrix" ) );
+			var compiled = $compile( table.join( "" ) )( $scope );
+
+			var resistanceMatrix = angular.element( document.getElementsByClassName( 'resistanceMatrix' ) );
+			resistanceMatrix.append( compiled );
 
 			// Make thead sticky
 			//$( '.resistanceMatrix' ).floatThead();
@@ -177,15 +179,13 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 
 
-
-
-
 		// MOUSE OVER
 		// I listen to mouseovers of cells; if it happens, I determine if 
 		// the user hovered a colum or row title. If he did, I highlight the whole
 		// row/col, else just the single cell and it's titles (row/col).
-		element.on( "mouseenter", "th, td", function() {
-				
+		Zepto( element[ 0 ] )
+
+			.on( "mouseenter", "th, td", function() {
 				
 				//
 				// Highlight ROW
@@ -195,7 +195,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 				var highlightRow = $( this ).is( ":first-child" );
 
 				// Get row number
-				var rowNr = element.find( "tr" ).index( $( this ).parent() );
+				var rowNr = Zepto( element[ 0 ] ).find( "tr" ).index( $( this ).parent() );
 
 
 				//
@@ -207,10 +207,10 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 				// Get column number
 				if( highlightCol ) {
-					var colNr = $( ".resistanceMatrix tr:first th" ).index( $( this ) ) + 1;
+					var colNr = $( ".resistanceMatrix tr:first-child th" ).index( $( this ) ) + 1;
 				}
 				else {
-					var colNr = $( $( this ).closest( "tr" ).find( "td" ) ).index( $( this ) ) + 1;
+					var colNr = $( Zepto( this ).closest( "tr" ).find( "td" ) ).index( $( this ) ) + 1;
 				}
 
 				//console.log( "highlightRow: %o rowNr %o, highlightCol: %o colNr %o", highlightRow, rowNr, highlightCol, colNr );
@@ -225,25 +225,25 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 				var highlightedClass = 'highlighted';
 
 				// Remove old highlight
-				element.find( "th." + highlightedClass + ", td." + highlightedClass ).removeClass( highlightedClass );
+				Zepto( element[ 0 ] ).find( "th." + highlightedClass + ", td." + highlightedClass ).removeClass( highlightedClass );
 
 				// Highlight row
 				if( highlightRow ) {
-					element.find( "tbody tr:nth-child( " + rowNr + ") td, tbody tr:nth-child( " + rowNr + ") th" ).addClass( highlightedClass );
+					Zepto( element[ 0 ] ).find( "tbody tr:nth-child( " + rowNr + ") td, tbody tr:nth-child( " + rowNr + ") th" ).addClass( highlightedClass );
 				}
 
 				// Highlight col
 				else if( highlightCol ) {
-					element.find( "tr" ).find( "td:nth-child(" + colNr + "), th[scope='col']:nth-child(" + colNr + ")" ).addClass( highlightedClass );
+					Zepto( element[ 0 ] ).find( "tr" ).find( "td:nth-child(" + colNr + "), th[scope='col']:nth-child(" + colNr + ")" ).addClass( highlightedClass );
 				}
 
 				// Highlight single cell
 				else {
 					//$( this ).css( 'opacity', 1 );
 					// col title
-					element.find( "th[scope='col']:nth-child(" + ( colNr + 1 ) + ")").addClass( highlightedClass );
+					Zepto( element[ 0 ] ).find( "th[scope='col']:nth-child(" + ( colNr + 1 ) + ")").addClass( highlightedClass );
 					// row title
-					element.find( "tr:nth-child(" + rowNr + ") th[scope='row']" ).addClass( highlightedClass );
+					Zepto( element[ 0 ] ).find( "tr:nth-child(" + rowNr + ") th[scope='row']" ).addClass( highlightedClass );
 				}
 
 
@@ -257,7 +257,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			.on( "mouseleave", 'th, td', function() {
 
 				// Display letter (H, L, I)
-				if( $( this ).is( 'td' ) ) {
+				if( Zepto( this ).is( 'td' ) ) {
 					displayRegularValue( $( this ) );
 				}
 
@@ -322,22 +322,76 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 		function updateRowVisibility() {
 
-			// Get filters for ba	cteria
+			// Get filters for bacteria
 			var filters = FilterFactory.getFilters( 'bacterium' );
 
-			console.log( 'Bacteria filters: %o', filters );
+			// Add bacteria from diagnosis filter to filters (bacteria)
+			var diagnoisisFilters = FilterFactory.getFilters( 'diagnosis' );
 
-			// Loop through all bacterias – they need to have the same order that was used to create the table;
+			console.error( 'resistanceMatrixDirective: Bacteria filters: %o', filters );
+			console.error( 'resistanceMatrixDirective: Diagnosis filters: %o', diagnoisisFilters );
+
+			// Loop through all bacteria – they need to have the same order that was used to create the table;
 			// If they don't match filter, hide them. Else show them.
 			var allBacteria = $scope.getBacteriaSorted();
+
+
+
+
+			var diagnosisBacteriaIds = [];
+
+			// Only display bacteria that match at least ONE of the diagnosis filters
+			// The only property a diagnosisFilter can have is name
+			// Create diagnosisBacteriaIds that contain _all_ valid bacteria for the selected diagnosis.
+			if( diagnoisisFilters && diagnoisisFilters.name && diagnoisisFilters.name.length ) {
+
+				diagnoisisFilters.name.forEach( function( nameFilter ) {
+
+					if( nameFilter && nameFilter.containers && angular.isArray( nameFilter.containers ) ) {
+
+						nameFilter.containers.forEach( function( cont ) {
+
+							if( cont && cont.bacteria && angular.isArray( cont.bacteria ) ) {
+
+								cont.bacteria.forEach( function( bact ) {
+
+									diagnosisBacteriaIds.push( bact.id );
+
+								} );
+
+
+							}
+
+						} );
+
+					}
+
+				} );
+
+			}
+
+			console.log( 'resistanceMatrixDirective: diagnosis bacteria have ids %o', diagnosisBacteriaIds );
+
+
+
+
 			for( var i = 0; i < allBacteria.length; i++ ) {
 
-				var itemVisible = checkItemAgainstFilters( allBacteria[ i ], filters ) ? "show" : "hide";
+				var itemVisible = checkItemAgainstFilters( allBacteria[ i ], filters );
+
+				// Item is visible and we are filtering by diagnosis: only display bacterium if 
+				// it belongs to the selected diagnosis
+				if( itemVisible && diagnosisBacteriaIds.length ) {
+					if( diagnosisBacteriaIds.indexOf( allBacteria[ i ].id ) === -1 ) {
+						itemVisible = false;
+					}
+				}
+
 
 				// Add 1 to i for the table header row
-				var row 		= element.find( "tbody tr[data-bacterium-id='" + allBacteria[ i ].id + "']" );
+				var row 		= element[ 0 ].querySelector( "tbody tr[data-bacterium-id='" + allBacteria[ i ].id + "']" );
 
-				row[ itemVisible ]();
+				row.style.display = itemVisible ? 'table-row' : 'none';
 
 			}
 
@@ -365,8 +419,6 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 				// Get column number for current antibiotic
 				var colNr			= $( '.resistanceMatrix thead [data-antibiotic-id=\'' + allAntibiotics[ i ].id + '\'' ).index();
 
-				console.error( colNr );
-
 				// Get all cells of current antibiotic; index is 0-based, nth-child not
 				var cells 			= $( ".resistanceMatrix" ).find( "td:nth-child(" + ( colNr + 1 ) + "), th:nth-child(" + ( ( colNr + 1 ) ) + ")" );
 
@@ -383,7 +435,8 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 		// Scroll: FIX table head (add class .fixed to tableHead after scrolling too much)
 		$( window ).scroll( function() {
-			var tableHead 		= element.find( "thead:first" )
+			
+			var tableHead 		= Zepto( element[ 0 ] ).find( "thead:first-child" )
 				, tableHeadTop 	= tableHead.offset().top - parseInt( $( "#content" ).css( 'margin-top' ), 10 )
 				, scrollTop 	= $( document ).scrollTop();
 
@@ -407,7 +460,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 		* as the ones given in filters. 
 		*
 		* @param item			antibiotic or bacterium
-		* @param filter			Array with items from SearchTableFactory.searchTable
+		* @param filters		Array with items from SearchTableFactory.searchTable
 		*
 		* @return <Boolean>		true if item matches filter, else false
 		*/
@@ -425,7 +478,6 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			if( filterPropertyCount === 0 ) {
 				return true;
 			}
-
 
 			// Loop through filter types (substance, gram etc) – contains multiple results for that type of filter
 			for( var type in filters ) {

@@ -22,15 +22,17 @@
 }());
 
 
+
+
 // Rotate table cell content
-(function ($) {
-  $.fn.rotateTableCellContent = function (options) {
   /*
   Version 1.0
   7/2011
   Written by David Votrubec (davidjs.com) and
   Michal Tehnik (@Mictech) for ST-Software.com
   */
+/*(function ($) {
+  $.fn.rotateTableCellContent = function (options) {
 
 		var cssClass = ((options) ? options.className : false) || "vertical";
 
@@ -54,4 +56,4 @@
 			$(this).html(betterCells[i]);
 		});
 	};
-})(jQuery);
+})(Zepto);*/

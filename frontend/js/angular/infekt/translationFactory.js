@@ -139,6 +139,7 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 			, values	: {
 				"bacterium" 		: "Bakterium"
 				, "antibiotic" 		: "Antibiotikum"
+				, "diagnosis"		: "Diagnose"
 			}
 		}
 
@@ -149,7 +150,7 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		}
 
 
-	}
+	};
 
 
 
@@ -170,7 +171,7 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		var ret = {
 			name: propertyName
 			, value: object[ propertyName ]
-		}
+		};
 
 
 		// (Temporarily) store translation for property and values
@@ -222,8 +223,8 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		return ret;
 
 
-	}
+	};
 
-	return factory
+	return factory;
 
 } );

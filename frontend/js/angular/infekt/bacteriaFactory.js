@@ -63,7 +63,7 @@ infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 			ret.push( shapes[ i ].name );
 		}
 
-	}
+	};
 
 
 	function parseBacteria( data ) {
@@ -124,7 +124,7 @@ infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 
 		return httpPromise;
 
-	}
+	};
 
 
 
@@ -167,13 +167,13 @@ infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 		}*/
 
 		// Bacteria not yet gotten: Make call to server
-		if( factory.bacteria.length == 0 ) {
+		if( factory.bacteria.length === 0 ) {
 			
 			factory.promiseObject = fetchBacteria().then( function( response ) {
 				factory.promiseObject = null;
 
 				// Bacteria hasn't been set before 
-				if( factory.bacteria.length == 0 ) {
+				if( factory.bacteria.length === 0 ) {
 					factory.bacteria = parseBacteria( response.data );
 				}
 
@@ -193,7 +193,7 @@ infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 
 		return deferred.promise;
 
-	}
+	};
 
 
 	// Return bacterium with id id
@@ -207,7 +207,7 @@ infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 
 		} 
 
-	}
+	};
 
 
 

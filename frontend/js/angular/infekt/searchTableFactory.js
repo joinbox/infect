@@ -1,7 +1,7 @@
 
 
 // I create a hashTable for all values of antibiotics, bacteria and diagnosis to speed up searches
-infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFactory, TranslationFactory ) {
+infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFactory, DiagnosisFactory, TranslationFactory ) {
 
 
 
@@ -47,12 +47,14 @@ infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 	function generateSearchTable() {
 
 		// Bacteria or AB not yet ready
-		if( AntibioticsFactory.antibiotics.length === 0 || BacteriaFactory.bacteria.length === 0 ) {
+		if( AntibioticsFactory.antibiotics.length === 0 || BacteriaFactory.bacteria.length === 0 || DiagnosisFactory.getDiagnosis().length === 0 ) {
 			return;
 		}
 
 
-		var allData = AntibioticsFactory.antibiotics.concat( BacteriaFactory.bacteria )
+		var allData = AntibioticsFactory.antibiotics.concat( BacteriaFactory.bacteria );
+		allData = allData.concat( DiagnosisFactory.getDiagnosis() );
+
 		console.group( 'generateSearchTable' );
 		console.log( "SearchTableFactory: generateSearchTable - allData: %o", allData );
 
@@ -88,7 +90,7 @@ infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 		}
 
 
-		console.error( "Hash Table: %o", searchTable );
+		console.log( "Hash Table: %o", searchTable );
 
 		window.st = searchTable; // Debug 
 		console.groupEnd();
@@ -149,7 +151,7 @@ infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 				, humanName 	: translatedObj.name
 				, humanValue 	: translatedObj.value
 				, containers	: [ obj.pointer ]
-			}
+			};
 
 			searchTable.push( newObj );
 
@@ -162,40 +164,16 @@ infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 	// I return the whole searchTable
 	factory.getTerms = function() {
 
-		if( searchTable.length == 0 ) {
+		if( searchTable.length === 0 ) {
 			generateSearchTable();
 		}
 
 		return searchTable;
 
-	}
+	};
 
 
 
-
-	// I go through the searchTable array and return all elements, whose values match searchString, as an array
-	/*factory.findTerm = function( searchString ) {
-
-		if( searchTable.length == 0 ) {
-			generateSearchTable();
-		}
-
-		var results = [];
-
-		// Go through searchTable, look up searchString in it's values
-		for( var i = 0; i < searchTable.length; i++ ) {
-			// Make searchTable[ i ].value to a string, as int won't know indexOf
-			console.error( searchTable[ i ].humanValue );
-			if( ( searchTable[ i ].humanValue + "" ).toLowerCase().indexOf( searchString.toLowerCase() ) > -1 || 
-				(  searchTable[ i ].humanName + "").toLowerCase().indexOf( searchString.toLowerCase() ) > -1 ) {
-				results.push( searchTable[ i ] );
-			}
-		}
-
-		console.log( "findTerm returns %o – searched in table %o", results, searchTable );
-		return results;
-
-	}*/
 
 	return factory;
 

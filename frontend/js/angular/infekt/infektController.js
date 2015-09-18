@@ -1,4 +1,4 @@
-infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, BacteriaFactory, ResistanceFactory, SearchTableFactory, FilterFactory ) {
+infekt.controller( 'InfektController', [ '$scope', 'AntibioticsFactory', 'BacteriaFactory', 'ResistanceFactory', 'DiagnosisFactory', 'SearchTableFactory', 'FilterFactory', function( $scope, AntibioticsFactory, BacteriaFactory, ResistanceFactory, DiagnosisFactory, SearchTableFactory, FilterFactory ) {
 
 	$scope.antibiotics = [];
 	$scope.bacteria = [];
@@ -13,6 +13,13 @@ infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 
 			$scope.antibiotics = data;
 
+		} );
+
+
+	console.log( DiagnosisFactory );
+	DiagnosisFactory
+		.fetchDiagnosis()
+		.then( function( data ) {
 		} );
 
 
@@ -48,24 +55,24 @@ infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 	// must be the same as antibioticResistanceSortFunction
 	var antibioticSortFunction = function( a, b ) {
 		return a.name > b.name;
-	}
+	};
 
 	// I'm there to sort the resistance table returned by getResistanceTable
 	// must be the same as antibioticSortFunction
 	var antibioticResistanceSortFunction = function( a, b ) {
 		return a.antibiotic.name > b.antibiotic.name ? 1 : -1;
-	}
+	};
 
 	// I sort bacteria (getResistanceTable stuff) alphabetically for rows
 	// must be the same as bacteriumSortFunction
 	var bacteriumRowSortFunction = function( a, b ) {
 		return a.bacterium.genus + a.bacterium.species > b.bacterium.genus + b.bacterium.species ? 1 : -1;
-	}
+	};
 
 	// I sort bacteria; must be the same as bacteriumRowSortFunction
 	var bacteriumSortFunction = function( a, b ) {
 		return a.name > b.name;
-	}
+	};
 
 
 
@@ -96,7 +103,7 @@ infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 			humanName: "test"
 			, humanValue: ["testVal"]
 		}*/ ];
-	}
+	};
 
 
 	// Returns all items that may be searched
@@ -110,44 +117,44 @@ infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 		}
 
 		return terms;
-	}
+	};
 
 
 	// Returns a string to be searched for every item 
 	$scope.returnSearchTerm = function( item ) {
 		return item.humanValue + " " + item.value;
-	}
+	};
 
 	// Handler that is called when an typeahead proposition is selected
 	$scope.selectHandlerCallback = function( item ) {
 		$scope.addFilter( item );
-	}
+	};
 
 
 	// See FilterFactory.addFilter
 	$scope.addFilter = function( obj ) {
 		console.log( "infektController: add to filter %o", obj );
 		FilterFactory.addFilter( obj );
-	}
+	};
 
 
 	$scope.getFilters = function( name ) {
 		return FilterFactory.getFilters( name );
-	}
+	};
 	
 	$scope.getFilterCount = function( name ) {
 		return FilterFactory.getFilterCount( name );
-	}
+	};
 
 	$scope.removeFilter = function( obj ) {
 		console.log( "infectController: remove filter %o", obj );
 		FilterFactory.removeFilter( obj );
-	}
+	};
 
 	// Returns true if 
 	$scope.isInFilter = function( ) {
 
-	}
+	};
 
 
 
@@ -175,13 +182,13 @@ infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 	// I return the $scope.antibiotics array, sorted alphabetically
 	$scope.getAntibioticsSorted = function() {
 		return $scope.antibiotics.sort( antibioticSortFunction );
-	}
+	};
 
 	// I return the $scope.bacteria, sorted by the same mechanism that sorts me for the display
 	// of the resistanceMatrix. I'm needed to filter the reistencyMatrix table. 
 	$scope.getBacteriaSorted = function() {
 		return $scope.bacteria.sort( bacteriumSortFunction );
-	}
+	};
 
 
 
@@ -192,7 +199,7 @@ infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 
 
 		// ResistanceTable's not yet ready (data not yet gotten from server) 
-		if( !$scope.resistances || $scope.resistances.length == 0 ) {
+		if( !$scope.resistances || $scope.resistances.length === 0 ) {
 			console.log( "InfektController: getResistanceTable returns empty result" );
 			return [];
 		}
@@ -253,7 +260,7 @@ infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 						value  		: res.value
 						, type 		: res.type
 					}
-				} )
+				} );
 			
 			}
 
@@ -277,27 +284,27 @@ infekt.controller( 'InfektController', function( $scope, AntibioticsFactory, Bac
 
 			return {
 				value		: null
-			}
+			};
 
 		}
 
-		console.error( "getResistanceTable: ret before sorting: %o", ret );
+		console.log( "getResistanceTable: ret before sorting: %o", ret );
 
 
 
 		// Sort resistances
-		for( var i = 0; i < ret.length; i++ ) {
+		for( i = 0; i < ret.length; i++ ) {
 			//console.error( "sort %o by .antibiotic.name", ret[ i ].resistances )
 			ret[ i ].resistances.sort( antibioticResistanceSortFunction );
 		}	
 
-		console.error( "get bacterium row returns unsorted %o", ret );
+		console.log( "get bacterium row returns unsorted %o", ret );
 		return ret.sort( bacteriumRowSortFunction );
 
-	}
+	};
 
 
-} );
+} ] );
 
 
 

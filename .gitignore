@@ -22,3 +22,6 @@ Temporary Items
 
 # Siteflow
 .siteflow
+
+**/node_modules
+**/bower_components

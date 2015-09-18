@@ -14,6 +14,7 @@ var infektSettings = {
 		, antibiotics 	: "antibiotic"
 		, bacteria 		: "bacteria"
 		, resistances 	: "resistance"
+		, diagnosis		: "diagnosis"
 	}
 };
 
@@ -29,6 +30,7 @@ infekt
 		$translateProvider.translations( "de", {
 			"antibiotic" 				: "Antibiotikum"
 			, "bacterium" 				: "Bakterium"
+			, 'diagnosis'				: 'Diagnose'
 		} );
 
 		$translateProvider.preferredLanguage( 'de' );
@@ -54,7 +56,7 @@ infekt
 
 var getLanguage = function() {
 	return $( "html" ).attr( "lang" ).substr( 0, 2 );
-}
+};
 
 
 var countProperties = function( obj ) {
@@ -63,4 +65,4 @@ var countProperties = function( obj ) {
 		len++;
 	}
 	return len;
-}
+};

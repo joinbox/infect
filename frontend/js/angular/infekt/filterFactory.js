@@ -16,9 +16,9 @@ infekt.factory( 'FilterFactory', function() {
 
 
 
-	// I return the property of filters that corresponds to the
+	// Returns the property of filters that corresponds to the
 	// type of obj
-	function getFilterType( obj ) {
+	function getFiltersByType( obj ) {
 
 		// Missing type
 		if( !obj.type ) {
@@ -60,13 +60,16 @@ infekt.factory( 'FilterFactory', function() {
 
 
 
-
+	/**
+	* If name is provided, returns filters for the name (e.g. diagnosis, bacterium …), else
+	* returns all filters.
+	*/
 	factory.getFilters = function( name ) {
 
 		if( name ) {
 
 			if( !filters[ name ] ) {
-				//console.error( "infektController: getFilters called with name that doesn't exist in filters: %o vs %o", name, filters );
+				console.error( "infektController: getFilters called with name that doesn't exist in filters: %o vs %o", name, filters );
 				return [];
 			}
 
@@ -97,8 +100,7 @@ infekt.factory( 'FilterFactory', function() {
 	*/ 
 	factory.addFilter = function( obj ) {
 
-		// Get obje
-		var filter = getFilterType( obj.containers[ 0 ] );
+		var filter = getFiltersByType( obj.containers[ 0 ] );
 
 		if( !filter ) {
 			console.error( "Unknown type for adding filter: %o", obj );
@@ -113,7 +115,7 @@ infekt.factory( 'FilterFactory', function() {
 
 		filter[ obj.name ].push( obj );
 
-		console.log( "FilterFactory: add property %o to filter %o", obj, filter );
+		console.log( "FilterFactory: add property %o to filter %o. Filters is %o", obj, filter, filters );
 
 	};
 
@@ -126,7 +128,7 @@ infekt.factory( 'FilterFactory', function() {
 	*/
 	factory.removeFilter = function( obj ) {
 
-		var filter = getFilterType( obj.containers[ 0 ] );
+		var filter = getFiltersByType( obj.containers[ 0 ] );
 
 		// Filters not found for type of obj (bact/ab)
 		if( !filter ) {
