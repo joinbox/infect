@@ -63,7 +63,7 @@ class SubstanceClassController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
                         $locales = array();
-            foreach ($entity->getLocales() as $locale) 
+            foreach ($entity->getLocales() as $locale)
             {
                 $locales[] = $locale;
                 $entity->removeLocale($locale);
@@ -175,7 +175,7 @@ class SubstanceClassController extends Controller
         if ($editForm->isValid()) {
             foreach ($entity->getLocales() as $locale) {
                 foreach ($originalLocales as $key => $toDel) {
-                    if ($toDel->getLanguage() === $locale->getLanguage() && $toDel->getSubstanceClass() === $locale->getSubstanceClass()) 
+                    if ($toDel->getLanguage() === $locale->getLanguage() && $toDel->getSubstanceClass() === $locale->getSubstanceClass())
                     {
                         unset($originalLocales[$key]);
                     }
@@ -185,7 +185,7 @@ class SubstanceClassController extends Controller
                 $em->remove($locale);
             }
 
-            $this->updateTree($entity);
+            if($entity->getParent()) $this->updateTree($entity);
 
             $em->persist($entity);
             $em->flush();
@@ -202,11 +202,11 @@ class SubstanceClassController extends Controller
 
     private function updateTree($entity)
     {
-        $em = $this->getDoctrine()->getManager();
-        $conn = $em->getConnection();
+        $em       = $this->getDoctrine()->getManager();
+        $conn     = $em->getConnection();
 
         // calculate position adjustment variables
-        $newpos = $entity->getParent()->getLft() + 1;
+        $newpos   = $entity->getParent()->getLft() + 1;
 
         $width    = $entity->getRgt() - $entity->getLft() + 1;
         $distance = $newpos - $entity->getLft();
@@ -266,8 +266,8 @@ class SubstanceClassController extends Controller
             )
         );
         $conn->executeUpdate('
-                            UPDATE substanceClass 
-                            SET rgt = rgt - ? 
+                            UPDATE substanceClass
+                            SET rgt = rgt - ?
                             WHERE rgt > ?'
             , array(
                 $width,
