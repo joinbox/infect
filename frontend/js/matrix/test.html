@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://d3js.org/d3.v4.js"></script>
+	<script src="resistency-matrix.js"></script>
+</head>
+<body>
+
+	<h1>Test</h1>
+	<div class="matrix"></div>
+
+	<style>
+		svg {
+			height: 100%;
+			width: 1200px;
+			border: 1px solid gray;
+		}
+
+		svg text {
+			font-family: Helvetica;
+		}
+
+		svg .active text{
+			fill: tomato;
+		}
+
+	</style>
+
+	<script>
+
+		/* global document, infect */
+
+		var resistencyMatrix;
+
+		const antibiotics = Array.from(new Array(50));
+
+		// Create map
+		const data = {};
+		Array.from(new Array(80)).forEach((bact, bactIndex) => {
+			const map = {};
+			antibiotics.forEach((ab, abIndex) => {
+				let value = Math.random();
+				if (Math.random() < 0.1) value = null;
+				map[`ab-${abIndex}`] = {
+					value		: value
+					, bact		: `bact-${ bactIndex }`
+					, anti		: `ab-${ abIndex }`
+				};
+			});
+			data[`bact-${ bactIndex }`] = map;
+		});
+
+
+
+		resistencyMatrix = new infect.ResistencyMatrix(document.querySelector('.matrix'));
+		resistencyMatrix.updateData(data, 'value');
+
+
+
+	</script>
+</body>
+</html>

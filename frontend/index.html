@@ -14,12 +14,14 @@
 
 
 		<!-- Vendor -->
+		<script src="js/bower_components/d3/d3.js"></script>
 		<script src="js/bower_components/zepto/zepto.js"></script>
 		<script src="js/bower_components/angular/angular.js"></script>
 		<script src="js/bower_components/fxstr-angular-typeahead/fxstr-angular-typeahead/typeaheadDirective.js"></script>
 		<script src="js/bower_components/angular-translate/angular-translate.js"></script>
 
 		<script src="js/plugins.js"></script>
+		<script src="js/matrix/resistency-matrix.js"></script>
 
 
 
@@ -28,11 +30,9 @@
 		<script src="js/angular/infekt/app.js"></script>
 
 		<!-- Factories -->
-		<script src="js/angular/infekt/httpRequestFactory.js"></script>
 		<script src="js/angular/infekt/translationFactory.js"></script>
 		<script src="js/angular/infekt/antibioticsFactory.js"></script>
 		<script src="js/angular/infekt/bacteriaFactory.js"></script>
-		<script src="js/angular/infekt/diagnosisFactory.js"></script>
 		<script src="js/angular/infekt/searchTableFactory.js"></script>
 		<script src="js/angular/infekt/resistanceFactory.js"></script>
 		<script src="js/angular/infekt/filterFactory.js"></script>
@@ -41,7 +41,8 @@
 		<script src="js/angular/infekt/infektController.js"></script>
 
 		<!-- Directives -->
-		<script src="js/angular/infekt/resistanceMatrixDirective.js"></script>
+		<!--<script src="js/angular/infekt/resistanceMatrixDirective.js"></script>-->
+		<script src="js/angular/infekt/resistanceMatrixComponent.js"></script>
 
 		<!-- Filters -->
 		<script src="js/angular/infekt/joinFilter.js"></script>
@@ -51,6 +52,15 @@
 		<!-- View stuff -->
 		<script src="js/main.js"></script>
 
+		<style>
+			svg	{
+				height: 100%;
+				width: 70%;
+			}
+			resistance-matrix {
+				display: block;
+			}
+		</style>
 
     </head>
 
@@ -84,24 +94,6 @@
 								<input type="search" ng-model="searchFieldValue" class="typeaheadDirective" typeahead-empty-data-source="getDefaultResults" typeahead-data-source="getAllSearchTerms()" typeahead-max-results="9" typeahead-search-term-function="returnSearchTerm" typeahead-select-handler="selectHandlerCallback" typeahead-template-url="templates/infektResultListTemplate.html" typeahead-insert-after="#filter-input-wrapper"></input>
 							</div>
 
-
-							<!-- Suggestion needs to look like -->
-							<!--
-								<div id="filter-suggestion-overlay">
-									<ul class="filter-suggestion-list flat-list">
-										<li class="filter-list-item">
-											<span class="filter-item-category">Bakterium - Farbigkeit</span>
-											Gram+
-										</li>
-										<li class="filter-list-item">
-											<span class="filter-item-category">Bakterium - Farbigkeit</span>
-											Gram-
-										</li>
-									</ul>
-								</div>
-							-->
-								
-													
 						</div>
 					
 					</div>
@@ -112,8 +104,6 @@
 
 					<ul class="active-filter-list flat-list">
 	
-
-
 						<li ng-repeat="type in ['bacterium','antibiotic','diagnosis']" data-ng-if="getFilterCount(type)">
 							<label class="animated">{{ type | translate }}</label>
 
@@ -131,35 +121,6 @@
 							</ul>
 						</li>
 
-<!--
-						<li data-ng-if="getFilterCount('antibiotic')">
-							<label class="animated">Antibiotikum</label>
-							<ul class="active-filter-item-list flat-list animated">
-								<li ng-repeat="filter in getFilters('antibiotic')" class="filter-list-item">
-									<div ng-repeat="subFilter in filter">
-										<span class="filter-item-category">{{filter.humanName}}</span>
-										{{filter.humanValue}}
-										<button class="removeFilterButton" ng-click="removeFilter(filter)">x</button>
-									</div>
-								</li>
-							</ul>
-						</li>
--->
-						
-						<!--<li>
-							<label class="animated">Antibiotikum <span class="filter-item-indicator animated">0</span></label>
-						</li>
-
-						<li>
-							<label class="animated">Diagnose <span class="filter-item-indicator animated">1</span></label>
-							<ul class="active-filter-item-list flat-list animated">
-								<li class="filter-list-item">
-									<span class="filter-item-category">Diagnose</span>
-									Pneumonie
-								</li>
-							</ul>
-						</li>-->
-						
 					</ul>
 				
 				</div>
@@ -175,8 +136,7 @@
 
 		<section id="matrix">
 
-			<table class="resistanceMatrix" id="resistence-table">
-			</table>
+			<resistance-matrix resistances="resistances" bacteria="bacteria" antibiotics="antibiotics"></resistance-matrix>
 
 		</section>
 

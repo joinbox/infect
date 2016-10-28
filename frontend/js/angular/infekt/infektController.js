@@ -1,4 +1,7 @@
-infekt.controller( 'InfektController', [ '$scope', 'AntibioticsFactory', 'BacteriaFactory', 'ResistanceFactory', 'DiagnosisFactory', 'SearchTableFactory', 'FilterFactory', function( $scope, AntibioticsFactory, BacteriaFactory, ResistanceFactory, DiagnosisFactory, SearchTableFactory, FilterFactory ) {
+/**
+* Main controller (ng-controller), from angular 1.2
+*/
+infekt.controller( 'InfektController', [ '$scope', 'AntibioticsFactory', 'BacteriaFactory', 'ResistanceFactory', 'SearchTableFactory', 'FilterFactory', function( $scope, AntibioticsFactory, BacteriaFactory, ResistanceFactory, SearchTableFactory, FilterFactory ) {
 
 	$scope.antibiotics = [];
 	$scope.bacteria = [];
@@ -16,11 +19,11 @@ infekt.controller( 'InfektController', [ '$scope', 'AntibioticsFactory', 'Bacter
 		} );
 
 
-	console.log( DiagnosisFactory );
+	/*console.log( DiagnosisFactory );
 	DiagnosisFactory
 		.fetchDiagnosis()
 		.then( function( data ) {
-		} );
+		} );*/
 
 
 	// Get bacteria
