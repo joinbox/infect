@@ -4,11 +4,16 @@ The application is currently under development, it is not production ready.
 
 ## How to use the frontend (dev mode)
 
-- make sure express is installed 
+- Change to the frontend repo
 ```bash
-$ npm i -g express
+$cd frontend
 ```
-- start local webserver (use sudo for port 80)
+- Install node modules
 ```bash
-sudo node localServer.js
+$ npm i
 ```
+- Start local webserver
+```bash
+node localServer.js
+```
+- Open browser on localhost and port specified in the console output, e.g. `localhost:8123`
