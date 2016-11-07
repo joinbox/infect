@@ -165,5 +165,3 @@ DocProject/Help/html
 *.Cache
 ~$*
 *.dbmdl
-
-package.json

@@ -1,0 +1,15 @@
+{
+  "name": "infect-frontend",
+  "version": "0.0.1",
+  "description": "Infect's frontend",
+  "main": "localServer.js",
+  "dependencies": {
+    "express": "4.14.x"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
