@@ -8,15 +8,20 @@
 		, "zepto"					: "1.1.x"
 		, "angular-translate"		: "2.12.x"
 		, "fxstr-angular-typeahead"	: "1.0.x"
+		,	"sass-css3-mixins"			: "latest"
+		, "sass-flex-mixin"				: "latest"
+		, "sass-mixins"					: "latest"
+		, "sass-mediaqueries"			: "1.6.x"
+		, "normalize.css"            : "5.0.x"
 	}
 	, "ignore"				: [
 	]
 	, "license"				: "MIT"
 	, "authors"				: [
-		{ 
+		{
 			"name"			: "Felix Steiner"
 			, "email"		: "felix@joinbox.com"
-			, "homepage"	: "http://joinbox.com" 
+			, "homepage"	: "http://joinbox.com"
 		}
 	]
 	, "repository"			: {

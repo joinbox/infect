@@ -10,11 +10,11 @@
 		, rename			= require( 'gulp-rename' )
 		, sourcemap			= require( 'gulp-sourcemaps' )
 		, gulpPrint			= require( 'gulp-print' )
-		, del				= require( 'del' )
+
 		, util				= require( 'gulp-util' )
 		, minifyCSS			= require( 'gulp-minify-css' )
 		, gulpExpect		= require( 'gulp-expect-file')
-		, q					= require( 'q' )
+
 		, replace			= require( 'gulp-replace' )
 		, debug				= require( 'gulp-debug' );
 
@@ -23,15 +23,15 @@
 	// Paths
 	var config = {
 		bower					: {
-			srcFolder			: 'www/src/bower_components'
+			srcFolder			: 'src/bower_components'
 		}
 		, js					: {
-			srcFolder			: 'www/src/js'
-			, destFolder		: 'www/dist/js'
+			srcFolder			: 'src/js'
+			, destFolder		: 'dist/js'
 		}
 		, css					: {
-			srcFolder			: 'www/src/scss'
-			, destFolder		: 'www/dist/css'
+			srcFolder			: 'src/scss'
+			, destFolder		: 'dist/css'
 		}
 	};
 
@@ -40,402 +40,21 @@
 
 	var jsPaths = [
 
-		// Base that's required on _every_ site
-		// - console polyfill
-		// - no console.log for live
-		// - browser error message
-		{
-			dest		: 'base'
-			, src		: [
-
-				  // Browser support (display errors instantly)
-				  config.js.srcFolder + '/vendor/browser.js'
-				, config.js.srcFolder + '/plugins/browserTest.js'
-
-				  // Console, environment …
-				, config.bower.srcFolder + '/console-polyfill/index.js'
-				, config.js.srcFolder + '/environment.js'
-
-				// TBD: Only load if necessary
-				, config.bower.srcFolder + '/picturefill/dist/picturefill.js'
-
-				// Menu, which is displayed on almost all pages
-				, config.js.srcFolder + '/plugins/menu.js'
-
-				// Fabian's stuff
-				, config.js.srcFolder + '/main.js'
-
-			]
-		}
-
-
-
-		, {
-			dest			: 'video'
-			, src			: [
-				// Video.js
-				  config.bower.srcFolder + '/video.js/dist/video-js/video.dev.js'
-				, config.js.srcFolder + '/vendor/dash.js/dist/dash.all.js'
-				, config.js.srcFolder + '/vendor/videojs-tech-dashjs.js'
-				, config.js.srcFolder + '/angular/directives/videoJsDirective.js'
-			]
-		}
-
-
-
-		, {
-			dest			: 'time'
-			, src			: [
-				  // Time and date
-				  config.bower.srcFolder + '/moment/moment.js'
-				, config.bower.srcFolder + '/moment/locale/de.js'
-				, config.bower.srcFolder + '/moment/locale/fr.js'
-				, config.bower.srcFolder + '/moment/locale/it.js'
-				, config.js.srcFolder + '/angular/filters/momentFilter.js'
-			]
-		}
-
-
-
-		// Minimal stuff that's needed to use the user and the language menu
-		, {
-			dest			: 'user-and-language'
-			, src			: [
-				  config.js.srcFolder + '/angular/user/user.js'
-				, config.js.srcFolder + '/angular/base/common.js'
-				, config.js.srcFolder + '/angular/user/userService.js'
-				, config.js.srcFolder + '/angular/directives/userMenuDirective.js'
-				, config.js.srcFolder + '/angular/base/languageService.js'
-				, config.js.srcFolder + '/angular/directives/languageMenuDirective.js'
-			]
-		}
-
-
-
-		// Used on detail pages and front page
-		, {
-			dest		: 'slideshow'
-			, src		: [
-				  config.bower.srcFolder + '/flickity/dist/flickity.pkgd.js'
-				, config.js.srcFolder + '/plugins/init-slideshow.js'
-			]
-		}
-
-
-
-
-		// Detail site
-		, {
-			dest		: 'detail'
-			, src		: [
-
-				  // Carts
-				  config.js.srcFolder + '/angular/detail/detail.js'
-				, config.js.srcFolder + '/angular/cart/cartStoreService.js'
-				, config.js.srcFolder + '/angular/cart/cartController.js'
-				, config.js.srcFolder + '/angular/cart/cartService.js'
-
-				// Youtube movie (within slideshow)
-				, config.js.srcFolder + '/angular/directives/youtube-player-directive.js'
-
-			]
-		}
-
-
-
-
-
-		// Full fledged angular support, to be imported by other
-		// paths
-		, {
-			dest		: 'angular'
-			, src		: [
-
-				  config.bower.srcFolder + '/jquery/jquery.js'
-				, config.bower.srcFolder + '/angular/angular.js'
-				, config.bower.srcFolder + '/angular-route/angular-route.js'
-
-				, config.bower.srcFolder + '/angular-translate/angular-translate.js'
-
-				, config.bower.srcFolder + '/jb-api-wrapper/src/apiWrapperService.js'
-
-				// Language and user stuff (see above)
-				, config.js.destFolder + '/user-and-language.js'
-
-			]
-		}
-
-
-
-		, {
-			dest			: 'profile'
-			, src			: [
-
-				config.js.destFolder + '/angular.js'
-
-				, config.bower.srcFolder + '/eb-language-loader/src/languageLoaderService.js'
-
-				, config.js.srcFolder + '/angular/directives/errorMessageDirective.js'
-				, config.js.srcFolder + '/angular/directives/floatingLabelDirective.js'
-				, config.js.srcFolder + '/angular/directives/dateSelectorDirective.js'
-				, config.js.srcFolder + '/angular/directives/placeholderPolyfillDirective.js'
-
-				, config.js.srcFolder + '/angular/profile/profileController.js'
-				, config.js.srcFolder + '/angular/orderCreditCard/orderCreditCardController.js'
-
-			]
-		}
-
-
-
-
-		// Super-slick site for specials (initial load)
-		, {
-			dest		: 'specials'
-			, src		: [
-
-				  // Load user menu with a delay
-				  // Console and browser stuff is duplicated – should not matter
-				  config.js.srcFolder + '/plugins/minimal-script-loader.js'
-				, config.bower.srcFolder + '/squeezetext/src/squeezetext.js'
-
-			]
-		}
-
-
-
-		// Events and cinema (front and detail)
-		// They share most components – use one JS file to optimize caching.
-		, {
-			dest			: 'events-and-cinema'
-			, src			: [
-
-				  config.js.destFolder + '/angular.js' // Anulgar must be loaded _before_ eventListController etc.
-
-				, config.bower.srcFolder + '/squeezetext/src/squeezetext.js'
-				, config.bower.srcFolder + '/squeezetext/src/squeezetext-directive.js'
-
-				, config.bower.srcFolder + '/eb-language-loader/src/languageLoaderService.js'
-
-				, config.js.srcFolder + '/angular/directives/eventListLoaderDirective.js'
-				, config.js.srcFolder + '/angular/directives/picturefill-directive.js'
-
-				, config.js.srcFolder + '/angular/filters/momentFilter.js'
-				, config.js.srcFolder + '/angular/filterForm/filterFormDatesService.js'
-				, config.js.srcFolder + '/angular/filterForm/filterFormDataService.js'
-
-				, config.js.destFolder + '/time.js'
-
-
-				// Event specific
-				, config.js.srcFolder + '/angular/eventList/eventListController.js'
-
-
-				// Movie specific
-				, config.js.destFolder + '/video.js'
-
-				, config.js.srcFolder + '/angular/directives/geopositionButton.js'
-				, config.bower.srcFolder + '/jb-relation-input/src/jb-relation-input.js'
-
-				, config.js.srcFolder + '/angular/movieList/movieListController.js'
-				, config.js.srcFolder + '/angular/movieList/movieListDirective.js'
-				, config.js.srcFolder + '/angular/movieList/movieFlyoutDirective.js'
-
-				, config.js.srcFolder + '/angular/moviePlaytimes/moviePlaytimesDirective.js'
-
-				// Detail pages
-				, config.js.destFolder + '/detail.js'
-
-				// Movie Detail
-				, config.js.srcFolder + '/angular/movieDetail/movieDetailController.js'
-				, config.js.srcFolder + '/angular/directives/googleMapsDirective.js'
-
-				// Cinema Detail
-				, config.js.srcFolder + '/angular/cinemaDetail/cinemaDetailController.js'
-
-
-			]
-		}
-
-
-
-		// Minimal sites (terms, specials etc.) that only have
-		// - a user icon
-		// - a language menu
-		// They don't need no jquery
-		, {
-			dest		: 'minimal'
-			, src		: [
-
-				  config.bower.srcFolder + '/angular/angular.js'
-				, config.bower.srcFolder + '/jb-api-wrapper/src/apiWrapperService.js'
-
-				// user & language: see above
-				, config.js.destFolder + '/user-and-language.js'
-
-				, config.js.srcFolder + '/angular/base/defaultPage.js'
-			]
-
-		}
-
-
-
-
-		// Movie detail sites  (in addition to events-and-cinema)
-		// - cinema
-		// - movie
-		, {
-			dest		: 'movie-detail'
-			, src		: [
-				// Cinema stuff
-				config.bower.srcFolder + '/jb-relation-input/src/jb-relation-input.js'
-
-				, config.js.srcFolder + '/angular/movieDetail/movieDetailController.js'
-				, config.js.srcFolder + '/angular/cinemaDetail/cinemaDetailController.js'
-
-				// EventList for cinema and movie detail
-				, config.js.srcFolder + '/angular/directives/eventListLoaderDirective.js'
-
-				// FormDates (front and all movie sites)
-				, config.js.srcFolder + '/angular/filterForm/filterFormDatesService.js'
-				, config.js.srcFolder + '/angular/filterForm/filterFormDataService.js'
-
-				// GeoPosition (front and all movie sites)
-				, config.js.srcFolder + '/angular/directives/geopositionButton.js'
-				, config.js.srcFolder + '/angular/moviePlaytimes/moviePlaytimesDirective.js'
-
-			]
-		}
-
-
-
-		// Movie front page (in addition to events-and-cinema)
-		, {
-			dest			: 'movie-front'
-			, src			: [
-				// FormDates (front and all movie sites)
-				config.bower.srcFolder + '/jb-relation-input/src/jb-relation-input.js'
-				, config.js.srcFolder + '/angular/filterForm/filterFormDatesService.js'
-				, config.js.srcFolder + '/angular/filterForm/filterFormDataService.js'
-
-				// GeoPosition (front and all movie sites)
-				, config.js.srcFolder + '/angular/directives/geopositionButton.js'
-				, config.js.srcFolder + '/angular/moviePlaytimes/moviePlaytimesDirective.js'
-			]
-
-		}
-
-
-
-
-
-		// Checkout
-		, {
-			dest		: 'checkout'
-			, src		: [
-
-				config.js.destFolder + '/angular.js'
-
-
-				// Language stuff
-				, config.js.srcFolder + '/angular/base/languageParser.js'
-				, config.bower.srcFolder + '/eb-language-loader/src/languageLoaderService.js'
-
-
-				// Checkout
-				, config.js.srcFolder + '/angular/checkout/checkout.js'
-				, config.js.srcFolder + '/angular/checkout/checkoutController.js'
-				, config.js.srcFolder + '/angular/checkout/checkoutService.js'
-				, config.js.srcFolder + '/angular/checkout/checkoutRoutingIdTranslationService.js'
-
-				// Cart
-				, config.js.srcFolder + '/angular/checkout/checkoutCartService.js'
-				, config.js.srcFolder + '/angular/checkout/checkoutCartController.js'
-				, config.js.srcFolder + '/angular/cart/cartStoreService.js'
-
-				// Conditions
-				, config.js.srcFolder + '/angular/checkout/checkoutConditionsService.js'
-				, config.js.srcFolder + '/angular/checkout/checkoutStepController.js'
-				, config.js.srcFolder + '/angular/init/initController.js'
-
-				// User
-				, config.js.srcFolder + '/angular/user/userService.js'
-				, config.js.srcFolder + '/angular/user/loginController.js'
-				, config.js.srcFolder + '/angular/user/registerController.js'
-				, config.js.srcFolder + '/angular/user/recoverPasswordController.js'
-				, config.js.srcFolder + '/angular/user/passwordRecoveredController.js'
-
-				// Single steps
-				, config.js.srcFolder + '/angular/address/addressController.js'
-				, config.js.srcFolder + '/angular/binOptional/binOptionalController.js'
-				, config.js.srcFolder + '/angular/guests/guestsController.js'
-				, config.js.srcFolder + '/angular/payment/paymentController.js'
-				, config.js.srcFolder + '/angular/questions/questionsController.js'
-				, config.js.srcFolder + '/angular/lottery/lotteryController.js'
-				, config.js.srcFolder + '/angular/confirmOrder/confirmOrderController.js'
-				, config.js.srcFolder + '/angular/externalFulfillment/externalFulfillmentController.js'
-				, config.js.srcFolder + '/angular/checkout/checkoutAnalyticsService.js'
-
-				// Error
-				, config.js.srcFolder + '/angular/error/errorController.js'
-
-				// General directives
-				, config.js.srcFolder + '/angular/directives/errorMessageDirective.js'
-				, config.js.srcFolder + '/angular/directives/floatingLabelDirective.js'
-				, config.js.srcFolder + '/angular/directives/binDirective.js'
-				, config.js.srcFolder + '/angular/directives/dateSelectorDirective.js'
-				, config.js.srcFolder + '/angular/directives/autoRequireIndicatorDirective.js'
-				, config.js.srcFolder + '/angular/directives/autoFocusDirective.js'
-				, config.js.srcFolder + '/angular/directives/placeholderPolyfillDirective.js'
-
-				// Request Cornèrcard stuff
-				, config.bower.srcFolder + '/jquery-srcset/src/jquery.srcset.js'
-				, config.js.srcFolder + '/angular/orderCreditCard/orderCreditCardController.js'
-
-			]
-		}
-
-
-
 	];
-
-
-
 
 
 
 	var cssPaths = [
 
-		// IE9
-		{
-			dest				: 'ie9'
-			, src				: [
-				config.css.srcFolder + '/layout/ie9.less'
-			]
-		}
-
 		// All styles
 		, {
 			dest				: 'main'
 			, src				: [
-				config.css.srcFolder + '/main.less'
+				config.css.srcFolder + '/main.scss'
 			]
 		}
 
 	];
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -478,7 +97,7 @@
 
 				var path = jsPaths[ i ];
 
-				if( !path.dest || !path.src ) {
+				if( !path.dest || !path.src ) {
 					return;
 				}
 
@@ -595,46 +214,7 @@
 				return replaceSources( timeStamp );
 			} );*/
 
-	} );
-
-
-
-
-	/**
-	*
-	*/
-	/*function replaceSources( timeStamp ) {
-
-		console.error( timeStamp );
-
-		return gulp.src( 'templates/*.html' )
-			.pipe( debug() )
-			.pipe( replace( /<!--\s*min-js\s*:\s*([^(\s|(-->))]*)\s*-->/g, function( result, name ) {
-				return name.replace( /.js$/, '.min-' + timeStamp + '.js' );
-			} ) )
-			.pipe( gulp.dest( './test' ) );
-
-	}*/
-
-
-
-	/**
-	* Replaces all JS files with the min version of them.
-	*/
-	/*gulp.task( 'replaceSources', [ 'minifyScripts' ], function() {
-
-		return gulp.src( 'templates//.html' )
-			.pipe( debug() )
-			.pipe( htmlreplace( {
-				'base'
-			} ) );
-
-
-	} );*/
-
-
-
-
+	} );
 
 
 
@@ -649,7 +229,7 @@
 
 			.pipe( concat ( 'main.min.css' ) )
 			.pipe( sass().on('error', gutil.log) )
-			//.pipe( minifyCSS() )
+			.pipe( minifyCSS() )
 			.pipe( gulp.dest( config.css.destFolder ) );
 
 	} );
@@ -658,26 +238,17 @@
 
 
 
-
-
-
-
-
-
-
-
-
 	gulp.task( 'watch', function() {
 
-		gulp.watch( config.js.srcFolder + '/**/*.js', [ 'concatScripts' ] );
-		gulp.watch( config.bower.srcFolder + '/**/*.js', [ 'concatScripts' ] );
+		gulp.watch( config.js.srcFolder + '/**/*.js', [ 'concatScripts' ] );
+		gulp.watch( config.bower.srcFolder + '/**/*.js', [ 'concatScripts' ] );
 
 		gulp.watch( config.css.srcFolder + '/**/*.scss', [ 'minifyStyles' ] );
 
 	} );
 
 
-	// ONLY concatenates scripts – main method when developing JS, speeds shit up
+	// ONLY concatenates scripts – main method when developing JS, speeds shit up
 	gulp.task( 'devJS', [ 'concatScripts', 'watch' ] );
 
 	// ONLY concatenates styles
@@ -685,7 +256,7 @@
 
 
 
-	// LIVE – Done by GitHub pre-commit hook
+	// LIVE – Done by GitHub pre-commit hook
 	gulp.task( 'live', [ 'minifyScripts' ] );
 
 

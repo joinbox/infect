@@ -1,0 +1,44 @@
+main {
+  @include flexbox();
+}
+
+.filters {
+  @include flex(1 0 20%);
+  border-right: 1px solid #cccccc;
+
+  &-filter{
+    background-color: #f1f1cf;
+  }
+
+  &-bakterien {
+    border-bottom: 1px solid #ccc;
+    padding: 30px;
+    p {
+      color: #ccc
+    }
+
+    &__list-name-checkbox {
+      //padding-left: 20px;
+    }
+  }
+
+  &-antibiotika {
+    border-bottom: 1px solid #ccc;
+    padding: 30px;
+    p {
+      color: #ccc
+    }
+  }
+
+  &-diagnosen {
+    padding: 30px;
+    p {
+      color: #ccc
+    }
+  }
+
+}
+.content {
+  @include flex(1 0 80%);
+  padding-left: 10px;
+}

@@ -1,0 +1,37 @@
+//
+// Variables
+// --------------------------------------------------
+
+
+// Global values
+// --------------------------------------------------
+
+
+// Scaffolding
+// -------------------------
+
+$body-bg:                 rgb(255, 255, 255);
+$text-color:              rgb(0, 0, 0);
+$infekt-green:			      rgb(183, 185, 14);
+
+// Links
+// -------------------------
+
+$link-color:              rgb(0, 0, 0);
+
+
+// Typography
+// -------------------------
+
+$font-family-sans-serif:  open_sans, "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-weight-base:			  400;
+$font-family-base:        $font-family-sans-serif;
+
+$font-size-base:          14px;
+
+$line-height-base:        1.428571429; // 20/14
+$line-height-computed:    floor($font-size-base * $line-height-base); // ~20px
+
+$headings-font-family:    $font-family-base;
+$headings-font-weight:    400;
+$headings-line-height:    1.1;
