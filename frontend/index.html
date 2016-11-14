@@ -11,48 +11,14 @@
 
         <link rel="stylesheet" href="styles/css/styles.css" />
 
+	    <script src="dist/js/scripts.js"></script>
 
-
-		<!-- Vendor -->
-		<script src="js/bower_components/d3/d3.js"></script>
-		<script src="js/bower_components/zepto/zepto.js"></script>
-		<script src="js/bower_components/angular/angular.js"></script>
-		<script src="js/bower_components/fxstr-angular-typeahead/fxstr-angular-typeahead/typeaheadDirective.js"></script>
-		<script src="js/bower_components/angular-translate/angular-translate.js"></script>
-
-		<script src="js/plugins.js"></script>
-		<script src="js/matrix/resistency-matrix.js"></script>
-
-
-
-		<!-- Infect Angular Module -->
-		<!-- Base -->
-		<script src="js/angular/infekt/app.js"></script>
-
-		<!-- Factories -->
-		<script src="js/angular/infekt/translationFactory.js"></script>
-		<script src="js/angular/infekt/antibioticsFactory.js"></script>
-		<script src="js/angular/infekt/bacteriaFactory.js"></script>
-		<script src="js/angular/infekt/searchTableFactory.js"></script>
-		<script src="js/angular/infekt/resistanceFactory.js"></script>
-		<script src="js/angular/infekt/filterFactory.js"></script>
-
-		<!-- Controllers -->
-		<script src="js/angular/infekt/infektController.js"></script>
-
-		<!-- Directives -->
-		<!--<script src="js/angular/infekt/resistanceMatrixDirective.js"></script>-->
-		<script src="js/angular/infekt/resistanceMatrixComponent.js"></script>
-
-		<!-- Filters -->
-		<script src="js/angular/infekt/joinFilter.js"></script>
-
-
-
-		<!-- View stuff -->
-		<script src="js/main.js"></script>
 
 		<style>
+			resistance-matrix .active {
+				fill: tomato;
+				font-weight: bold;
+			}
 			svg	{
 				height: 100%;
 				width: 70%;
@@ -131,20 +97,15 @@
 
 	</header>
 	
-	<div class="informationBox">
-		
-		<p><b>Infect ist ein Produkt in sehr frühem Entwicklungsstadium.</b> Diese Seite dient lediglich zur Demonstration. Weder die Applikation noch die darin verwendeten Daten dürfen derzeit zur Behandlung von Patienten verwendet werden, für beide wird keinerlei Gewähr übernommen.</p>
-		
-		<button class="about-overlay-button">Mehr zu INFECT (in Englisch)</button>
-		
-	</div>
+
+	<legal-notice></legal-notice>	
 
 
 	<section id="content">
 
 		<section id="matrix">
 
-			<resistance-matrix resistances="resistances" bacteria="bacteria" antibiotics="antibiotics"></resistance-matrix>
+			<resistance-matrix resistances="resistances" bacteria="bacteria" antibiotics="antibiotics" filters="filters"></resistance-matrix>
 
 		</section>
 
@@ -194,7 +155,7 @@ This will allow the use of statistical algorithms, like automated outbreak detec
 
 <h4>Disclaimer</h4>
 <p>Although INFECT is intended to be used to guide and support an optimal empirical antimicrobial therapy, its use does not substitute a thorough investigation of patients’ signs and symptoms, or sound diagnostic and therapeutic reasoning. Although all data is routinely checked for correctness, there is always a possibility of error. Therefore, INFECT specifically DISCLAIMS LIABILITY FOR INCIDENTAL OR CONSEQUENTIAL DAMAGES and assumes no responsibility or liability for any loss or damage suffered by any person as a result of the use or misuse of any of the information or content on this website.</p>
-
+
 <h4>Team</h4>
 <p>The INFECT team consists of eight highly motivated members (alphabetical order):
 	<ul class="member-list">

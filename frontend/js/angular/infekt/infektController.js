@@ -6,6 +6,7 @@ infekt.controller( 'InfektController', [ '$scope', 'AntibioticsFactory', 'Bacter
 	$scope.antibiotics = [];
 	$scope.bacteria = [];
 	$scope.resistances = [];
+	$scope.filters = [];
 
 
 
@@ -130,7 +131,9 @@ infekt.controller( 'InfektController', [ '$scope', 'AntibioticsFactory', 'Bacter
 
 	// Handler that is called when an typeahead proposition is selected
 	$scope.selectHandlerCallback = function( item ) {
-		$scope.addFilter( item );
+		$scope.$apply(function() {
+			$scope.addFilter( item );
+		});
 	};
 
 
@@ -141,9 +144,20 @@ infekt.controller( 'InfektController', [ '$scope', 'AntibioticsFactory', 'Bacter
 	};
 
 
+	// Needed to watch filteres in resistanceMatrixComponent
+	$scope.filters = FilterFactory.filters;
+
 	$scope.getFilters = function( name ) {
 		return FilterFactory.getFilters( name );
 	};
+
+	// We must – somehow – manually set the filters in order that the
+	// filter change is seen in resistanceMatrixComponent
+	$scope.$watch('getFilters()', function(newFilter) {
+		console.log('infektController: Filters changed to %o', newFilter);
+		$scope.filters = JSON.parse(JSON.stringify(newFilter));
+	}, true);
+
 	
 	$scope.getFilterCount = function( name ) {
 		return FilterFactory.getFilterCount( name );

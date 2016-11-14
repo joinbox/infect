@@ -95,7 +95,9 @@ infekt.factory( 'ResistanceFactory', function( AntibioticsFactory, BacteriaFacto
 			res.push( {
 				bacterium		: bact
 				, antibiotic 	: ab
-				, value 		: resistance
+				// value		: resistance 
+				// Todo: replace with line above
+				, value 		: Math.random()
 				, type 			: resistanceType
 			} );
 
