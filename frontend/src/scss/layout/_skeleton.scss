@@ -73,7 +73,7 @@ header{
 }
 
 #logo *{
-	display:block;
+	display:inline;
 	margin:0 auto;
 	color:rgb(255, 255, 255);
 	font: normal 2.1rem/1 futura_ltbold, Arial, sans-serif;
@@ -81,7 +81,7 @@ header{
 }
 
 #logo-img{
-	display:block;
+	display:inline;;
 	width:50px;
 	margin-bottom:12px;
 }
