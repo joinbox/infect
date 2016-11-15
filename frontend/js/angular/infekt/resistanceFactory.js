@@ -92,12 +92,29 @@ infekt.factory( 'ResistanceFactory', function( AntibioticsFactory, BacteriaFacto
 
 			//console.error( "connect %o to %o with resistance %o (type %o)", bact.latinName, ab.name, resistance, resistanceType );
 
-			res.push( {
+			var entry ={
 				bacterium		: bact
 				, antibiotic 	: ab
-				, value 		: resistance
-				, type 			: resistanceType
-			} );
+			};
+
+			// TODO: REMOVE!
+			if (Math.random() < 0.3) {
+				var rand = Math.random();
+				entry.type = 'fallback';
+				entry.value = rand < 0.3 ? 1 : rand < 0.6 ? 2 : 3;
+			}
+
+			else {
+				entry.type = 'normal';
+				entry.value = Math.random();
+			}
+
+							// TODO: CHANGE!
+				//, value			: Math.random()
+				//, type 			: Math.random() < 0.5 ? 'fallback' : 'normal'
+
+
+			res.push(entry);
 
 			// Debug
 			/*if( bact.id === 33 ) {

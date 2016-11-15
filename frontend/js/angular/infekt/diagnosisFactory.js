@@ -68,7 +68,7 @@
 		*/
 		Diagnosis.prototype.parseServerData = function( diagnosisData, bacteriaData ) {
 
-			console.error( diagnosisData, bacteria );
+			//console.error( diagnosisData, bacteria );
 			var ret = [];
 
 			// Go through each diagnosis
@@ -94,7 +94,7 @@
 
 			} );
 
-			console.error( ret );
+			//console.error( ret );
 
 			return ret;
 		};

@@ -64,8 +64,47 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 					// 2: intermediate
 					// 3: high
 					// Only display H/L/I, but not values
-					if( resistance.type === 'classResistanceDefault' || resistance.type === 'resistanceDefault' ) {
+
+					if (!resistance.type) {
+						className = 'not-available';
+						cellValue = '&nbsp;';
+					}
+
+
+					// Fallback
+					else if (resistance.type === 'fallback') {
+						
+						switch( resistance.value ) {
+							case 1:
+								className = '0';
+								cellValue = 'L';
+								break;
+							case 2:
+								className = '5';
+								cellValue = 'I';
+								break;
+							case 3:
+								className = '10';
+								cellValue = 'H';
+								break;
+							default:
+								className = 'not-available';
+								cellValue = '&nbsp;';
+						}
+
+					}
+
+					else if (resistance.type === 'normal') {
+
+						cellValue = Math.floor(resistance.value * 100);
+						className = Math.round(resistance.value * 10);
+
+					}
+
+
+					/*else if( resistance.type === 'classResistanceDefault' || resistance.type === 'resistanceDefault' ) {
 						cellValue = '';
+
 						switch( resistance.value ) {
 							case 1: 
 								className = 'low';
@@ -82,24 +121,25 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 							default:
 								className = 'not-available';
 						}
-					}
+
+					}*/
 
 
 					// Type is missing: No data available.
 					// Don't display anything at all
-					else if( !resistance.type ) {
+					/*else if( !resistance.type ) {
 
 						className = 'not-available';
 						cellValue = '&nbsp;';
 
-					}
+					}*/
 
 
 					// Detailed values: numbers betwee 0 and 1, 
 					// < 0.33: low
 					// < 0.66: intermediate
 					// < 1: high
-					else {
+					/*else {
 
 						//console.error( resistance );
 	
@@ -127,9 +167,9 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 						//console.error( cellValue );
 
-					}
+					}*/
 
-					table.push( "<td data-resistance-type=\'" + resistance.type + "\' data-resistance-value=\'" +  resistance.value + "\' class='animated resistance-" + className + "'>" + cellValue + "</td>" );
+					table.push( "<td data-resistance-type=\'" + resistance.type + "\' data-resistance-value=\'" +  cellValue + "\' class='animated resistance-" + className + "'>" + cellValue + "</td>" );
 
 				}
 
@@ -283,7 +323,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			td
 				// Store original text (for mouseleave)
 				.data( 'originalText', td.text() )
-				.text( value );
+				.text( value + '%' );
 
 		}
 
@@ -328,8 +368,8 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			// Add bacteria from diagnosis filter to filters (bacteria)
 			var diagnoisisFilters = FilterFactory.getFilters( 'diagnosis' );
 
-			console.error( 'resistanceMatrixDirective: Bacteria filters: %o', filters );
-			console.error( 'resistanceMatrixDirective: Diagnosis filters: %o', diagnoisisFilters );
+			//console.error( 'resistanceMatrixDirective: Bacteria filters: %o', filters );
+			//console.error( 'resistanceMatrixDirective: Diagnosis filters: %o', diagnoisisFilters );
 
 			// Loop through all bacteria – they need to have the same order that was used to create the table;
 			// If they don't match filter, hide them. Else show them.
