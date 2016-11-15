@@ -43,12 +43,12 @@
 		* @param {String} fieldName			Values are passed in an object; name of the key that holds the
 		*									data which should be displayed in table.
 		*/
-		updateData(data, keyName) {
+		updateData(data, keyName, dontUpdateScale) {
 
 			this._data = data;
-			console.log('ResistencyMatrix / updateData: Update data to %o', data);
+			console.log('ResistencyMatrix / updateData: Update scale? %o. Update data to %o', !dontUpdateScale, data);
 			this._keyName = keyName;
-			if (this._container && this._data) this.drawMatrix();
+			if (this._container && this._data) this.drawMatrix(dontUpdateScale);
 
 		}
 
@@ -58,16 +58,21 @@
 		/**
 		* Main method. Draws the matrix with data and container provided.
 		*/
-		drawMatrix() {
+		drawMatrix(dontUpdateScale) {
 
 			// Get row scale
-			this._columnScale = this._createColumnScale();
-			this._colorScale = this._createColorScale();
+			if (!dontUpdateScale) {
+				this._columnScale = this._createColumnScale();
+				this._colorScale = this._createColorScale();
+			}
 
-			this._elements.rows = this._drawRows( this._columnScale.bandwidth() );
-			this._elements.columns = this._drawColumnHeads();
+			this._drawRows(this._columnScale.bandwidth());
+			this._drawColumnHeads();
 
-			this._updateColumnScale();
+			if (!dontUpdateScale) {
+				this._updateColumnScale();
+			}
+
 			this._updatePositionsAndSizes();
 
 		}
@@ -88,19 +93,24 @@
 			// g
 			const rows = this._elements.svg
 				.selectAll('.row')
-				.data(Object.entries(this._data))
+				// http://stackoverflow.com/questions/22240842/d3-update-on-node-removal-always-remove-the-last-entry-in-svg-dom
+				.data(this._data, (bacterium) => bacterium.id);
+
+			const enteredRows = rows
 				.enter()
 					.append('g')
-						.attr('class', 'row')
-						.attr('transform', (d, i) => `translate(0, ${i * rowHeight})`)
-						// Cannot use arrow functions as we need this
-						.each(function(row) {
-							self._drawCell( this, row, rowHeight );
-						});
+					.attr('class', 'row')
+					.attr('transform', (d, i) => `translate(0, ${i * rowHeight})`)
+					// Cannot use arrow functions as we need this
+					.each(function(row) {
+						self._drawCell(this, row, rowHeight);
+					});
 
+			self._createSingleRowLabel(enteredRows);
 
-			this._createSingleRowLabel(rows);
-			return rows;
+			rows
+				.exit()
+				.remove();
 
 		}
 
@@ -125,8 +135,8 @@
 				.append('text')
 				.attr('class', 'label')
 				.attr('text-anchor', 'end')
-				.text((d, i) => {
-					return d[0];
+				.text((d) => {
+					return d.bacterium.latinName;
 				});
 		}
 
@@ -147,7 +157,8 @@
 		*/
 		_createColumnScale() {
 
-			const data = Object.keys(Object.values(this._data)[0]);
+			const data = this._data[0].antibiotics.map((item) => item.antibiotic.name);
+			console.log('ResistencyMatrix: Data for column scale (len %o) is %o', data.length, data);
 			return d3.scaleBand()
 				.domain(data)
 				// -50: We turn the col labels by 45°, this takes a bit of space
@@ -167,8 +178,7 @@
 				//const lightness = 0.5;
 				// Hue needs values between 40 and 90
 				const hue = t * 100;
-				//console.warn
-				(t.toFixed(3), hue.toFixed(3), saturation.toFixed(3), lightness.toFixed(3));
+				//console.warn(t.toFixed(3), hue.toFixed(3), saturation.toFixed(3), lightness.toFixed(3));
 				const hsl = d3.hsl(hue, saturation, lightness);
 				return hsl.toString();
 			});
@@ -182,12 +192,13 @@
 		_updateColumnScale() {
 
 			// Remove amount of entries so that we can insert a line of 1 px
-			const amountOfDataSets = Object.values(Object.values(this._data)[0]).length - 1;
+			const amountOfDataSets = this._elements.svg.selectAll('.column').size();
 			const width = this._getSvgWidth() - 50 - this._getMaxRowLabelWidth() - this._configuration.spaceBetweenLabelsAndMatrix - amountOfDataSets * this._configuration.lineWeight;
-			console.log( 'ResistencyMatrix / _updateColumnScale: Col # is %o, svg width is %o, width column content is %o', amountOfDataSets, this._getSvgWidth(), width );
+			console.log('ResistencyMatrix / _updateColumnScale: Col # is %o, svg width is %o, width column content is %o', amountOfDataSets, this._getSvgWidth(), width);
 
 			// Update scale
 			this._columnScale.range([0, width]);
+			console.log('ResistencyMatrix: New bandwidth is %o, step is %o', this._columnScale.bandwidth(), this._columnScale.step());
 
 		}
 
@@ -196,10 +207,11 @@
 		* Returns width of widest row label
 		*/
 		_getMaxRowLabelWidth() {
-			if (!this._elements.rows) return 0;
+
+			if (!this._elements.svg.selectAll('.row')) return 0;
 
 			let maxRowLabelWidth = 0;
-			this._elements.rows.select('.label').each(function(){
+			this._elements.svg.selectAll('.row').select('.label').each(function(){
 				const width = this.getBBox().width;
 				if (width > maxRowLabelWidth) maxRowLabelWidth = width;
 			});
@@ -213,7 +225,7 @@
 		*/
 		_getMaxColumnLabelHeight() {
 			let maxColLabelHeight = 0;
-			this._elements.columns.select('.label').each(function() {
+			this._elements.svg.selectAll('.column').select('.label').each(function() {
 				const height = this.getBBox().width;
 				if (height > maxColLabelHeight) maxColLabelHeight = height;
 			});
@@ -239,7 +251,8 @@
 			console.log('ResistencyMatrix / _updatePositionsAndSizes: maxRowLabelWidth', maxRowLabelWidth, 'collabelheight', maxColLabelHeight, 'bandWidth', bandWidth);
 
 			// Update rows
-			this._elements.rows
+			this._elements.svg
+				.selectAll('.row')
 				.each(function(d,i){
 					d3.select(this)
 						.attr('height', bandWidth)
@@ -248,7 +261,8 @@
 
 
 			// Update cell's rectangles
-			this._elements.rows
+			this._elements.svg
+				.selectAll('.row')
 				.selectAll('.cell')
 				.each(function(d, i) {
 					self._alignCell(this, Math.floor(self._columnScale.bandwidth()), i, Math.floor(maxRowLabelWidth + self._configuration.spaceBetweenLabelsAndMatrix), self._configuration.lineWeight);
@@ -259,7 +273,9 @@
 				});
 
 			// Update cols
-			this._elements.columns
+			//this._elements.columns
+			this._elements.svg
+				.selectAll('.column')
 				.each(function(d,i) {
 					// step / 2: Make sure we're kinda centered over the col
 					const left = i * (Math.floor(step) + self._configuration.lineWeight) + maxRowLabelWidth + self._configuration.spaceBetweenLabelsAndMatrix + step / 2;
@@ -268,7 +284,8 @@
 				});
 
 			// Update label's x position
-			this._elements.rows
+			this._elements.svg
+				.selectAll('.row')
 				.select('.label')
 				.attr('x', maxRowLabelWidth)
 				.each(function() {
@@ -277,9 +294,9 @@
 				});
 
 			// Update col label's y position
-			this._elements.columns
-				.select('.label')
-				.attr('transform', 'rotate(-45)');
+			//this._elements.columns
+			//	.select('.label')
+			//	.attr('transform', 'rotate(-45)');
 
 			// Update svg height
 			const amountOfCols = ( Object.keys(this._data).length )
@@ -316,27 +333,33 @@
 		_drawColumnHeads() {
 
 			// Get headers from data (keys of first array item)
-			const firstRow = Object.values(this._data)[0];
-			const headers = Object.keys(firstRow);
+			const headers = this._data[0].antibiotics.map((col) => col.antibiotic);
 			console.log('ResistencyMatrix / _drawColumnHeads: Headers are %o', headers);
 
 			// <g> and transform
 			const colHeads = this._elements.svg
 				.selectAll('.column')
-				.data(headers)
+				.data(headers, (col) => {
+					return col.id;
+				});
+
+			// Draw heads, consisting of <g> with contained <text>
+			colHeads
 				.enter()
 					.append('g')
 					// translation will be done in this.updatePositionsAndSizes
-					.attr('class', 'column');
+					.attr('class', 'column')
+					.append('text')
+						.attr('class', 'label')
+						.attr('text-anchor', 'start')
+						.attr('transform', 'rotate(-45)')
+						.text(d => d.name);
+
 
 			// Text
 			colHeads
-				.append('text')
-				.attr('class', 'label')
-				.attr('text-anchor', 'start')
-				.text(d => d);
-
-			return colHeads;
+				.exit()
+				.remove();
 
 		}
 
@@ -350,38 +373,49 @@
 			const self = this;
 
 			// Remove 'name' property on row object
-			const filteredData = Object.values(rowData[1])
-					.filter((entry) =>  entry.key !== 'name')
-					.map((entry) => entry.value);
+			const filteredData = rowData.antibiotics;
 
 			// <g>
 			const cells = d3.select(rowElement)
 				.selectAll('.cell')
-				.data(filteredData)
-				.enter()
-					.append('g')
-					.attr('class', 'cell');
+				.data(filteredData, (col) => {
+					//console.error(col.antibiotic.id);
+					return col.antibiotic.id;
+				});
 
-			// Rect
-			cells.each(function(d) {
-				d3.select(this)
-					.append('rect')
-					.style('fill', d ? self._colorScale(d) : '#fff')
-					.style('stroke', d === null ? '#dedede' : '')
-					.style('stroke-width', d === null ? 1 : 0)
-					// Set size of rect
-					.each(function() {
-						self._resizeCell(this,dimensions);
-					})
-					.on('mouseenter', function(d) {
-						const element = this;
-						self._mouseOverHandler.call(self, element, d);
-					})
-					.on('mouseleave', function() {
-						const element = this;
-						self._mouseOutHandler.call(self, element);
-					});
-			});
+			cells
+				.enter()
+				.append('g')
+				.attr('class', 'cell')
+				// Rect
+				.each(function(d) {
+					d3.select(this)
+						.append('rect')
+						.style('fill', d ? self._colorScale(d.value) : '#fff')
+						.style('stroke', d.value === null ? '#dedede' : '')
+						.style('stroke-width', d.value === null ? 1 : 0)
+						// Set size of rect
+						.each(function() {
+							self._resizeCell(this,dimensions);
+						})
+						.on('mouseenter', function(d) {
+							const element = this;
+							self._mouseOverHandler.call(self, element, d);
+						})
+						.on('mouseleave', function() {
+							const element = this;
+							self._mouseOutHandler.call(self, element);
+						});
+				});
+
+
+			cells
+				.exit()
+				.each(function(d, i) {
+					console.error(this, d, i);
+				})
+				.remove();
+
 
 			return cells;
 
@@ -430,8 +464,9 @@
 
 			// Data not available: Cell has no value. There's no 
 			// hover effect for empty cells.
-			if (!data) return;
+			if (!data.value) return;
 
+			// Map svg's DOM element to svg
 			let svg;
 			this._elements.svg.each(function() { svg = this; });
 
@@ -447,16 +482,17 @@
 				.append('rect')
 				.attr('x', x - 20)
 				.attr('y', y - 20)
+				.attr('class', 'hover-cell')
 				.style('fill', element.style.fill)
 				.style('pointer-events', 'none')
 				.attr('height', height)
 				.attr('width', width)
-				.style('pointer-events', 'none')
-				.style('opacity', 0.9);
+				.style('pointer-events', 'none');
+				//.style('opacity', 0.9);
 			
 			this._mouseOverRect
 				.append('text')
-				.text(data.toFixed(2))
+				.text(data.value.toFixed(2))
 				.style('color', 'black')
 				.style('font-size', '20px')
 				.style('text-align', 'center')
@@ -464,10 +500,13 @@
 				.attr('x', x - 10)
 				.attr('y', y + 20);
 
-			this._mouseOverRect.select('text').each(function() {
+			/*this._mouseOverRect.select('text').each(function() {
 				//const bbox = this.getBBox();
 			});
-			//console.error(this._mouseOverRect, this._mouseOverRect.querySelector('text').getBBox());
+			
+			this._mouseOverRect.each(function() {
+				console.error(this.querySelector('rect'));
+			});*/
 
 			// Highlight row
 			const row = this._getParentElement(element, '.row');
@@ -476,7 +515,7 @@
 			// Highlight col
 			const cell = this._getParentElement(element, '.cell');
 			const colIndex = this._getChildNodeIndex(cell, '.cell');
-			const currentCol = this._elements.columns.filter((d,i) => i === colIndex);
+			const currentCol = this._elements.svg.selectAll('.column').filter((d,i) => i === colIndex);
 			currentCol.classed('active', true);
 
 		}
@@ -485,8 +524,8 @@
 
 			if (this._mouseOverRect) this._mouseOverRect.remove();
 
-			this._elements.rows.classed('active', false);
-			this._elements.columns.classed('active', false);
+			this._elements.svg.selectAll('.row').classed('active', false);
+			this._elements.svg.selectAll('.column').classed('active', false);
 
 		}
 

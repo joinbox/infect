@@ -25,6 +25,7 @@
 			// Upgrade data to have the format that ResistencyMatrix requires
 			// Ignore empty data
 			if ((changesObj.resistances || changesObj.bacteria || changesObj.antibiotics) && (this.antibiotics && this.bacteria && this.resistances) && (this.antibiotics.length && this.bacteria.length && this.resistances.length)) {
+				// Let's assume this is the initial rendering and won't be called afterwards
 				this._handleDataUpdate(this.antibiotics, this.bacteria, this.resistances);
 			}
 
@@ -109,13 +110,20 @@
 				console.log('ResistanceMatrixController / $onChanges: intermediateData is %o', intermediateData);
 
 				// Conversion 2
-				const internalData = this._prepareMatrixForComponent(intermediateData);
-				console.log('ResistanceMatrixController / $onChanges: internalData is %o', internalData);
+				//const internalData = this._prepareMatrixForComponent(intermediateData);
+				//console.log('ResistanceMatrixController / $onChanges: internalData is %o', internalData);
+				const internalData = intermediateData;
 
-				// Draw matrix
-				this.$element.empty();
-				const matrix = new infect.ResistencyMatrix(this.$element[0]);
-				matrix.updateData(internalData, 'value');
+				let dontUpdateScale = true;
+
+				// Draw matrix, because it has not yet been initialized
+				// Afterwards only update data and don't change scale
+				if (!this._matrix) {
+					this.$element.empty();
+					this._matrix = new infect.ResistencyMatrix(this.$element[0]);
+					dontUpdateScale = false;
+				}
+				this._matrix.updateData(internalData, 'value', dontUpdateScale);
 
 		}
 
@@ -139,7 +147,7 @@
 		_remodelMatrix(bacteria, antibiotics, resistances) {
 
 			// Map with key: bacterium, value: Map with key: antibiotic, value: reistance
-			const remodeled = new Map();
+			const remodeled = [];
 
 			// Sort antibiotics (as they will be re-used when creating the cols)
 			const sortedAntibiotics = antibiotics
@@ -147,59 +155,39 @@
 
 			// Create rows (bacteria) with cols (antibiotics)
 			bacteria
-				.sort((a, b) => a.name < b.name ? -1 : 1 )
+				.sort((a, b) => a.latinName < b.latinName ? -1 : 1 )
 				.forEach((bacterium) => {
-					const map = new Map();
+					const row = [];
 					sortedAntibiotics.forEach((antibiotic) => {
-						map.set(antibiotic, null); // null is the default resistance
+						row.push({
+							antibiotic		: antibiotic
+							// null is the default resistance
+							, value			: null
+						});
 					});				
-					remodeled.set(bacterium, map);
+					remodeled.push({
+						bacterium			: bacterium
+						, antibiotics		: row
+					});
 				});
 
-			// Set resistances on the remodeled row
+
+			// Write resistance on value property of the mapping between antibiotic and bacterium
 			resistances.forEach((resistance) => {
-				// We must find the key by its ID as we're working on pseudo-immutable data
-				const matchedBacteriumKey = Array.from(remodeled.keys()).find((bacterium) => bacterium.id === resistance.bacterium.id);
-				if (!matchedBacteriumKey) return;
-				const matchedBacterium = remodeled.get(matchedBacteriumKey);
-				const antibioticKey = Array.from(matchedBacterium.keys()).find((antibiotic) => antibiotic.id === resistance.antibiotic.id);
-				if (!antibioticKey) return;
-				matchedBacterium.set(antibioticKey, resistance.value);
-				//if (bacterium) bacterium.set(resistance.antibiotic, resistance.value);
+
+				// Get bacterium
+				const bacterium = remodeled.find((row) => row.bacterium === resistance.bacterium);
+				if (!bacterium) return;
+
+				const antibiotic = bacterium.antibiotics.find((col) => col.antibiotic === resistance.antibiotic);
+				if (!antibiotic) return;
+
+				antibiotic.value = resistance.value;
+
 			});
 
 			return remodeled;
 
-		}
-
-
-
-		/**
-		* Takes the matrx returned by _remodelMatrix, prepares it to be used with 
-		* ResistencyMatrix, i.e.
-		* {
-		* 	bact1Name		: {
-		*		ab1Name		: {data}
-		*		, ab2Name	: {data}
-		* }, {
-		* 	bact2Name		: {
-		*		ab1Name		: {data}
-		*		, ab2Name	: {data}
-		*	}
-		* }
-		*
-		* where {data} at least contains a value (0-1)
-		*/
-		_prepareMatrixForComponent(data) {
-			const ret = {};
-			data.forEach((rowValue, rowKey) => {
-				const col = {};
-				rowValue.forEach((colValue, colKey) => {
-					col[colKey.name] = { value: colValue };
-				});
-				ret[rowKey.latinName] = col;
-			});
-			return ret;
 		}
 
 	}
