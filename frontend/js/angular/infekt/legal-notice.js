@@ -63,7 +63,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	}();
 
 	angular.module('infekt').component('legalNotice', {
-		template: '<div class="informationBox" ng-hide="$ctrl.hidden">\n\t\t\t\t\t\t\t\t\t<p><b>Infect ist ein Produkt in sehr fr\xFChem Entwicklungsstadium.</b> Diese Seite dient lediglich zur Demonstration. Weder die Applikation noch die darin verwendeten Daten d\xFCrfen derzeit zur Behandlung von Patienten verwendet werden, f\xFCr beide wird keinerlei Gew\xE4hr \xFCbernommen.</p>\n\t\t\t\t\t\t\t\t\t<button class="about-overlay-button">Mehr zu INFECT (in Englisch)</button>\n\t\t\t\t\t\t\t\t\t<button class="" ng-click="$ctrl.hide()">&times;</button>\n\t\t\t\t\t\t\t\t</div>',
+		template: '<div class="informationBox" ng-hide="$ctrl.hidden">\n\t\t\t\t\t\t\t\t\t<p><b>Infect ist ein Produkt in sehr fr\xFChem Entwicklungsstadium.</b> Diese Seite dient lediglich zur Demonstration. Weder die Applikation noch die darin verwendeten Daten d\xFCrfen derzeit zur Behandlung von Patienten verwendet werden, f\xFCr beide wird keinerlei Gew\xE4hr \xFCbernommen.</p>\n\t\t\t\t\t\t\t\t\t<button class="about-overlay-button">Mehr zu INFECT (in Englisch)</button>\n\t\t\t\t\t\t\t\t\t<button class="button -close" ng-click="$ctrl.hide()">&times;</button>\n\t\t\t\t\t\t\t\t</div>',
 		controller: LegalNoticeController
 	});
 })();
