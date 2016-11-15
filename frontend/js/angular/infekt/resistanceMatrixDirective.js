@@ -72,7 +72,7 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 
 					// Fallback
-					else if (resistance.type === 'fallback') {
+					else if (resistance.type === 'resistanceUser') {
 						
 						switch( resistance.value ) {
 							case 1:
@@ -94,10 +94,10 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 
 					}
 
-					else if (resistance.type === 'normal') {
+					else if (resistance.type === 'resistanceImport') {
 
-						cellValue = Math.floor(resistance.value * 100);
-						className = Math.round(resistance.value * 10);
+						cellValue = Math.round(resistance.value);
+						className = Math.round(resistance.value / 10);
 
 					}
 
@@ -316,14 +316,22 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 			//console.error( '%o - %o', type, value );
 
 			// Type is (class)ResistanceDefault: Don't display numbers
-			if( type === 'classResistanceDefault' || type === 'resistanceDefault' || type === 'undefined' ) {
+			/*if( type === 'classResistanceDefault' || type === 'resistanceDefault' || type === 'undefined' ) {
 				return;
-			}
+			}*/
+
+			if (!type) return;
 
 			td
 				// Store original text (for mouseleave)
-				.data( 'originalText', td.text() )
-				.text( value + '%' );
+				.data( 'originalText', td.text() );
+
+			if (type === 'resistanceUser') {
+				td.text(value);
+			}
+			else if (type === 'resistanceImport') {
+				td.text(value + '%');
+			}
 
 		}
 
@@ -334,7 +342,8 @@ infekt.directive( "resistanceMatrix", function( $compile, FilterFactory ) {
 		function displayRegularValue( td ) {
 			if( td.data( 'originalText' ) ) {
 				td.text( td.data( 'originalText' ) );
-				td.removeData( 'originalText' );
+				//td.removeData( 'originalText' );
+				td.get(0).removeAttribute('data-original-text');
 			}
 		}
 
