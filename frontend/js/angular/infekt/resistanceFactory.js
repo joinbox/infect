@@ -52,7 +52,7 @@ infekt.factory( 'ResistanceFactory', function( AntibioticsFactory, BacteriaFacto
 		console.log( "Parse resistances" );
 
 		// debug
-		window.resistances = data;
+		//window.resistances = data;
 
 		var res = [];
 
@@ -66,7 +66,7 @@ infekt.factory( 'ResistanceFactory', function( AntibioticsFactory, BacteriaFacto
 				, ab 				= AntibioticsFactory.getById( abId )
 				, resistance		= data.resistanceImport
 				, resistanceType
-				, resistanceOrder 	= [ 'resistanceImport', 'resistanceUser', 'classResistanceUser', 'classResistanceDefault', 'resistanceDefault' ]; // classResistanceDefault and resistanceDefault: Don't display number
+				, resistanceOrder 	= [ 'resistanceImport', 'resistanceUser' ];//, 'classResistanceUser', 'classResistanceDefault', 'resistanceDefault' ]; // classResistanceDefault and resistanceDefault: Don't display number
 
 			/*if( bact.id === 33 ) {
 				console.error( data[ i ] );
@@ -97,7 +97,7 @@ infekt.factory( 'ResistanceFactory', function( AntibioticsFactory, BacteriaFacto
 				, antibiotic 	: ab
 				// value		: resistance 
 				// Todo: replace with line above
-				, value 		: Math.random()
+				, value 		: Math.random() * 100
 				, type 			: resistanceType
 			} );
 

@@ -106,10 +106,21 @@
 						self._drawCell(this, row, rowHeight);
 					});
 
+			enteredRows
+				.enter()
+				.append('text')
+				.each(() => {
+					console.error('remove row');
+				})
+				.text('test');
+
 			self._createSingleRowLabel(enteredRows);
 
 			rows
 				.exit()
+				.each(() => {
+					console.error('rm rw');
+				})
 				.remove();
 
 		}
@@ -359,6 +370,9 @@
 			// Text
 			colHeads
 				.exit()
+				.each(() => {
+					console.error('rm cl hd');
+				})
 				.remove();
 
 		}
@@ -374,6 +388,7 @@
 
 			// Remove 'name' property on row object
 			const filteredData = rowData.antibiotics;
+			//console.error('drawCell: %o', filteredData);
 
 			// <g>
 			const cells = d3.select(rowElement)
@@ -411,13 +426,11 @@
 
 			cells
 				.exit()
-				.each(function(d, i) {
-					console.error(this, d, i);
+				.each(() => {
+					console.error('rm cell');
 				})
 				.remove();
 
-
-			return cells;
 
 		}
 

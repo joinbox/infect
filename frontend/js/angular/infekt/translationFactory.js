@@ -31,8 +31,8 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		aerobic 		:  {
 			name 		: "Aerob"
 			, values 	: {
-				1 		: "Aerob"
-				, 0 	: "Nicht aerob"
+				true 		: "Aerob"
+				, false 	: "Nicht aerob"
 			}
 		}
 
@@ -40,8 +40,8 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		, anaerobic 	: {
 			name 		: "Anaerob"
 			, values 	: {
-				1 		: "Anaerob"
-				, 0 	: "Nicht anaerob"
+				true 		: "Anaerob"
+				, false 	: "Nicht anaerob"
 			}
 		}
 
@@ -56,8 +56,8 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		, gram 			: {
 			name 		: "Gram"
 			, values 	: {
-				1 		: "Gram+"
-				, 0 	: "Gram-"
+				true		: "Gram+"
+				, false		: "Gram-"
 			}
 		}
 
@@ -72,8 +72,8 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		, iv			: {
 			name  		: "Intravenös"
 			, values 	: {
-				1 		: "Ja"
-				, 0 	: "Nein"
+				true 		: "Intravenös"
+				, false 	: "Nicht intravenös"
 			}
 		}
 
@@ -90,8 +90,8 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		, po  			: {
 			name 		: "Per oss"
 			, values 	: {
-				1 		: "Ja"
-				, 0 	: "Nein"
+				true 		: "Ja"
+				, false 	: "Nein"
 			}
 		}
 
@@ -164,7 +164,6 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 	// Takes an object and a name (of a property) of this object that is to be translated;
 	// returns the translated form of it
 	factory.translate = function( object, propertyName, propertyValue ) {
-
 
 		// Prefill returned object; take over name and
 		// get default value of object
