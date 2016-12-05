@@ -110,7 +110,7 @@
 				.enter()
 				.append('text')
 				.each(() => {
-					console.error('remove row');
+					console.error('create row');
 				})
 				.text('test');
 
@@ -119,7 +119,7 @@
 			rows
 				.exit()
 				.each(() => {
-					console.error('rm rw');
+					console.error('rm rw', this);
 				})
 				.remove();
 
@@ -381,7 +381,7 @@
 		/**
 		* Draws a single resistency cell
 		*/
-		_drawCell( rowElement, rowData, dimensions ) {
+		_drawCell(rowElement, rowData, dimensions) {
 
 			//console.log( 'ResistencyMatrix / _drawCell: row %o, data %o, dimensions %o', rowElement, rowData, dimensions );
 			const self = this;

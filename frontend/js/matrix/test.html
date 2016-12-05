@@ -3,7 +3,7 @@
 <head>
 	<title></title>
 	<script src="https://d3js.org/d3.v4.js"></script>
-	<script src="resistency-matrix.es2015.js"></script>
+	<script src="resistance-matrix.es2015.js"></script>
 </head>
 <body>
 
@@ -22,8 +22,14 @@
 			font-family: Helvetica;
 		}
 
-		svg .active text{
+		svg .active .column-label,
+		svg .active .row-label {
 			fill: tomato;
+			font-weight: bold;
+		}
+
+		.cell-label {
+			font-size: 0.5em;
 		}
 
 	</style>
@@ -32,7 +38,7 @@
 
 		/* global document, infect */
 
-		var resistencyMatrix;
+		var resistanceMatrix;
 
 		function generateData() {
 
@@ -67,7 +73,8 @@
 					if (Math.random() < 0.1) value = null;
 					row.push( {
 						antibiotic		: ab
-						, value			: value	
+						, colorValue	: value	
+						, labelValue	: value
 					});
 				});
 
@@ -85,23 +92,41 @@
 
 		const data = generateData();
 
-		resistencyMatrix = new infect.ResistencyMatrix(document.querySelector('.matrix'));
-		resistencyMatrix.updateData(data, 'value');
+		resistanceMatrix = new infect.ResistanceMatrix(document.querySelector('.matrix'), data, {
+			columnHeaderTransformer				: (data) => {
+					return data[0].antibiotics.map((item) => item);
+				}
+			, columnLabelValue					: (item) => item.antibiotic.name
+			, columnHeaderIdentifier			: (item) => item.antibiotic.id
+			, rowDataTransformer				: (item) => item.antibiotics
+			, rowIdentifier						: (item) => item.bacterium.id
+			, colorValue						: (item) => item.colorValue
+			, cellLabelValue					: (item) => item.labelValue === null ? '' : item.labelValue.toFixed(2) + 'l'
+			, rowLabelValue						: (item) => item.bacterium.latinName
+			, rowHidden							: (item) => item.bacterium.hidden
+		});
 
 		document.body.addEventListener('keydown', (ev) => {
 
 			if (ev.code === 'KeyR') {
-				const index = Math.floor(Math.random() * data.length);
-				data.splice(index, 1);
-				resistencyMatrix.updateData(data, 'value', true);
-			}
-			if (ev.code === 'KeyC') {
-				const spliceIndex = Math.floor(Math.random() * data[0].antibiotics.length);
-				console.error('remove col %o', spliceIndex);
-				data.forEach((ab) => {
-					const rm = ab.antibiotics.splice(spliceIndex, 1);
+				let cols = Array.from(new Array(Math.floor(Math.random() * 10 )));
+				cols = cols.map(() => Math.floor(Math.random() * data[0].antibiotics.length));
+				console.log('Remove rows %o', cols);
+				data.forEach((row) => {
+					row.antibiotics.forEach((ab) => ab.hidden = false);
+					cols.forEach((col) => {
+						row.antibiotics[col].hidden = true;
+					});
 				});
-				resistencyMatrix.updateData(data, 'value', true);
+				resistanceMatrix.updateData(data, true);
+			}
+
+			if (ev.code === 'KeyC') {
+				data.forEach((datum) => {
+					datum.bacterium.hidden = (Math.random() < 0.3) ? true : false;
+				});
+				console.error('removed col %o, data is now %o', data);
+				resistanceMatrix.updateData(data, true);
 			}
 
 		});

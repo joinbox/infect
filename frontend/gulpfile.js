@@ -53,7 +53,7 @@
 
 		// Plugins
 		, 'js/plugins.js'
-		, 'js/matrix/resistency-matrix.js'
+		, 'js/matrix/resistance-matrix.js'
 
 		// App
 		, 'js/angular/infekt/app.js'
@@ -88,10 +88,10 @@
 		return gulp.src('**/*.es2015.js')
 			.pipe(debug())
 			.pipe(sourcemap.init())
-				.pipe(babel({
-					presets: ['es2015']
-				}))
-			.pipe(sourcemap.write())
+			.pipe(babel({
+				presets: ['es2015']
+			}))
+			.pipe(sourcemap.write('.'))
 			.pipe(rename((path) => {
 				path.basename = path.basename.replace( /\.es2015/, '' );
 			}))
@@ -110,16 +110,19 @@
 			.pipe(sourcemap.init())
 				.pipe(concat('scripts.js'))
 				//.pipe(uglify())
-			.pipe(sourcemap.write())
+			.pipe(sourcemap.write('.'))
 			//.pipe(gutil.beep())
 			.pipe(gulp.dest('dist/js'));
 
 	});
 
-	gulp.task('scripts', runSequence('babel', 'mergeScripts'));
+
+	gulp.task('scripts', () => {
+		return runSequence('babel', 'mergeScripts');
+	});
 
 
-
+	// USE THIS FOR JS DEV!
 	gulp.task('watchScripts', ['scripts'], () => {
 		gulp.watch('**/*.es2015.js', ['babel']);		
 		gulp.watch('**/*[^es2015].js', ['mergeScripts']);
@@ -148,7 +151,7 @@
 
 	gulp.task( 'watch', function() {
 
-		gulp.watch( config.js.srcFolder + '/**/*.js', [ 'concatScripts' ] );
+		//gulp.watch( config.js.srcFolder + '/**/*.js', [ 'concatScripts' ] );
 		gulp.watch( config.bower.srcFolder + '/**/*.js', [ 'concatScripts' ] );
 
 		gulp.watch( config.css.srcFolder + '/**/*.scss', [ 'minifyStyles' ] );

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://d3js.org/d3.v4.js"></script>
+</head>
+<body>
+
+<script>
+/* global d3*/
+
+// Update…
+function update(data) {
+
+	var p = d3.select("body")
+	  .selectAll("p")
+	  .data(data, (d) => d)
+	    .text(function(d) { return d; })
+	    .each(function() {
+	    	console.log('update');
+	    });
+
+	// Enter…
+	p.enter().append("p")
+	    .text(function(d) { return d; })
+	    .each(function() {
+	    	console.log('enter');
+	    });
+
+	// Exit…
+	p.exit()
+		.remove()
+		.each(function() {
+			console.log('exit');
+		});
+
+}
+
+update([4, 8, 15, 16, 23, 42]);
+
+const data = [3,5,13,36,2];
+setTimeout(() => {
+	console.log('---');
+	update(data);
+}, 2000);
+
+setTimeout(() => {
+	console.log('---');
+	data.splice(1,2);
+	update(data);
+}, 4000);
+
+</script>
+
+</body>
+</html>
+

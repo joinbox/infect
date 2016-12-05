@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://d3js.org/d3.v4.js"></script>
+
+	<table><tbody></tbody></table>
+
+</head>
+<body>
+
+<script>
+/* global d3*/
+
+
+
+// https://jsfiddle.net/nwozjscs/2/
+
+
+// Update…
+function update(data) {
+
+	var p = d3.select("tbody")
+		.selectAll("tr")
+		.data(data, (d) => {
+			console.error(d[0].col);
+			return d[0].col;
+		})
+		.call((el) => console.log('update', el.size()));
+
+	// Enter…
+	var pEnter = p.enter()
+		.append("tr")
+		.call((el) => console.log('enter', el.size()));
+
+
+
+
+		//.merge(p);
+		//.text((d) => d[0].col);
+
+
+
+
+	// Exit…
+	p.exit()
+		.remove()
+		.call((el) => console.log('exit', el.size()));
+
+
+
+
+	const cells = p
+		.merge(pEnter)
+		.selectAll('td')
+		.data((d) => d, (d) => d.key);
+
+	cells
+		.enter()
+		.call((el) => console.log('enter row', el.size()))
+		.append('td')
+		.style('position', 'relative')
+		.style('left', 0)
+
+		.merge(cells)
+		.text((d) => d.value)
+		.transition()
+		.duration(500)
+		.style('left', (d) => {
+			var left = (d.value * 50) + 'px';
+			return left;
+		});
+
+	cells
+		.call((el) => console.log('update row', el.size()));
+
+	cells
+		.exit()
+		.call((el) => console.log('exit row', el.size()));
+
+
+
+
+	//updateValues(p);
+
+
+
+/*	const cell = p
+		.selectAll('span')
+		.data((d) => d);
+
+	cell
+		.enter()
+		.each(() => console.log('enter cell'))
+		.append('span');
+
+	cell
+		.text((d) => d.value)
+		.each(() => console.log('update cell'));*/
+
+}
+
+
+
+
+
+const data = [
+	      [{col: 'a', key:1, value: 3}, {col: 'a', key:2, value: 5}, {col: 'a', key:3, value: 1}]
+	    , [{col: 'b', key:1, value: 5}, {col: 'b', key:2, value: 9}, {col: 'b', key:3, value: 2}]
+];
+
+update(data);
+
+setInterval(() => {
+	[1,2,3,4].forEach(() => {
+		const item = data[Math.floor(Math.random() * data.length)][Math.floor(Math.random() * 3)];
+		item.value = Math.floor(Math.random() * 20);
+	});
+	update(data);
+
+}, 700);
+
+</script>
+
+</body>
+</html>
+

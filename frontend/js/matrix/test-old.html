@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://d3js.org/d3.v4.js"></script>
+	<script src="resistency-matrix.es2015.js"></script>
+</head>
+<body>
+
+	<h1>Test</h1>
+	<p>Press «c» (removes col) or «r» (removes row)</p>
+	<div class="matrix"></div>
+
+	<style>
+		svg {
+			height: 100%;
+			width: 1200px;
+			border: 1px solid gray;
+		}
+
+		svg text {
+			font-family: Helvetica;
+		}
+
+		svg .active text{
+			fill: tomato;
+		}
+
+	</style>
+
+	<script>
+
+		/* global document, infect */
+
+		var resistencyMatrix;
+
+		function generateData() {
+
+			// Antibiotics
+			const antibiotics = Array.from(new Array(50));
+			antibiotics.forEach((item, index) => {
+				antibiotics[index] = { 
+					name: 'ab-' + index 
+					, id: index
+				};
+			});
+
+			// Bacteria
+			const bacteria = Array.from(new Array(30));
+			bacteria.forEach((item, index) => {
+				bacteria[index] = { 
+					latinName: 'bact-' + index 
+					, id: index
+				};
+			});
+
+			console.error('Antibiotics: %o, bacteria %o', antibiotics, bacteria);
+
+			// Create map
+			const data = [];
+			bacteria.forEach((bacterium) => {
+
+				// Create rows
+				const row = [];
+				antibiotics.forEach((ab) => {
+					let value = Math.random();
+					if (Math.random() < 0.1) value = null;
+					row.push( {
+						antibiotic		: ab
+						, value			: value	
+					});
+				});
+
+				data.push({
+					bacterium			: bacterium
+					, antibiotics		: row
+				});
+
+			});
+
+			return data;
+
+		}
+
+
+		const data = generateData();
+
+		resistencyMatrix = new infect.ResistencyMatrix(document.querySelector('.matrix'));
+		resistencyMatrix.updateData(data, 'value');
+
+		document.body.addEventListener('keydown', (ev) => {
+
+			if (ev.code === 'KeyR') {
+				const index = Math.floor(Math.random() * data.length);
+				data.splice(index, 1);
+				resistencyMatrix.updateData(data, 'value', true);
+			}
+			if (ev.code === 'KeyC') {
+				const spliceIndex = Math.floor(Math.random() * data[0].antibiotics.length);
+				data.forEach((ab) => {
+					ab.antibiotics.splice(spliceIndex, 1);
+				});
+				console.error('removed col %o, data is now %o', spliceIndex, data);
+				resistencyMatrix.updateData(data, 'value', true);
+			}
+
+		});
+
+
+	</script>
+</body>
+</html>
+

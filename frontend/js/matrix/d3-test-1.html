@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://d3js.org/d3.v4.js"></script>
+</head>
+<body>
+
+<script>
+/* global d3*/
+
+
+
+
+
+
+
+function updateValues(selection) {
+
+
+	function align(sel, d, i) {
+		d3.select(sel)
+			.transition()
+			.duration(900)
+			.style('left', (i + 1) * 50 + 'px');
+	}
+
+
+
+
+	var sel = d3.select(selection)
+		.selectAll('span')
+		.each((d,i) => {
+			console.error(this, d, i);
+		})
+		.data((d) => d);
+
+
+	sel
+		.enter()
+		.append('span')
+		.text((d) => d.value)
+		.style('position', 'relative')
+		.each(function(d) {
+			console.log('enter span %o', d);
+		});
+
+	sel
+		.exit()
+		.each(function() {
+			console.log('exit span');
+		})
+		.remove();
+
+
+	sel
+		.text((d) => d)
+		.each(function(d, i) {
+			console.log('update span');
+			align(this, d, i);
+		});
+
+
+}
+
+
+
+// Update…
+function update(data) {
+
+	var p = d3.select("body")
+	  .selectAll("div")
+	  .data(data, (d) => d[0].key);
+
+	// Enter…
+	p.enter()
+		.append("div")
+	    .text((d) => d[0].key)
+	    .each(function() {
+	    	console.log('enter');
+	    	updateValues(this);
+	    });
+
+	// Exit…
+	p.exit()
+		.remove()
+		.each(function() {
+			console.log('exit');
+	    	updateValues(this);
+		});
+
+	// Update
+	p
+	    .text((d) => d[0].key)
+	    .each(function() {
+	    	console.log('update');
+	    	updateValues(this);
+	    });
+
+	//updateValues(p);
+
+
+
+/*	const cell = p
+		.selectAll('span')
+		.data((d) => d);
+
+	cell
+		.enter()
+		.each(() => console.log('enter cell'))
+		.append('span');
+
+	cell
+		.text((d) => d.value)
+		.each(() => console.log('update cell'));*/
+
+}
+
+
+
+
+
+const data = [
+	    [{ key: 'a', value: 3 }, { key: 'a', value: 1 }, { key: 'a', value: 5 }]
+	  , [{ key: 'b', value: 1 }, { key: 'a', value: 7 }, { key: 'a', value: 9 }]
+];
+
+update(data);
+
+setTimeout(() => {
+	console.log('---');
+	data[0][2].value = 7;
+	data[1][1].value = 13;
+	update(data);
+}, 2000);
+
+setTimeout(() => {
+	console.log('---');
+	data[0][1].value = 5;
+	data[1][0].value = 4;
+	update(data);
+}, 1000);
+
+</script>
+
+</body>
+</html>
+

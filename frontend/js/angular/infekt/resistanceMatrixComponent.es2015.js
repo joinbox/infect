@@ -38,22 +38,88 @@
 		*/
 		_updateVisibility() {
 
-			let antibiotics = JSON.parse(JSON.stringify(this.antibiotics))
-				, bacteria = JSON.parse(JSON.stringify(this.bacteria));
+			console.log('ResistanceMatrixController: filters are %o', this.filters);
 
-			console.error('_updateVisibility', antibiotics, bacteria, this.filters);
+			if (!this._data) return;
 
-			if (Object.entries(this.filters.antibiotic).length) {
-				console.error(this.filters.antibiotic);
-				antibiotics = this._filterAntibiotics(antibiotics, this.filters.antibiotic);
-			}
 
-			if (Object.entries(this.filters.bacterium).length) {
-				bacteria = this._filterBacteria(bacteria, this.filters.bacterium);
-			}
 
-			console.log('ResistanceMatrixController: Filtered ab %o, bacteria %o', antibiotics, bacteria);
-			this._handleDataUpdate(antibiotics, bacteria, this.resistances);
+			// Filter BACTERIA
+			this._data.forEach((bacterium) => {
+				const match = this._matchesFilter(bacterium.bacterium, this.filters.bacterium);
+				if (match) console.log('ResistanceMatrixController: Matches: %o', bacterium);
+				bacterium.bacterium.hidden = !match;
+			});
+
+
+
+			// Filter ANTIBIOTICS
+			const antibiotics = this._data[0].antibiotics;
+
+			// Get indexes of all visible antibiotics; we only want to calculate the filters once
+			const visibleAntibioticIndexes = [];
+			antibiotics.forEach((cell, index) => {
+				if (this._matchesFilter(cell.antibiotic, this.filters.antibiotic)) {
+					visibleAntibioticIndexes.push(index);
+				}
+			});
+			
+			// Go through rows, then antibiotics, and update the «hidden» property on them
+			this._data.forEach((row) => {
+				row.antibiotics.forEach((ab, abIndex) => {
+					ab.hidden = visibleAntibioticIndexes.indexOf(abIndex) > -1 ? false : true;
+				});
+			});
+
+
+
+			this._matrix.updateData(this._data);
+
+
+		}
+
+
+		/**
+		* Takes bacterium or ab as item and the corresponding filters as filters and returns true if
+		* the item is part of the filters. 
+		*/
+		_matchesFilter(item, filters) {
+
+			// Types of filters as array (e.g. ['gram'])
+			const filterTypes = Object.keys(filters);
+
+			// Return value – true if all filter types are matched
+			let matchesAllFilters = true;
+
+			// Loop filter types – e.g. name, gram etc.
+			filterTypes.some((type) => {
+
+				// Same type of filter: They are additional, take all values
+				const filtersForType = filters[type];
+				//console.log('ResistanceMatrixController: Filter by type %o', type);
+					
+				// Is item part of the current filter type?
+				let isInFilterType = false;
+				filtersForType.some((filter) => {
+
+					// Filter is in container
+					const inContainer = filter.containers.find((container) => container.id === item.id);
+					isInFilterType = !!inContainer;
+
+					// Break
+					if (isInFilterType) return true;
+					
+				});
+
+				if (!isInFilterType) {
+					//console.log('ResistanceMatrixController: %o is not in filters %o', item, filters[type]);
+					matchesAllFilters = false;
+					return true;
+				}
+
+			});
+
+			return matchesAllFilters;
 
 		}
 
@@ -63,6 +129,7 @@
 		* Filters bacteria (clone from this.bacteria) with filters from this.filters
 		*/
 		_filterBacteria(bacteria, filters) {
+			console.error(filters);
 			return bacteria;
 		}
 
@@ -103,27 +170,39 @@
 		*/
 		_handleDataUpdate(antibiotics, bacteria, resistances) {
 
-				console.warn('ResistanceMatrixController / $onChange: resistances is %o, antibiotics %o, bacteria %o', resistances, antibiotics, bacteria);
+				console.warn('ResistanceMatrixController: resistances is %o, antibiotics %o, bacteria %o', resistances, antibiotics, bacteria);
 
 				// Conversion 1
 				const intermediateData = this._remodelMatrix(bacteria, antibiotics, resistances);
-				console.log('ResistanceMatrixController / $onChanges: intermediateData is %o', intermediateData);
+				console.log('ResistanceMatrixController: intermediateData is %o', intermediateData);
 
 				// Conversion 2
 				//const internalData = this._prepareMatrixForComponent(intermediateData);
 				//console.log('ResistanceMatrixController / $onChanges: internalData is %o', internalData);
-				const internalData = intermediateData;
-
-				let dontUpdateScale = true;
+				this._data = intermediateData;
 
 				// Draw matrix, because it has not yet been initialized
 				// Afterwards only update data and don't change scale
 				if (!this._matrix) {
+
 					this.$element.empty();
-					this._matrix = new infect.ResistencyMatrix(this.$element[0]);
-					dontUpdateScale = false;
+
+					// Create matrix
+					this._matrix = new infect.ResistanceMatrix(this.$element[0], this._data, {
+						columnHeaderTransformer				: (data) => {
+								return data[0].antibiotics.map((item) => item);
+							}
+						, columnLabelValue					: (item) => item.antibiotic.name
+						, columnHeaderIdentifier			: (item) => item.antibiotic.id
+						, rowDataTransformer				: (item) => item.antibiotics
+						, rowIdentifier						: (item) => item.bacterium.id
+						, colorValue						: (item) => item.colorValue
+						, cellLabelValue					: (item) => item.labelValue === null ? '' : item.labelValue
+						, rowLabelValue						: (item) => item.bacterium.latinName
+						, rowHidden							: (item) => item.bacterium.hidden
+					});
+
 				}
-				this._matrix.updateData(internalData, 'value', dontUpdateScale);
 
 		}
 
@@ -162,7 +241,7 @@
 						row.push({
 							antibiotic		: antibiotic
 							// null is the default resistance
-							, value			: null
+							, colorValue	: null
 						});
 					});				
 					remodeled.push({
@@ -182,7 +261,34 @@
 				const antibiotic = bacterium.antibiotics.find((col) => col.antibiotic === resistance.antibiotic);
 				if (!antibiotic) return;
 
-				antibiotic.value = resistance.value;
+				if (resistance.type === 'resistanceDefault') {
+
+					switch (resistance.value) {
+						case 1:
+							antibiotic.colorValue = 0;
+							antibiotic.labelValue = 'L';
+							break;
+						case 2:
+							antibiotic.colorValue = 0.3;
+							antibiotic.labelValue = 'I';
+							break;
+						case 3:
+							antibiotic.colorValue = 0.7;
+							antibiotic.labelValue = 'H';
+							break;
+						default: 
+							console.error('Unknown resistance %o', resistance);
+							antibiotic.colorValue = null;
+							antibiotic.labelValue = null;
+					}
+				}
+
+				else {
+					antibiotic.colorValue = resistance.value === null ? null : resistance.value / 100;
+					antibiotic.labelValue = resistance.value === null ? '' : Math.round(resistance.value) + '%';
+				}
+
+				//console.error(resistance.type, resistance.value, antibiotic.colorValue, antibiotic.labelValue);
 
 			});
 
