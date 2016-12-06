@@ -4,9 +4,30 @@
 
 	/**
 	* Draws a matrix with resistencies. 
-	* Rows: Anti biotics
+	* Rows: Antibiotics
 	* Cols: Bacteria
-	* Cells: Colored according to resistance
+	* Cells: Colored according to resistance, with label
+	*
+	* Data should be an array containing rowData. rowData is an object with a property for the row's label
+	* and a property wich contains an array with the cell's data:
+	*
+	* [
+	*	// One object per row
+	*	{
+	*
+	*		// Row label's data
+	*		bacterium : { name: 'bact-name', id: 1 }
+	*
+	*		// Cells display antibiotics
+	*		, antibiotics : [
+	*			{
+	*				antibiotic: { name: 'abname', id: 15}
+	*				, resistance: 0.5
+	*			}
+	*		]
+	*	}
+	* ]
+	*
 	*/
 	class ResistanceMatrix {
 
@@ -51,7 +72,7 @@
 			};
 
 			// Holds references
-			this._elements		= {};
+			this._elements = {};
 			this._isInitialRendering = true;
 
 			// Create SVG
@@ -72,6 +93,8 @@
 
 			this._data = data;
 			console.log('ResistanceMatrix: Update data to %o', data);
+			// When data is updated, don't update scales, we want all entities to retain
+			// their size.
 			if (this._container && this._data) this.drawMatrix(true);
 
 		}
@@ -128,19 +151,17 @@
 
 			const self = this;
 
-			console.log('ResistanceMatrix / _drawRows: Draw rows with data %o and height %o', Object.values(this._data), scale.bandwidth());
+			//console.log('ResistanceMatrix: Draw %o rows with data %o and height %o', Object.values(this._data), scale.bandwidth());
 
 			// g
 			const rows = this._elements.svg
 				.selectAll('.row')
-				.call((d) => {
-					console.error('updated rows', d.size());
-				})
+				.call((d) => console.log('ResistanceMatrix: Updated rows', d.size()))
 				// http://stackoverflow.com/questions/22240842/d3-update-on-node-removal-always-remove-the-last-entry-in-svg-dom
 				.data(this._data, this._configuration.rowIdentifier);
 				
 
-			// Enter
+			// Enter: Append g
 			const enteredRows = rows
 				.enter()
 					.append('g')
@@ -153,8 +174,8 @@
 				.remove();
 
 
-
-			// Label (enter and update), before cells
+			// Draw label on enter; do it before drawing the cells to
+			// have the correct DOM order
 			this._createSingleRowLabel(enteredRows);
 
 
@@ -174,10 +195,10 @@
 			// - animates transformation
 			let numberOfVisibleRows = 0;
 			enteredRows
-				.call((d) => console.error('new rows', d.size() ))
+				.call((d) => console.log('ResistanceMatrix: New rows', d.size() ))
 				.merge(rows)
-				.transition()
-				.duration(this._configuration.transitionDuration)
+				//.transition()
+				//.duration(this._configuration.transitionDuration)
 				.attr('transform', (d) => {
 					const translation =  `translate(0, ${ this._getMaxColumnLabelHeight() + this._configuration.spaceBetweenLabelsAndMatrix + numberOfVisibleRows * scale.step() })`;
 					if (!this._configuration.rowHidden(d)) numberOfVisibleRows++;
@@ -186,7 +207,7 @@
 				.style('opacity', (d) => this._configuration.rowHidden(d) ? 0 : 1);
 
 
-			// Draw cells
+			// Draw cells when rows are updated and drawn
 			enteredRows
 				.merge(rows)
 				.call((parent) => {
@@ -241,7 +262,7 @@
 		_createColumnScale() { 
 
 			const data = this._configuration.columnHeaderTransformer(this._data);
-			console.log('ResistanceMatrix: Data for column scale (len %o) is %o', data.length, data);
+			console.log('ResistanceMatrix: Data for column scale len %', data.length);
 			const scale = d3.scaleBand()
 				// -50: We turn the col labels by 45°, this takes a bit of space
 				.rangeRound([0, this._getSvgWidth() - 50])
@@ -335,19 +356,20 @@
 
 			// Get headers from data (keys of first array item)
 			const headers = this._configuration.columnHeaderTransformer(this._data);
-			console.log('ResistanceMatrix / _drawColumnHeads: Headers are %o', headers);
 
 			// <g> and transform
 			const colHeads = this._elements.svg
 				.selectAll('.column')
-				.data(headers, this._configuration.columnHeaderIdentifier);
+				.data(headers, this._configuration.columnHeaderIdentifier)
+				.call((d) => console.log('ResistanceMatrix: Update headers %o', d.size()));
 
 			// Draw heads, consisting of <g> with contained <text>
 			const colHeadsEnter = colHeads
 				.enter()
 					.append('g')
 					// translation will be done in this.updatePositionsAndSizes
-					.attr('class', 'column');
+					.attr('class', 'column')
+					.call((d) => console.log('ResistanceMatrix: New headers: %o', d.size()));
 
 			// Append text. Rotate by 45°
 			colHeadsEnter
@@ -363,8 +385,8 @@
 			let currentIndex = 0;
 			colHeadsEnter
 				.merge(colHeads)
-				.transition()
-				.duration(this._configuration.transitionDuration)
+				//.transition()
+				//.duration(this._configuration.transitionDuration)
 				.attr('transform', function(d) {
 					const translation = `translate(${ currentIndex * scale.step() + self._getMaxRowLabelWidth() + self._configuration.spaceBetweenLabelsAndMatrix + Math.round(scale.step() / 2 - 8) }, ${ self._getMaxColumnLabelHeight() })`;
 					if (!d.hidden) currentIndex++;
@@ -382,18 +404,20 @@
 		*/
 		_drawCell(row, scale) {
 
-			console.log('ResistanceMatrix: Draw cell; row %o, dimensions %o', row, scale.bandwidth());
+			//console.log('ResistanceMatrix: Draw cell; row %o, dimensions %o', row, scale.bandwidth());
 			
 
 			const cells = row
 				.selectAll('.cell')
 				// Row is {bacterium: {} antibiotics: []} – only use antibiotics
-				.data(this._configuration.rowDataTransformer);
+				.data(this._configuration.rowDataTransformer)
+				.call((d) => console.log('ResistanceMatrix: Updated cells', d.size()));
 
 
 			// g
 			const gs = cells
 				.enter()
+				.call((d) => console.log('ResistanceMatrix: New cells', d.size()))
 				.append('g')
 				// data-label attribute (debugging)
 				.attr('data-label', (d) => {
@@ -427,8 +451,8 @@
 				.enter()
 				.merge(row)
 				.selectAll('.cell')
-				.transition()
-				.duration(this._configuration.transitionDuration)
+				//.transition()
+				//.duration(this._configuration.transitionDuration)
 				.attr('transform', (d, i) => {
 					// Reset currentRowIndex if i equals 0 again
 					if (i === 0) currentRowIndex = 0;
@@ -451,7 +475,6 @@
 		*/
 		_drawCellLabel(cells) {
 
-			return;
 			const self = this;
 
 			cells.each(function(d) {

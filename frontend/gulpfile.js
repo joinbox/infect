@@ -59,6 +59,7 @@
 		, 'js/angular/infekt/app.js'
 
 		// Factories
+		, 'js/angular/infekt/diagnosisFactory.js'
 		, 'js/angular/infekt/translationFactory.js'
 		, 'js/angular/infekt/antibioticsFactory.js'
 		, 'js/angular/infekt/bacteriaFactory.js'

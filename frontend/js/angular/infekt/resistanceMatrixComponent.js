@@ -55,7 +55,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				// Filter BACTERIA
 				this._data.forEach(function (bacterium) {
 					var match = _this._matchesFilter(bacterium.bacterium, _this.filters.bacterium);
-					if (match) console.log('ResistanceMatrixController: Matches: %o', bacterium);
 					bacterium.bacterium.hidden = !match;
 				});
 
@@ -76,6 +75,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						ab.hidden = visibleAntibioticIndexes.indexOf(abIndex) > -1 ? false : true;
 					});
 				});
+
+				// Filter DIAGNOSIS (bacteria)
+				// Must be in addition to bacteria filter above
+				var diagnosisFilter = this.filters.diagnosis;
+				// Loop types (name etc.)
+				var allValidBacteria = [];
+				Object.keys(diagnosisFilter).forEach(function (type) {
+					diagnosisFilter[type][0].containers[0].bacteria.forEach(function (bacterium) {
+						allValidBacteria.push(bacterium.id);
+					});
+				});
+				// If filter was not set (length 0), then don't filter. Else do.
+				if (allValidBacteria.length > 0) {
+					this._data.forEach(function (bacterium) {
+						// Hide in addition to filter above
+						if (allValidBacteria.indexOf(bacterium.bacterium.id) === -1) bacterium.bacterium.hidden = true;
+					});
+				}
 
 				this._matrix.updateData(this._data);
 			}
@@ -124,48 +141,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				});
 
 				return matchesAllFilters;
-			}
-
-			/**
-   * Filters bacteria (clone from this.bacteria) with filters from this.filters
-   */
-
-		}, {
-			key: '_filterBacteria',
-			value: function _filterBacteria(bacteria, filters) {
-				console.error(filters);
-				return bacteria;
-			}
-
-			/**
-   * Filters antibiotics (clone from from this.antibiocs) with filters from 
-   * this.filters
-   */
-
-		}, {
-			key: '_filterAntibiotics',
-			value: function _filterAntibiotics(antibiotics, filters) {
-
-				var filtered = [];
-
-				Object.keys(filters).forEach(function (filterKey) {
-					// Go through filters on a type, e.g. substances
-					filters[filterKey].forEach(function (filter) {
-
-						// Go through all antibiotics and check if they're part of 
-						// the container
-						antibiotics.forEach(function (antibiotic) {
-							if (filter.containers.map(function (containerValue) {
-								return containerValue.id;
-							}).indexOf(antibiotic.id) > -1) {
-								filtered.push(antibiotic);
-							}
-						});
-					});
-				});
-
-				console.error('filtered: %o', filtered);
-				return filtered;
 			}
 
 			/**

@@ -61241,9 +61241,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	/**
  * Draws a matrix with resistencies. 
- * Rows: Anti biotics
+ * Rows: Antibiotics
  * Cols: Bacteria
- * Cells: Colored according to resistance
+ * Cells: Colored according to resistance, with label
+ *
+ * Data should be an array containing rowData. rowData is an object with a property for the row's label
+ * and a property wich contains an array with the cell's data:
+ *
+ * [
+ *	// One object per row
+ *	{
+ *
+ *		// Row label's data
+ *		bacterium : { name: 'bact-name', id: 1 }
+ *
+ *		// Cells display antibiotics
+ *		, antibiotics : [
+ *			{
+ *				antibiotic: { name: 'abname', id: 15}
+ *				, resistance: 0.5
+ *			}
+ *		]
+ *	}
+ * ]
+ *
  */
 	var ResistanceMatrix = function () {
 
@@ -61328,6 +61349,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				this._data = data;
 				console.log('ResistanceMatrix: Update data to %o', data);
+				// When data is updated, don't update scales, we want all entities to retain
+				// their size.
 				if (this._container && this._data) this.drawMatrix(true);
 			}
 
@@ -61384,22 +61407,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				var self = this;
 
-				console.log('ResistanceMatrix / _drawRows: Draw rows with data %o and height %o', Object.values(this._data), scale.bandwidth());
+				//console.log('ResistanceMatrix: Draw %o rows with data %o and height %o', Object.values(this._data), scale.bandwidth());
 
 				// g
 				var rows = this._elements.svg.selectAll('.row').call(function (d) {
-					console.error('updated rows', d.size());
+					return console.log('ResistanceMatrix: Updated rows', d.size());
 				})
 				// http://stackoverflow.com/questions/22240842/d3-update-on-node-removal-always-remove-the-last-entry-in-svg-dom
 				.data(this._data, this._configuration.rowIdentifier);
 
-				// Enter
+				// Enter: Append g
 				var enteredRows = rows.enter().append('g').attr('class', 'row');
 
 				// Exit
 				rows.exit().remove();
 
-				// Label (enter and update), before cells
+				// Draw label on enter; do it before drawing the cells to
+				// have the correct DOM order
 				this._createSingleRowLabel(enteredRows);
 
 				// Update and enter: 
@@ -61413,8 +61437,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				// - animates transformation
 				var numberOfVisibleRows = 0;
 				enteredRows.call(function (d) {
-					return console.error('new rows', d.size());
-				}).merge(rows).transition().duration(this._configuration.transitionDuration).attr('transform', function (d) {
+					return console.log('ResistanceMatrix: New rows', d.size());
+				}).merge(rows)
+				//.transition()
+				//.duration(this._configuration.transitionDuration)
+				.attr('transform', function (d) {
 					var translation = 'translate(0, ' + (_this._getMaxColumnLabelHeight() + _this._configuration.spaceBetweenLabelsAndMatrix + numberOfVisibleRows * scale.step()) + ')';
 					if (!_this._configuration.rowHidden(d)) numberOfVisibleRows++;
 					return translation;
@@ -61422,7 +61449,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					return _this._configuration.rowHidden(d) ? 0 : 1;
 				});
 
-				// Draw cells
+				// Draw cells when rows are updated and drawn
 				enteredRows.merge(rows).call(function (parent) {
 					_this._drawCell(parent, scale);
 				});
@@ -61472,7 +61499,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function _createColumnScale() {
 
 				var data = this._configuration.columnHeaderTransformer(this._data);
-				console.log('ResistanceMatrix: Data for column scale (len %o) is %o', data.length, data);
+				console.log('ResistanceMatrix: Data for column scale len %', data.length);
 				var scale = d3.scaleBand()
 				// -50: We turn the col labels by 45°, this takes a bit of space
 				.rangeRound([0, this._getSvgWidth() - 50])
@@ -61563,15 +61590,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				// Get headers from data (keys of first array item)
 				var headers = this._configuration.columnHeaderTransformer(this._data);
-				console.log('ResistanceMatrix / _drawColumnHeads: Headers are %o', headers);
 
 				// <g> and transform
-				var colHeads = this._elements.svg.selectAll('.column').data(headers, this._configuration.columnHeaderIdentifier);
+				var colHeads = this._elements.svg.selectAll('.column').data(headers, this._configuration.columnHeaderIdentifier).call(function (d) {
+					return console.log('ResistanceMatrix: Update headers %o', d.size());
+				});
 
 				// Draw heads, consisting of <g> with contained <text>
 				var colHeadsEnter = colHeads.enter().append('g')
 				// translation will be done in this.updatePositionsAndSizes
-				.attr('class', 'column');
+				.attr('class', 'column').call(function (d) {
+					return console.log('ResistanceMatrix: New headers: %o', d.size());
+				});
 
 				// Append text. Rotate by 45°
 				colHeadsEnter.append('text').attr('class', 'column-label').attr('text-anchor', 'start').attr('transform', 'rotate(-45)').text(this._configuration.columnLabelValue);
@@ -61579,7 +61609,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				// Update position
 				// (enter and update)
 				var currentIndex = 0;
-				colHeadsEnter.merge(colHeads).transition().duration(this._configuration.transitionDuration).attr('transform', function (d) {
+				colHeadsEnter.merge(colHeads)
+				//.transition()
+				//.duration(this._configuration.transitionDuration)
+				.attr('transform', function (d) {
 					var translation = 'translate(' + (currentIndex * scale.step() + self._getMaxRowLabelWidth() + self._configuration.spaceBetweenLabelsAndMatrix + Math.round(scale.step() / 2 - 8)) + ', ' + self._getMaxColumnLabelHeight() + ')';
 					if (!d.hidden) currentIndex++;
 					return translation;
@@ -61597,14 +61630,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function _drawCell(row, scale) {
 				var _this2 = this;
 
-				console.log('ResistanceMatrix: Draw cell; row %o, dimensions %o', row, scale.bandwidth());
+				//console.log('ResistanceMatrix: Draw cell; row %o, dimensions %o', row, scale.bandwidth());
+
 
 				var cells = row.selectAll('.cell')
 				// Row is {bacterium: {} antibiotics: []} – only use antibiotics
-				.data(this._configuration.rowDataTransformer);
+				.data(this._configuration.rowDataTransformer).call(function (d) {
+					return console.log('ResistanceMatrix: Updated cells', d.size());
+				});
 
 				// g
-				var gs = cells.enter().append('g')
+				var gs = cells.enter().call(function (d) {
+					return console.log('ResistanceMatrix: New cells', d.size());
+				}).append('g')
 				// data-label attribute (debugging)
 				.attr('data-label', function (d) {
 					return _this2._configuration.cellLabelValue(d);
@@ -61624,7 +61662,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				// Move right
 				var currentRowIndex = 0;
-				row.enter().merge(row).selectAll('.cell').transition().duration(this._configuration.transitionDuration).attr('transform', function (d, i) {
+				row.enter().merge(row).selectAll('.cell')
+				//.transition()
+				//.duration(this._configuration.transitionDuration)
+				.attr('transform', function (d, i) {
 					// Reset currentRowIndex if i equals 0 again
 					if (i === 0) currentRowIndex = 0;
 					// Get translation
@@ -61645,7 +61686,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: '_drawCellLabel',
 			value: function _drawCellLabel(cells) {
 
-				return;
 				var self = this;
 
 				cells.each(function (d) {
@@ -61860,6 +61900,115 @@ var countProperties = function( obj ) {
 	}
 	return len;
 };
+( function() {
+
+	'use strict';
+
+	angular
+	.module( 'infekt' )
+	.factory( 'DiagnosisFactory', [ '$http', 'BacteriaFactory', function( $http, BacteriaFactory ) {
+
+		var _getDataPromise
+			, _diagnosis = [];
+
+		var Diagnosis = function() {
+		};
+
+
+		Diagnosis.prototype.getDiagnosis = function() {
+			return _diagnosis;
+		};
+
+
+		Diagnosis.prototype.fetchDiagnosis = function() {
+			
+			var self = this
+				, bacteria
+				, diagnosisData;
+
+			if( _getDataPromise ) {
+				return _getDataPromise;
+			}
+
+			var url = infektSettings.apiUrls.base + "/" + infektSettings.apiUrls.diagnosis + "?" + infektSettings.apiKeyName + "=" + infektSettings.apiKey + "&noc=" + new Date().getTime();
+			console.log( "Diagn: URL for diagnosis: %o", url );
+
+			// Get diagnosis data
+			_getDataPromise = $http( { 
+				method: "GET"
+				, url: url 
+			} )
+
+			// Wait for bacteria to be ready/loaded from serer
+			.then( function( response ) {
+
+				diagnosisData = response.data;
+
+				return BacteriaFactory
+					.getBacteria();
+
+			} )
+
+			// Parse data
+			.then( function( bacteriaData ) {
+
+				bacteria = bacteriaData;
+
+				_diagnosis = self.parseServerData( diagnosisData, bacteria );
+				console.log('DiagnosisFactory: Diagnosis are %o', _diagnosis);
+				return _diagnosis;
+
+			} );
+			
+			return _getDataPromise;
+
+		};
+
+
+		/**
+		* @param <Array> bacteriaData		parsed bacterium data from BacteriaFactory
+		* @param <Array> diagnosisData		Data gotten from server (/diagnosis)
+		*/
+		Diagnosis.prototype.parseServerData = function( diagnosisData, bacteriaData ) {
+
+			var ret = [];
+
+			// Go through each diagnosis
+			diagnosisData.forEach( function( diagnosis ) {
+
+				// Go through bacteria; add bacteria that can cause the diagnosis
+				// to diagnosisBacteria
+				var diagnosisBacteria = [];
+				bacteriaData.forEach( function( bacterium ) {
+
+					if( diagnosis.bacteria.indexOf( bacterium.id ) > -1 ) {
+						diagnosisBacteria.push( bacterium );
+					}
+
+				} );
+
+
+				ret.push( {
+					name					: diagnosis.locales[ 0 ].title
+					, bacteria				: diagnosisBacteria
+					, type					: 'diagnosis'
+				} );
+
+			} );
+
+
+			return ret;
+		};
+
+
+
+		return new Diagnosis();
+
+
+
+	} ] );
+
+} )();
 //
 // Translates properties and values of antibiotics and bacteria object to «human readable»
 // words ( i.e. { gram: 1 } becomes {name: "Gram", value: "Gram Positiv" } )
@@ -61979,7 +62128,9 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 			name 		: "Substanzklasse(n)"
 			, values	: function( propertyValue ) {
 				//console.error( propertyValue );
-				return propertyValue.localeName + " (" + propertyValue.names.join( ", " ) + ")";
+				var name = propertyValue.names.join( ', ');
+				if (propertyValue.localeName) name = propertyValue.localeName + '( ' + name + ')';
+				return name;
 			}
 		}
 
@@ -61990,7 +62141,9 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		, substances : {
 			name 		: "Substanzen"
 			, values	: function( propertyValue ) {
-				return propertyValue.localeName + " (" + propertyValue.names.join( ", " ) + ")";
+				var name = propertyValue.names.join( ', ');
+				if (propertyValue.localeName) name = propertyValue.localeName + '( ' + name + ')';
+				return name;
 			}
 		}
 
@@ -62551,7 +62704,7 @@ infekt.factory( 'BacteriaFactory', function( $http, $q, $timeout ) {
 
 
 // I create a hashTable for all values of antibiotics, bacteria and diagnosis to speed up searches
-infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFactory, TranslationFactory ) {
+infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFactory, DiagnosisFactory, TranslationFactory ) {
 
 
 
@@ -62597,12 +62750,13 @@ infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 	function generateSearchTable() {
 
 		// Bacteria or AB not yet ready
-		if( AntibioticsFactory.antibiotics.length === 0 || BacteriaFactory.bacteria.length === 0) {
+		if( AntibioticsFactory.antibiotics.length === 0 || BacteriaFactory.bacteria.length === 0 || DiagnosisFactory.getDiagnosis().length === 0 ) {
 			return;
 		}
 
 
 		var allData = AntibioticsFactory.antibiotics.concat( BacteriaFactory.bacteria );
+		allData = allData.concat( DiagnosisFactory.getDiagnosis() );
 
 		console.group( 'generateSearchTable' );
 		console.log( "SearchTableFactory: generateSearchTable - allData: %o", allData );
@@ -63168,7 +63322,7 @@ angular
 /**
 * Main controller (ng-controller), from angular 1.2
 */
-infekt.controller( 'InfektController', [ '$scope', 'AntibioticsFactory', 'BacteriaFactory', 'ResistanceFactory', 'SearchTableFactory', 'FilterFactory', function( $scope, AntibioticsFactory, BacteriaFactory, ResistanceFactory, SearchTableFactory, FilterFactory ) {
+infekt.controller( 'InfektController', [ '$scope', 'AntibioticsFactory', 'BacteriaFactory', 'ResistanceFactory', 'SearchTableFactory', 'FilterFactory', 'DiagnosisFactory', function( $scope, AntibioticsFactory, BacteriaFactory, ResistanceFactory, SearchTableFactory, FilterFactory, DiagnosisFactory ) {
 
 	$scope.antibiotics = [];
 	$scope.bacteria = [];
@@ -63187,11 +63341,11 @@ infekt.controller( 'InfektController', [ '$scope', 'AntibioticsFactory', 'Bacter
 		} );
 
 
-	/*console.log( DiagnosisFactory );
 	DiagnosisFactory
 		.fetchDiagnosis()
-		.then( function( data ) {
-		} );*/
+		.then(function(data) {
+			//console.error(data);
+		});
 
 
 	// Get bacteria
@@ -63551,7 +63705,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				// Filter BACTERIA
 				this._data.forEach(function (bacterium) {
 					var match = _this._matchesFilter(bacterium.bacterium, _this.filters.bacterium);
-					if (match) console.log('ResistanceMatrixController: Matches: %o', bacterium);
 					bacterium.bacterium.hidden = !match;
 				});
 
@@ -63572,6 +63725,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						ab.hidden = visibleAntibioticIndexes.indexOf(abIndex) > -1 ? false : true;
 					});
 				});
+
+				// Filter DIAGNOSIS (bacteria)
+				// Must be in addition to bacteria filter above
+				var diagnosisFilter = this.filters.diagnosis;
+				// Loop types (name etc.)
+				var allValidBacteria = [];
+				Object.keys(diagnosisFilter).forEach(function (type) {
+					diagnosisFilter[type][0].containers[0].bacteria.forEach(function (bacterium) {
+						allValidBacteria.push(bacterium.id);
+					});
+				});
+				// If filter was not set (length 0), then don't filter. Else do.
+				if (allValidBacteria.length > 0) {
+					this._data.forEach(function (bacterium) {
+						// Hide in addition to filter above
+						if (allValidBacteria.indexOf(bacterium.bacterium.id) === -1) bacterium.bacterium.hidden = true;
+					});
+				}
 
 				this._matrix.updateData(this._data);
 			}
@@ -63620,48 +63791,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				});
 
 				return matchesAllFilters;
-			}
-
-			/**
-   * Filters bacteria (clone from this.bacteria) with filters from this.filters
-   */
-
-		}, {
-			key: '_filterBacteria',
-			value: function _filterBacteria(bacteria, filters) {
-				console.error(filters);
-				return bacteria;
-			}
-
-			/**
-   * Filters antibiotics (clone from from this.antibiocs) with filters from 
-   * this.filters
-   */
-
-		}, {
-			key: '_filterAntibiotics',
-			value: function _filterAntibiotics(antibiotics, filters) {
-
-				var filtered = [];
-
-				Object.keys(filters).forEach(function (filterKey) {
-					// Go through filters on a type, e.g. substances
-					filters[filterKey].forEach(function (filter) {
-
-						// Go through all antibiotics and check if they're part of 
-						// the container
-						antibiotics.forEach(function (antibiotic) {
-							if (filter.containers.map(function (containerValue) {
-								return containerValue.id;
-							}).indexOf(antibiotic.id) > -1) {
-								filtered.push(antibiotic);
-							}
-						});
-					});
-				});
-
-				console.error('filtered: %o', filtered);
-				return filtered;
 			}
 
 			/**

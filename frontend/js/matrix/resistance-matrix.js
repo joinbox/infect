@@ -10,9 +10,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	/**
  * Draws a matrix with resistencies. 
- * Rows: Anti biotics
+ * Rows: Antibiotics
  * Cols: Bacteria
- * Cells: Colored according to resistance
+ * Cells: Colored according to resistance, with label
+ *
+ * Data should be an array containing rowData. rowData is an object with a property for the row's label
+ * and a property wich contains an array with the cell's data:
+ *
+ * [
+ *	// One object per row
+ *	{
+ *
+ *		// Row label's data
+ *		bacterium : { name: 'bact-name', id: 1 }
+ *
+ *		// Cells display antibiotics
+ *		, antibiotics : [
+ *			{
+ *				antibiotic: { name: 'abname', id: 15}
+ *				, resistance: 0.5
+ *			}
+ *		]
+ *	}
+ * ]
+ *
  */
 	var ResistanceMatrix = function () {
 
@@ -97,6 +118,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				this._data = data;
 				console.log('ResistanceMatrix: Update data to %o', data);
+				// When data is updated, don't update scales, we want all entities to retain
+				// their size.
 				if (this._container && this._data) this.drawMatrix(true);
 			}
 
@@ -153,22 +176,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				var self = this;
 
-				console.log('ResistanceMatrix / _drawRows: Draw rows with data %o and height %o', Object.values(this._data), scale.bandwidth());
+				//console.log('ResistanceMatrix: Draw %o rows with data %o and height %o', Object.values(this._data), scale.bandwidth());
 
 				// g
 				var rows = this._elements.svg.selectAll('.row').call(function (d) {
-					console.error('updated rows', d.size());
+					return console.log('ResistanceMatrix: Updated rows', d.size());
 				})
 				// http://stackoverflow.com/questions/22240842/d3-update-on-node-removal-always-remove-the-last-entry-in-svg-dom
 				.data(this._data, this._configuration.rowIdentifier);
 
-				// Enter
+				// Enter: Append g
 				var enteredRows = rows.enter().append('g').attr('class', 'row');
 
 				// Exit
 				rows.exit().remove();
 
-				// Label (enter and update), before cells
+				// Draw label on enter; do it before drawing the cells to
+				// have the correct DOM order
 				this._createSingleRowLabel(enteredRows);
 
 				// Update and enter: 
@@ -182,8 +206,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				// - animates transformation
 				var numberOfVisibleRows = 0;
 				enteredRows.call(function (d) {
-					return console.error('new rows', d.size());
-				}).merge(rows).transition().duration(this._configuration.transitionDuration).attr('transform', function (d) {
+					return console.log('ResistanceMatrix: New rows', d.size());
+				}).merge(rows)
+				//.transition()
+				//.duration(this._configuration.transitionDuration)
+				.attr('transform', function (d) {
 					var translation = 'translate(0, ' + (_this._getMaxColumnLabelHeight() + _this._configuration.spaceBetweenLabelsAndMatrix + numberOfVisibleRows * scale.step()) + ')';
 					if (!_this._configuration.rowHidden(d)) numberOfVisibleRows++;
 					return translation;
@@ -191,7 +218,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					return _this._configuration.rowHidden(d) ? 0 : 1;
 				});
 
-				// Draw cells
+				// Draw cells when rows are updated and drawn
 				enteredRows.merge(rows).call(function (parent) {
 					_this._drawCell(parent, scale);
 				});
@@ -241,7 +268,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function _createColumnScale() {
 
 				var data = this._configuration.columnHeaderTransformer(this._data);
-				console.log('ResistanceMatrix: Data for column scale (len %o) is %o', data.length, data);
+				console.log('ResistanceMatrix: Data for column scale len %', data.length);
 				var scale = d3.scaleBand()
 				// -50: We turn the col labels by 45°, this takes a bit of space
 				.rangeRound([0, this._getSvgWidth() - 50])
@@ -332,15 +359,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				// Get headers from data (keys of first array item)
 				var headers = this._configuration.columnHeaderTransformer(this._data);
-				console.log('ResistanceMatrix / _drawColumnHeads: Headers are %o', headers);
 
 				// <g> and transform
-				var colHeads = this._elements.svg.selectAll('.column').data(headers, this._configuration.columnHeaderIdentifier);
+				var colHeads = this._elements.svg.selectAll('.column').data(headers, this._configuration.columnHeaderIdentifier).call(function (d) {
+					return console.log('ResistanceMatrix: Update headers %o', d.size());
+				});
 
 				// Draw heads, consisting of <g> with contained <text>
 				var colHeadsEnter = colHeads.enter().append('g')
 				// translation will be done in this.updatePositionsAndSizes
-				.attr('class', 'column');
+				.attr('class', 'column').call(function (d) {
+					return console.log('ResistanceMatrix: New headers: %o', d.size());
+				});
 
 				// Append text. Rotate by 45°
 				colHeadsEnter.append('text').attr('class', 'column-label').attr('text-anchor', 'start').attr('transform', 'rotate(-45)').text(this._configuration.columnLabelValue);
@@ -348,7 +378,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				// Update position
 				// (enter and update)
 				var currentIndex = 0;
-				colHeadsEnter.merge(colHeads).transition().duration(this._configuration.transitionDuration).attr('transform', function (d) {
+				colHeadsEnter.merge(colHeads)
+				//.transition()
+				//.duration(this._configuration.transitionDuration)
+				.attr('transform', function (d) {
 					var translation = 'translate(' + (currentIndex * scale.step() + self._getMaxRowLabelWidth() + self._configuration.spaceBetweenLabelsAndMatrix + Math.round(scale.step() / 2 - 8)) + ', ' + self._getMaxColumnLabelHeight() + ')';
 					if (!d.hidden) currentIndex++;
 					return translation;
@@ -366,14 +399,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function _drawCell(row, scale) {
 				var _this2 = this;
 
-				console.log('ResistanceMatrix: Draw cell; row %o, dimensions %o', row, scale.bandwidth());
+				//console.log('ResistanceMatrix: Draw cell; row %o, dimensions %o', row, scale.bandwidth());
+
 
 				var cells = row.selectAll('.cell')
 				// Row is {bacterium: {} antibiotics: []} – only use antibiotics
-				.data(this._configuration.rowDataTransformer);
+				.data(this._configuration.rowDataTransformer).call(function (d) {
+					return console.log('ResistanceMatrix: Updated cells', d.size());
+				});
 
 				// g
-				var gs = cells.enter().append('g')
+				var gs = cells.enter().call(function (d) {
+					return console.log('ResistanceMatrix: New cells', d.size());
+				}).append('g')
 				// data-label attribute (debugging)
 				.attr('data-label', function (d) {
 					return _this2._configuration.cellLabelValue(d);
@@ -393,7 +431,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				// Move right
 				var currentRowIndex = 0;
-				row.enter().merge(row).selectAll('.cell').transition().duration(this._configuration.transitionDuration).attr('transform', function (d, i) {
+				row.enter().merge(row).selectAll('.cell')
+				//.transition()
+				//.duration(this._configuration.transitionDuration)
+				.attr('transform', function (d, i) {
 					// Reset currentRowIndex if i equals 0 again
 					if (i === 0) currentRowIndex = 0;
 					// Get translation
@@ -414,7 +455,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: '_drawCellLabel',
 			value: function _drawCellLabel(cells) {
 
-				return;
 				var self = this;
 
 				cells.each(function (d) {

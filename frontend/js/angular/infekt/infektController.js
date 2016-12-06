@@ -1,7 +1,7 @@
 /**
 * Main controller (ng-controller), from angular 1.2
 */
-infekt.controller( 'InfektController', [ '$scope', 'AntibioticsFactory', 'BacteriaFactory', 'ResistanceFactory', 'SearchTableFactory', 'FilterFactory', function( $scope, AntibioticsFactory, BacteriaFactory, ResistanceFactory, SearchTableFactory, FilterFactory ) {
+infekt.controller( 'InfektController', [ '$scope', 'AntibioticsFactory', 'BacteriaFactory', 'ResistanceFactory', 'SearchTableFactory', 'FilterFactory', 'DiagnosisFactory', function( $scope, AntibioticsFactory, BacteriaFactory, ResistanceFactory, SearchTableFactory, FilterFactory, DiagnosisFactory ) {
 
 	$scope.antibiotics = [];
 	$scope.bacteria = [];
@@ -20,11 +20,11 @@ infekt.controller( 'InfektController', [ '$scope', 'AntibioticsFactory', 'Bacter
 		} );
 
 
-	/*console.log( DiagnosisFactory );
 	DiagnosisFactory
 		.fetchDiagnosis()
-		.then( function( data ) {
-		} );*/
+		.then(function(data) {
+			//console.error(data);
+		});
 
 
 	// Get bacteria

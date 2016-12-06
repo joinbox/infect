@@ -53,6 +53,7 @@
 				bacteria = bacteriaData;
 
 				_diagnosis = self.parseServerData( diagnosisData, bacteria );
+				console.log('DiagnosisFactory: Diagnosis are %o', _diagnosis);
 				return _diagnosis;
 
 			} );
@@ -68,7 +69,6 @@
 		*/
 		Diagnosis.prototype.parseServerData = function( diagnosisData, bacteriaData ) {
 
-			console.error( diagnosisData, bacteria );
 			var ret = [];
 
 			// Go through each diagnosis
@@ -94,7 +94,6 @@
 
 			} );
 
-			console.error( ret );
 
 			return ret;
 		};

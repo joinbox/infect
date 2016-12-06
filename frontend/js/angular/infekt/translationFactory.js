@@ -117,7 +117,9 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 			name 		: "Substanzklasse(n)"
 			, values	: function( propertyValue ) {
 				//console.error( propertyValue );
-				return propertyValue.localeName + " (" + propertyValue.names.join( ", " ) + ")";
+				var name = propertyValue.names.join( ', ');
+				if (propertyValue.localeName) name = propertyValue.localeName + '( ' + name + ')';
+				return name;
 			}
 		}
 
@@ -128,7 +130,9 @@ infekt.factory( 'TranslationFactory', function( $http, $q ) {
 		, substances : {
 			name 		: "Substanzen"
 			, values	: function( propertyValue ) {
-				return propertyValue.localeName + " (" + propertyValue.names.join( ", " ) + ")";
+				var name = propertyValue.names.join( ', ');
+				if (propertyValue.localeName) name = propertyValue.localeName + '( ' + name + ')';
+				return name;
 			}
 		}
 

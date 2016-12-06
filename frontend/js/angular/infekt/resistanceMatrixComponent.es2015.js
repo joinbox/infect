@@ -47,7 +47,6 @@
 			// Filter BACTERIA
 			this._data.forEach((bacterium) => {
 				const match = this._matchesFilter(bacterium.bacterium, this.filters.bacterium);
-				if (match) console.log('ResistanceMatrixController: Matches: %o', bacterium);
 				bacterium.bacterium.hidden = !match;
 			});
 
@@ -70,6 +69,25 @@
 					ab.hidden = visibleAntibioticIndexes.indexOf(abIndex) > -1 ? false : true;
 				});
 			});
+
+
+			// Filter DIAGNOSIS (bacteria)
+			// Must be in addition to bacteria filter above
+			const diagnosisFilter = this.filters.diagnosis;
+			// Loop types (name etc.)
+			const allValidBacteria = [];
+			Object.keys(diagnosisFilter).forEach((type) => {
+				diagnosisFilter[type][0].containers[0].bacteria.forEach((bacterium) => {
+					allValidBacteria.push(bacterium.id);
+				});
+			});
+			// If filter was not set (length 0), then don't filter. Else do.
+			if (allValidBacteria.length > 0) {
+				this._data.forEach((bacterium) => {
+					// Hide in addition to filter above
+					if (allValidBacteria.indexOf(bacterium.bacterium.id) === -1) bacterium.bacterium.hidden = true;
+				});
+			}
 
 
 
@@ -124,43 +142,6 @@
 		}
 
 
-
-		/**
-		* Filters bacteria (clone from this.bacteria) with filters from this.filters
-		*/
-		_filterBacteria(bacteria, filters) {
-			console.error(filters);
-			return bacteria;
-		}
-
-
-		/**
-		* Filters antibiotics (clone from from this.antibiocs) with filters from 
-		* this.filters
-		*/
-		_filterAntibiotics(antibiotics, filters) {
-
-			const filtered = [];
-
-			Object.keys(filters).forEach((filterKey) => {
-				// Go through filters on a type, e.g. substances
-				filters[filterKey].forEach((filter) => {
-
-					// Go through all antibiotics and check if they're part of 
-					// the container
-					antibiotics.forEach((antibiotic) => {
-						if (filter.containers.map((containerValue) => containerValue.id).indexOf(antibiotic.id) > -1) {
-							filtered.push(antibiotic);
-						}
-					});
-
-				});
-			});
-
-			console.error('filtered: %o', filtered);
-			return filtered;
-
-		}
 
 
 

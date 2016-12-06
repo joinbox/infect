@@ -1,7 +1,7 @@
 
 
 // I create a hashTable for all values of antibiotics, bacteria and diagnosis to speed up searches
-infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFactory, TranslationFactory ) {
+infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFactory, DiagnosisFactory, TranslationFactory ) {
 
 
 
@@ -47,12 +47,13 @@ infekt.factory( 'SearchTableFactory', function( AntibioticsFactory, BacteriaFact
 	function generateSearchTable() {
 
 		// Bacteria or AB not yet ready
-		if( AntibioticsFactory.antibiotics.length === 0 || BacteriaFactory.bacteria.length === 0) {
+		if( AntibioticsFactory.antibiotics.length === 0 || BacteriaFactory.bacteria.length === 0 || DiagnosisFactory.getDiagnosis().length === 0 ) {
 			return;
 		}
 
 
 		var allData = AntibioticsFactory.antibiotics.concat( BacteriaFactory.bacteria );
+		allData = allData.concat( DiagnosisFactory.getDiagnosis() );
 
 		console.group( 'generateSearchTable' );
 		console.log( "SearchTableFactory: generateSearchTable - allData: %o", allData );
